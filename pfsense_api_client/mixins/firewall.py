@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Union, Optional
 import pydantic
 import requests
 
-from .api_types import BasePFSenseAPIClient
+from pfsense_api_client.api_types import BasePFSenseAPIClient
 
 __all__ = [
     "FirewallMixin",
