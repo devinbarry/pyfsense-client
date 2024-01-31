@@ -12,7 +12,7 @@ import pfsense_api_client.mixins.system
 import pfsense_api_client.mixins.firewall
 import mixins.routing
 import pfsense_api_client.service
-import pfsense_api_client.service.dns
+import mixins.dns
 
 IGNORED_MEMBERS = [
     "requests",
@@ -37,7 +37,7 @@ for module in [
     pfsense_api_client.mixins.firewall,
     mixins.routing,
     pfsense_api_client.service,
-    pfsense_api_client.service.dns,
+    mixins.dns,
 ]:
 
     for name, member in inspect.getmembers(module, ):
