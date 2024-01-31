@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from requests import Response
 
-from ..client.base import ClientABC
+from ..client import ClientABC
 from ..client.types import APIResponse
 
 

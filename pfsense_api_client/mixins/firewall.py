@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Union, Optional
 from pydantic import BaseModel, validate_call
 import requests
 
-from ..client.base import ClientABC
+from ..client import ClientABC
 
 class AliasTypes(str, Enum):
     """types for firewall aliases"""

@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional
 import pydantic
 import requests
 
-from ..client.base import ClientABC
+from ..client import ClientABC
 from ..client.types import APIResponse
 
 
