@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Any, Dict
-from requests import Response, Session
+from requests import Response
 
 from .abc import ClientABC
 from .types import ClientConfig, APIResponse
@@ -11,8 +11,8 @@ from ..mixins.system import SystemMixin
 
 
 class ClientBase(ClientABC):
-    def __init__(self, config:  ClientConfig, requests_session: Session | None = None):
-        super().__init__(requests_session)
+    def __init__(self, config:  ClientConfig):
+        super().__init__()
         self.config = config
 
         if self.config.mode == "local" and not (self.config.username and self.config.password):
