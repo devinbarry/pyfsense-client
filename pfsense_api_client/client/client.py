@@ -1,10 +1,10 @@
 import requests
 
 from .base import ClientBase
-from mixins.firewall import FirewallMixin
-from mixins.service  import ServiceMixin
-from mixins.status import StatusMixin
-from mixins.system import SystemMixin
+from ..mixins.firewall import FirewallMixin
+from ..mixins.service  import ServiceMixin
+from ..mixins.status import StatusMixin
+from ..mixins.system import SystemMixin
 
 
 class PFSenseAPIClient(ClientBase, FirewallMixin, ServiceMixin, StatusMixin, SystemMixin):

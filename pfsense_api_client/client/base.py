@@ -1,7 +1,12 @@
+import os
+import json
+from pathlib import Path
+
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 from requests import Response, Session
 
+from .api_types import PFSenseConfig, APIResponse
 
 class ClientABC(ABC):
     def __init__(self, requests_session: Session):

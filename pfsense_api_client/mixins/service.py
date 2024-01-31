@@ -4,8 +4,8 @@ from typing import Any, Dict
 
 from requests import Response
 
-from client.base import ClientABC
-from client.api_types import APIResponse
+from ..client.base import ClientABC
+from ..client.api_types import APIResponse
 
 
 class ServiceMixin(ClientABC):

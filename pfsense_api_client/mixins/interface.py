@@ -1,6 +1,6 @@
 from typing import Any, Dict
 import requests
-from client.base import ClientABC
+from ..client.base import ClientABC
 
 
 class InterfaceMixin(ClientABC):
