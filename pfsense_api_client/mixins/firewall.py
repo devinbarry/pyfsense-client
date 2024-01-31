@@ -4,7 +4,8 @@ from enum import Enum
 from typing import Any, Dict, List, Union, Optional
 import pydantic
 import requests
-from pfsense_api_client.api_types import BasePFSenseAPIClient
+
+from client.base import ClientBase
 
 class AliasTypes(str, Enum):
     """types for firewall aliases"""
@@ -22,7 +23,7 @@ class FirewallAliasUpdate(pydantic.BaseModel):
     apply: bool
 
 
-class FirewallMixin(BasePFSenseAPIClient):
+class FirewallMixin(ClientBase):
     """ mixin class for firewall functions """
 
     def get_firewall_alias(self, **kwargs: Any) -> requests.Response:

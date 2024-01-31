@@ -4,10 +4,11 @@ from typing import Any, Dict, Optional
 import requests
 import pydantic
 
-from pfsense_api_client.api_types import APIResponse, APIResponseDict, BasePFSenseAPIClient
+from client.base import ClientBase
+from pfsense_api_client.api_types import APIResponse, APIResponseDict
 
 
-class StatusMixin(BasePFSenseAPIClient):
+class StatusMixin(ClientBase):
     """ status calls """
     def get_carp_status(
         self, **filterargs: Dict[str, Any]

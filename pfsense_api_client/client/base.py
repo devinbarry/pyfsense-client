@@ -1,3 +1,26 @@
+from abc import ABC, abstractmethod
+from typing import Any, Dict, Optional
+from requests import Response, Session
+
+
+class ClientBase(ABC):
+    def __init__(self, requests_session: Session):
+        self.session = requests_session
+
+    @abstractmethod
+    def call(self, url: str, method: str = "GET", payload: Optional[Any] = None, params: Optional[Any] = None,
+             **kwargs: Dict[str, Any]) -> Response:
+        """Abstract method for making a call to a specified URL. This method must be implemented by subclasses.
+        - `url`: The URL to which the call is made.
+        - `method`: HTTP method (e.g., 'GET', 'POST').
+        - `payload`: The payload of the request.
+        - `params`: Additional parameters for the request.
+        - `**kwargs`: Additional keyword arguments.
+        """
+        pass
+
+
+
 class BasePFSenseAPIClient:
     def __init__(self, username: Optional[str] = None, password: Optional[str] = None, hostname: Optional[str] = None,
                  port: Optional[int] = None, config_filename: Optional[str] = None, mode: Optional[str] = None,

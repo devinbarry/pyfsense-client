@@ -4,10 +4,11 @@ from typing import Any, Dict
 
 from requests import Response
 
-from pfsense_api_client.api_types import APIResponse, BasePFSenseAPIClient
+from client.base import ClientBase
+from pfsense_api_client.api_types import APIResponse
 
 
-class ServiceMixin(BasePFSenseAPIClient):
+class ServiceMixin(ClientBase):
     """ mixin to add all the various service calls """
     def get_service(
         self, **filterargs: Dict[str, Any]
