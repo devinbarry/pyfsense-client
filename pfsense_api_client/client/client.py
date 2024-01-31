@@ -40,7 +40,8 @@ class ClientBase(ClientABC):
         elif self.config.mode == "api_token":
             headers["Authorization"] = f"{self.config.client_id} {self.config.client_token}"
 
-        return self.session.request(url=url, method=method, allow_redirects=False, **kwargs)
+        return self.session.request(url=url, method=method, allow_redirects=False, verify=self.config.verify_ssl,
+                                    **kwargs)
 
     def call_api(self, url: str, method: str = "GET", payload: dict[str, Any] | None = None) -> APIResponse:
         response = self.call(url=url, method=method, payload=payload)

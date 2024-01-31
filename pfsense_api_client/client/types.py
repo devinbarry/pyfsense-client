@@ -37,6 +37,7 @@ class ClientConfig(BaseModel):
     jwt: str | None = None
     client_id: str | None = None
     client_token: str | None = None
+    verify_ssl: bool = True
 
     @model_validator(mode='after')
     def check_mode(self) -> ClientConfig:
