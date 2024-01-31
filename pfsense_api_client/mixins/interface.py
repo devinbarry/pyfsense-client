@@ -4,8 +4,6 @@ from typing import Any, Dict
 
 import requests
 
-from client.api_types import ClientBase
-
 from client.base import ClientABC
 
 
