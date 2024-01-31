@@ -8,6 +8,7 @@ services:
     volumes:
       - ./pfsense_api_client:/app/pfsense_api_client
       - ./tests:/app/tests
+      - ./pfsense-api.json:/root/.config/pfsense-api.json
     command: pytest tests/
     stdin_open: true
     tty: true
