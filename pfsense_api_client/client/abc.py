@@ -11,3 +11,7 @@ class ClientABC(ABC):
     @abstractmethod
     def call(self, url: str, method: str = "GET", payload: Any = None, params: Any = None, **kwargs: Any) -> Response:
         pass
+
+    @abstractmethod
+    def call_api(self, url: str, method: str = "GET", payload: dict[str, Any] | None = None) -> Response:
+        pass

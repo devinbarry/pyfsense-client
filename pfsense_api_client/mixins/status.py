@@ -74,5 +74,4 @@ class StatusMixin(ClientABC):
     def get_system_status(self, **filterargs: Dict[str, Any]) -> APIResponseDict:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-system-status"""
         url = "/api/v1/status/system"
-        result = APIResponseDict.parse_obj(self.call_json(url, payload=filterargs))
-        return result
+        return APIResponseDict.parse_obj(self.call_api(url, payload=filterargs))
