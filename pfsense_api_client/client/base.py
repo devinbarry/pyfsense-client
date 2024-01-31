@@ -6,7 +6,7 @@ from typing import Any, Dict
 from requests import Response, Session
 from abc import ABC, abstractmethod
 
-from .api_types import PFSenseConfig, APIResponse
+from .types import PFSenseConfig, APIResponse
 
 
 class ClientABC(ABC):

@@ -5,7 +5,7 @@ import requests
 import pydantic
 
 from ..client.base import ClientABC
-from ..client.api_types import APIResponse, APIResponseDict
+from ..client.types import APIResponse, APIResponseDict
 
 
 class StatusMixin(ClientABC):

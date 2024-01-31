@@ -6,7 +6,7 @@ import pydantic
 import requests
 
 from ..client.base import ClientABC
-from ..client.api_types import APIResponse
+from ..client.types import APIResponse
 
 
 class SystemMixin(ClientABC):
