@@ -1,6 +1,6 @@
 import pytest
 from pydantic import ValidationError
-from pfsense_api_client.client.types import ClientConfig, APIResponse, APIResponseDict, APIResponseList
+from pfsense_api_client.client import ClientConfig, APIResponse
 
 # Test for ClientConfig
 def test_pfsense_config_valid():

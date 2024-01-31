@@ -1,1 +1,1 @@
-from .client.client import PFSenseAPIClient
+from .client import PFSenseAPIClient
