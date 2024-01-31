@@ -8,9 +8,9 @@ from pfsense_api_client.api_types import BasePFSenseAPIClient
 
 class AliasTypes(str, Enum):
     """types for firewall aliases"""
-    host = "host"  # pylint: disable=invalid-name
-    network = "network"  # pylint: disable=invalid-name
-    port = "port"  # pylint: disable=invalid-name
+    host = "host"
+    network = "network"
+    port = "port"
 
 class FirewallAliasUpdate(pydantic.BaseModel):
     """validating the firewall alias update"""
@@ -33,7 +33,8 @@ class FirewallMixin(BasePFSenseAPIClient):
     @pydantic.validate_arguments()
     def create_firewall_alias(self, name: str, alias_type: str, descr: str, address: Union[str, List[str]],
                               detail: Union[str, List[str]], apply: bool = True) -> requests.Response:
-        """Add a new host, network or port firewall alias. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-firewall-aliases"""
+        """Add a new host, network or port firewall alias.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-firewall-aliases"""
         url = "/api/v1/firewall/alias"
         method = "POST"
         class FirewallAlias(pydantic.BaseModel):
@@ -44,12 +45,14 @@ class FirewallMixin(BasePFSenseAPIClient):
             address: Union[str, List[str]]
             detail: Union[str, List[str]]
             apply: bool
-        payload = FirewallAlias(name=name, type=alias_type, descr=descr, address=address, detail=detail, apply=apply).dict()
+        payload = FirewallAlias(name=name, type=alias_type, descr=descr, address=address, detail=detail,
+                                apply=apply).dict()
         return self.call(url=url, method=method, payload=payload)
 
     @pydantic.validate_arguments()
     def delete_firewall_alias(self, name: str, apply: bool = True) -> requests.Response:
-        """Delete an existing alias and (optionally) reload filter. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-firewall-aliases"""
+        """Delete an existing alias and (optionally) reload filter.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-firewall-aliases"""
         url = "/api/v1/firewall/alias"
         method = "DELETE"
         payload = {"id": name, "apply": apply}
@@ -57,20 +60,23 @@ class FirewallMixin(BasePFSenseAPIClient):
 
     @pydantic.validate_arguments
     def update_firewall_alias(self, *args: FirewallAliasUpdate) -> requests.Response:
-        """Modify an existing firewall alias. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-firewall-aliases"""
+        """Modify an existing firewall alias.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-firewall-aliases"""
         method = "PUT"
         url = "/api/v1/firewall/alias"
         payload = FirewallAliasUpdate(*args).dict()
         return self.call(url=url, method=method, payload=payload)
 
     def create_firewall_alias_entry(self, **args: Dict[str, Any]) -> requests.Response:
-        """Add new entries to an existing firewall alias. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-firewall-alias-entries"""
+        """Add new entries to an existing firewall alias.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-firewall-alias-entries"""
         method = "POST"
         url = "/api/v1/firewall/alias/entry"
         return self.call(url=url, method=method, payload=args)
 
     def delete_firewall_alias_entry(self, **args: Dict[str, Any]) -> requests.Response:
-        """Delete existing entries from an existing firewall alias. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-firewall-alias-entries"""
+        """Delete existing entries from an existing firewall alias.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-firewall-alias-entries"""
         method = "DELETE"
         url = "/api/v1/firewall/alias/entry"
         return self.call(url=url, method=method, payload=args)
@@ -83,19 +89,22 @@ class FirewallMixin(BasePFSenseAPIClient):
         return self.call(url, method)
 
     def create_firewall_nat_one_to_one(self, **args: Dict[str, Any]) -> requests.Response:
-        """Add a new NAT 1:1 Mapping. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-nat-1-to-1-mappings"""
+        """Add a new NAT 1:1 Mapping.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-nat-1-to-1-mappings"""
         method = "POST"
         url = "/api/v1/firewall/nat/one_to_one"
         return self.call(url=url, method=method, payload=args)
 
     def delete_firewall_nat_one_to_one(self, **args: Dict[str, Any]) -> requests.Response:
-        """Delete a NAT 1:1 Mapping. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-nat-1-to-1-mappings"""
+        """Delete a NAT 1:1 Mapping.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-nat-1-to-1-mappings"""
         method = "DELETE"
         url = "/api/v1/firewall/nat/one_to_one"
         return self.call(url=url, method=method, payload=args)
 
     def update_firewall_nat_one_to_one(self, **args: Dict[str, Any]) -> requests.Response:
-        """Update a NAT 1:1 Mapping. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-nat-1-to-1-mappings"""
+        """Update a NAT 1:1 Mapping.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-nat-1-to-1-mappings"""
         method = "PUT"
         url = "/api/v1/firewall/nat/one_to_one"
         return self.call(url=url, method=method, payload=args)
@@ -106,42 +115,49 @@ class FirewallMixin(BasePFSenseAPIClient):
         return self.call(url, payload=kwargs)
 
     def update_nat_outbound_settings(self, **args: Dict[str, Any]) -> requests.Response:
-        """Update outbound NAT mode settings. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-update-outbound-nat-settings"""
+        """Update outbound NAT mode settings.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-update-outbound-nat-settings"""
         method = "PUT"
         url = "/api/v1/firewall/nat/outbound"
         return self.call(url, method=method, payload=args)
 
     def create_outbound_nat_mapping(self, **args: Dict[str, Any]) -> requests.Response:
-        """Create new outbound NAT mappings. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-outbound-nat-mappings"""
+        """Create new outbound NAT mappings.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-outbound-nat-mappings"""
         method = "POST"
         url = "/api/v1/firewall/nat/outbound/mapping"
         return self.call(url, method=method, payload=args)
 
     def delete_outbound_nat_mapping(self, **args: Dict[str, Any]) -> requests.Response:
-        """Delete outbound NAT mappings. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-outbound-nat-mappings"""
+        """Delete outbound NAT mappings.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-outbound-nat-mappings"""
         method = "DELETE"
         url = "/api/v1/firewall/nat/outbound/mapping"
         return self.call(url, method=method, payload=args)
 
     def get_nat_outbound_mapping(self, **kwargs: Dict[str, Any]) -> requests.Response:
-        """Read existing outbound NAT mode mappings. https://github.com/jaredhendrickson13/pfsense-api#3-read-outbound-nat-mappings"""
+        """Read existing outbound NAT mode mappings.
+        https://github.com/jaredhendrickson13/pfsense-api#3-read-outbound-nat-mappings"""
         url = "/api/v1/firewall/nat/outbound/mapping"
         return self.call(url, payload=kwargs)
 
     def update_outbound_nat_mapping(self, **args: Dict[str, Any]) -> requests.Response:
-        """Update existing outbound NAT mappings. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-outbound-nat-mappings"""
+        """Update existing outbound NAT mappings.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-outbound-nat-mappings"""
         method = "PUT"
         url = "/api/v1/firewall/nat/outbound/mapping"
         return self.call(url=url, method=method, payload=args)
 
     def create_nat_port_forward(self, **args: Dict[str, Any]) -> requests.Response:
-        """Add a new NAT port forward rule. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-nat-port-forwards"""
+        """Add a new NAT port forward rule.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-nat-port-forwards"""
         url = "/api/v1/firewall/nat/port_forward"
         method = "POST"
         return self.call(url=url, method=method, payload=args)
 
     def delete_nat_port_forward(self, **args: Dict[str, Any]) -> requests.Response:
-        """Delete a NAT port forward rule. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-nat-port-forwards"""
+        """Delete a NAT port forward rule.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-nat-port-forwards"""
         url = "/api/v1/firewall/nat/port_forward"
         method = "DELETE"
         return self.call(url=url, method=method, payload=args)
@@ -152,7 +168,8 @@ class FirewallMixin(BasePFSenseAPIClient):
         return self.call(url, payload=kwargs)
 
     def update_nat_port_forward(self, **args: Dict[str, Any]) -> requests.Response:
-        """Update a NAT port forward rule. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-nat-port-forwards"""
+        """Update a NAT port forward rule.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-nat-port-forwards"""
         method = "PUT"
         url = "/api/v1/firewall/nat/port_forward"
         return self.call(url=url, method=method, payload=args)
@@ -321,7 +338,8 @@ class FirewallMixin(BasePFSenseAPIClient):
         return self.call(url=url, method=method, payload=payload)
 
     def update_firewall_rule(self, **args: Dict[str, Any]) -> requests.Response:
-        """Update firewall rules. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-firewall-rules"""
+        """Update firewall rules.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-firewall-rules"""
         url = "/api/v1/firewall/rule"
         method = "PUT"
         return self.call(url=url, method=method, payload=args)
@@ -332,35 +350,41 @@ class FirewallMixin(BasePFSenseAPIClient):
         return self.call(url=url, payload=kwargs)
 
     def create_traffic_shaper_queue(self, **args: Dict[str, Any]) -> requests.Response:
-        """Add a queue to a traffic shaper interface. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-traffic-shaper-queue"""
+        """Add a queue to a traffic shaper interface.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-traffic-shaper-queue"""
         method = "POST"
         url = "/api/v1/firewall/traffic_shaper/queue"
         return self.call(url=url, method=method, payload=args)
 
     def delete_traffic_shaper_queue(self, **args: Dict[str, Any]) -> requests.Response:
-        """Delete a queue from a traffic shaper interface. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-traffic-shaper-queue"""
+        """Delete a queue from a traffic shaper interface.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-traffic-shaper-queue"""
         method = "DELETE"
         url = "/api/v1/firewall/traffic_shaper/queue"
         return self.call(url=url, method=method, payload=args)
 
     def create_virtual_ip(self, **args: Dict[str, Any]) -> requests.Response:
-        """Add a new virtual IP. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-virtual-ips"""
+        """Add a new virtual IP.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-virtual-ips"""
         method = "POST"
         url = "/api/v1/firewall/virtual_ip"
         return self.call(url=url, method=method, payload=args)
 
     def delete_virtual_ip(self, **args: Dict[str, Any]) -> requests.Response:
-        """Delete a virtual IP. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-virtual-ips"""
+        """Delete a virtual IP.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-virtual-ips"""
         method = "DELETE"
         url = "/api/v1/firewall/virtual_ip"
         return self.call(url=url, method=method, payload=args)
 
     def get_virtual_ip(self, **kwargs: Dict[str, Any]) -> requests.Response:
-        """Read virtual IP assignments. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-virtual-ips"""
+        """Read virtual IP assignments.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-virtual-ips"""
         return self.call("/api/v1/firewall/virtual_ip", payload=kwargs)
 
     def update_virtual_ip(self, **args: Dict[str, Any]) -> requests.Response:
-        """Update a virtual IP. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-virtual-ips"""
+        """Update a virtual IP.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-virtual-ips"""
         method = "PUT"
         url = "/api/v1/firewall/virtual_ip"
         return self.call(url=url, method=method, payload=args)
