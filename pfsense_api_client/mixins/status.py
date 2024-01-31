@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import requests
 from pydantic import validate_call
 
-from ..client.base import ClientABC
+from ..client import ClientABC
 from ..client.types import APIResponse, APIResponseDict
 
 
