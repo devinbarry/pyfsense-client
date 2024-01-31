@@ -4,11 +4,11 @@ from typing import Any, Dict
 
 import requests
 
-from client.api_types import BasePFSenseAPIClient
+from client.api_types import ClientBase
 
 
 def create_interfaces(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-interfaces"""
     url = "/api/v1/interface"
@@ -17,7 +17,7 @@ def create_interfaces(
 
 
 def delete_interfaces(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-interfaces"""
     url = "/api/v1/interface"
@@ -25,14 +25,14 @@ def delete_interfaces(
     return self.call(url=url, method=method, payload=args)
 
 
-def get_interfaces(self: BasePFSenseAPIClient, **filterargs: Dict[str, Any]) -> requests.Response:
+def get_interfaces(self: ClientBase, **filterargs: Dict[str, Any]) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-interfaces"""
     url = "/api/v1/interface"
     return self.call(url, payload=filterargs)
 
 
 def update_interfaces(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-interfaces"""
     url = "/api/v1/interface"
@@ -40,7 +40,7 @@ def update_interfaces(
     return self.call(url=url, method=method, payload=args)
 
 
-def apply_interfaces(self: BasePFSenseAPIClient) -> requests.Response:
+def apply_interfaces(self: ClientBase) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-apply-interfaces"""
     url = "/api/v1/interface/apply"
     method = "POST"
@@ -48,7 +48,7 @@ def apply_interfaces(self: BasePFSenseAPIClient) -> requests.Response:
 
 
 def create_interface_bridges(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-interface-bridges"""
     url = "/api/v1/interface/bridge"
@@ -57,7 +57,7 @@ def create_interface_bridges(
 
 
 def delete_interface_bridge(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-interface-bridges"""
     url = "/api/v1/interface/bridge"
@@ -65,14 +65,14 @@ def delete_interface_bridge(
     return self.call(url=url, method=method, payload=args)
 
 
-def get_interface_bridge(self: BasePFSenseAPIClient, **filterargs: Dict[str, Any]) -> requests.Response:
+def get_interface_bridge(self: ClientBase, **filterargs: Dict[str, Any]) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-interface-bridges"""
     url = "/api/v1/interface/bridge"
     return self.call(url, payload=filterargs)
 
 
 def update_interface_bridge(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-interface-bridges"""
     url = "/api/v1/interface/bridge"
@@ -81,7 +81,7 @@ def update_interface_bridge(
 
 
 def create_interface_vlan(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-interface-vlans"""
     url = "/api/v1/interface/vlan"
@@ -90,7 +90,7 @@ def create_interface_vlan(
 
 
 def delete_interface_vlan(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-interface-vlans"""
     url = "/api/v1/interface/vlan"
@@ -98,14 +98,14 @@ def delete_interface_vlan(
     return self.call(url=url, method=method, payload=args)
 
 
-def get_interface_vlan(self: BasePFSenseAPIClient, **filterargs: Dict[str, Any]) -> requests.Response:
+def get_interface_vlan(self: ClientBase, **filterargs: Dict[str, Any]) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-interface-vlans"""
     url = "/api/v1/interface/vlan"
     return self.call(url, payload=filterargs)
 
 
 def update_interface_vlan(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-interface-vlans"""
     url = "/api/v1/interface/vlan"

@@ -9,21 +9,15 @@ from pydantic import BaseModel
 import requests
 
 
-from .api_types import APIResponse, BasePFSenseAPIClient
+from .api_types import APIResponse, ClientBase
 from .constants import RESPONSE_CODES
-from .firewall import FirewallMixin
-from .service  import ServiceMixin
-from .status import StatusMixin
-from .system import SystemMixin
+from mixins.firewall import FirewallMixin
+from mixins.service  import ServiceMixin
+from mixins.status import StatusMixin
+from mixins.system import SystemMixin
 
 
-class PFSenseAPIClient(
-    FirewallMixin,
-    ServiceMixin,
-    StatusMixin,
-    SystemMixin,
-    BasePFSenseAPIClient,
-    ):
+class PFSenseAPIClient(ClientBase, FirewallMixin, ServiceMixin, StatusMixin, SystemMixin):
     """pfSense API Client"""
 
     def request_access_token(self) -> requests.Response:

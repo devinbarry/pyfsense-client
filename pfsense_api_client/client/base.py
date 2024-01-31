@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional
 from requests import Response, Session
 
 
-class ClientBase(ABC):
+class ClientABC(ABC):
     def __init__(self, requests_session: Session):
         self.session = requests_session
 
@@ -21,7 +21,7 @@ class ClientBase(ABC):
 
 
 
-class BasePFSenseAPIClient:
+class ClientBase:
     def __init__(self, username: Optional[str] = None, password: Optional[str] = None, hostname: Optional[str] = None,
                  port: Optional[int] = None, config_filename: Optional[str] = None, mode: Optional[str] = None,
                  requests_session: Session = Session()):

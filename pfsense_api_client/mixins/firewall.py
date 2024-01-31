@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Union, Optional
 import pydantic
 import requests
 
-from client.base import ClientBase
+from client.base import ClientABC
 
 class AliasTypes(str, Enum):
     """types for firewall aliases"""
@@ -23,7 +23,7 @@ class FirewallAliasUpdate(pydantic.BaseModel):
     apply: bool
 
 
-class FirewallMixin(ClientBase):
+class FirewallMixin(ClientABC):
     """ mixin class for firewall functions """
 
     def get_firewall_alias(self, **kwargs: Any) -> requests.Response:

@@ -4,11 +4,11 @@ from typing import Any, Dict, Optional
 import requests
 import pydantic
 
-from client.base import ClientBase
+from client.base import ClientABC
 from client.api_types import APIResponse, APIResponseDict
 
 
-class StatusMixin(ClientBase):
+class StatusMixin(ClientABC):
     """ status calls """
     def get_carp_status(self, **filterargs: Dict[str, Any]) -> requests.Response:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-carp-status"""

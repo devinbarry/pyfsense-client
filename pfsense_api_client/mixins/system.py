@@ -5,11 +5,11 @@ from typing import Any, Dict, List, Optional
 import pydantic
 import requests
 
-from client.base import ClientBase
+from client.base import ClientABC
 from client.api_types import APIResponse
 
 
-class SystemMixin(ClientBase):
+class SystemMixin(ClientABC):
     """ system calls """
     def get_system_api_error(self) -> APIResponse:
         """gets the list of error codes

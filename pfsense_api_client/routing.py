@@ -4,11 +4,11 @@ from typing import Any, Dict
 
 import requests
 
-from client.api_types import BasePFSenseAPIClient
+from client.api_types import ClientBase
 
 
 def apply_routing(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-apply-routing"""
     url = "/api/v1/routing/apply"
@@ -17,7 +17,7 @@ def apply_routing(
 
 
 def create_routing_gateway(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-routing-gateways"""
     url = "/api/v1/routing/gateway"
@@ -26,7 +26,7 @@ def create_routing_gateway(
 
 
 def delete_routing_gateway(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-routing-gateways"""
     url = "/api/v1/routing/gateway"
@@ -34,7 +34,7 @@ def delete_routing_gateway(
     return self.call(url=url, method=method, payload=args)
 
 
-def get_routing_gateway(self: BasePFSenseAPIClient, **filterargs: Dict[str, Any]) -> requests.Response:
+def get_routing_gateway(self: ClientBase, **filterargs: Dict[str, Any]) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-routing-gateways"""
 
     url = "/api/v1/routing/gateway"
@@ -42,7 +42,7 @@ def get_routing_gateway(self: BasePFSenseAPIClient, **filterargs: Dict[str, Any]
 
 
 def update_routing_gateway(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-routing-gateways"""
 
@@ -52,7 +52,7 @@ def update_routing_gateway(
 
 
 def get_routing_gateway_details(
-    self: BasePFSenseAPIClient, **filterargs: Dict[str, Any],
+    self: ClientBase, **filterargs: Dict[str, Any],
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-routing-gateway-details"""
     url = "/api/v1/routing/gateway/detail"
@@ -60,7 +60,7 @@ def get_routing_gateway_details(
 
 
 def create_static_route(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-static-routes"""
     url = "/api/v1/routing/static_route"
@@ -69,7 +69,7 @@ def create_static_route(
 
 
 def delete_static_route(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-static-routes"""
     url = "/api/v1/routing/static_route"
@@ -77,14 +77,14 @@ def delete_static_route(
     return self.call(url=url, method=method, payload=args)
 
 
-def get_static_route(self: BasePFSenseAPIClient, **filterargs: Dict[str, Any]) -> requests.Response:
+def get_static_route(self: ClientBase, **filterargs: Dict[str, Any]) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-static-routes"""
     url = "/api/v1/routing/static_route"
     return self.call(url, payload=filterargs)
 
 
 def update_static_route(
-    self: BasePFSenseAPIClient, **args: Dict[str, Any]
+    self: ClientBase, **args: Dict[str, Any]
 ) -> requests.Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-static-routes"""
     url = "/api/v1/routing/static_route"
