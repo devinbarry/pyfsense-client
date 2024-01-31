@@ -87,7 +87,7 @@ class FirewallMixin(ClientABC):
         https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-apply-firewall"""
         url = "/api/v1/firewall/apply"
         method = "POST"
-        return self.call(url, method)
+        return self.call(url=url, method=method)
 
     def create_firewall_nat_one_to_one(self, **args: Dict[str, Any]) -> requests.Response:
         """Add a new NAT 1:1 Mapping.
@@ -113,34 +113,34 @@ class FirewallMixin(ClientABC):
     def get_firewall_nat_one_to_one(self, **kwargs: Dict[str, Any]) -> requests.Response:
         """Read 1:1 NAT mappings. https://github.com/jaredhendrickson13/pfsense-api#3-read-nat-1-to-1-mappings"""
         url = "/api/v1/firewall/nat/one_to_one"
-        return self.call(url, payload=kwargs)
+        return self.call(url=url, payload=kwargs)
 
     def update_nat_outbound_settings(self, **args: Dict[str, Any]) -> requests.Response:
         """Update outbound NAT mode settings.
         https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-update-outbound-nat-settings"""
         method = "PUT"
         url = "/api/v1/firewall/nat/outbound"
-        return self.call(url, method=method, payload=args)
+        return self.call(url=url, method=method, payload=args)
 
     def create_outbound_nat_mapping(self, **args: Dict[str, Any]) -> requests.Response:
         """Create new outbound NAT mappings.
         https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-outbound-nat-mappings"""
         method = "POST"
         url = "/api/v1/firewall/nat/outbound/mapping"
-        return self.call(url, method=method, payload=args)
+        return self.call(url=url, method=method, payload=args)
 
     def delete_outbound_nat_mapping(self, **args: Dict[str, Any]) -> requests.Response:
         """Delete outbound NAT mappings.
         https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-outbound-nat-mappings"""
         method = "DELETE"
         url = "/api/v1/firewall/nat/outbound/mapping"
-        return self.call(url, method=method, payload=args)
+        return self.call(url=url, method=method, payload=args)
 
     def get_nat_outbound_mapping(self, **kwargs: Dict[str, Any]) -> requests.Response:
         """Read existing outbound NAT mode mappings.
         https://github.com/jaredhendrickson13/pfsense-api#3-read-outbound-nat-mappings"""
         url = "/api/v1/firewall/nat/outbound/mapping"
-        return self.call(url, payload=kwargs)
+        return self.call(url=url, payload=kwargs)
 
     def update_outbound_nat_mapping(self, **args: Dict[str, Any]) -> requests.Response:
         """Update existing outbound NAT mappings.
@@ -166,7 +166,7 @@ class FirewallMixin(ClientABC):
     def get_firewall_nat_port_forward(self, **kwargs: Dict[str, Any]) -> requests.Response:
         """Read NAT port forward rules. https://github.com/jaredhendrickson13/pfsense-api#3-read-nat-port-forwards"""
         url = "/api/v1/firewall/nat/port_forward"
-        return self.call(url, payload=kwargs)
+        return self.call(url=url, payload=kwargs)
 
     def update_nat_port_forward(self, **args: Dict[str, Any]) -> requests.Response:
         """Update a NAT port forward rule.
@@ -203,7 +203,7 @@ class FirewallMixin(ClientABC):
         """Read all existing firewall schedules.
         https://github.com/jaredhendrickson13/pfsense-api#3-read-firewall-schedules"""
         url = "/api/v1/firewall/schedule"
-        return self.call(url, payload=kwargs)
+        return self.call(url=url, payload=kwargs)
 
     def update_firewall_schedule(self, **args: Dict[str, Any]) -> requests.Response:
         """Update a firewall schedule.
@@ -229,13 +229,13 @@ class FirewallMixin(ClientABC):
     def get_firewall_states(self, **kwargs: Dict[str, Any]) -> requests.Response:
         """Read the current firewall states. https://github.com/jaredhendrickson13/pfsense-api#1-read-firewall-states"""
         url = "/api/v1/firewall/states"
-        return self.call(url, payload=kwargs)
+        return self.call(url=url, payload=kwargs)
 
     def get_firewall_states_size(self, **kwargs: Dict[str, Any]) -> requests.Response:
         """Read the maximum firewall state size, the current firewall state size, and the default firewall state size.
         https://github.com/jaredhendrickson13/pfsense-api#1-read-firewall-state-size"""
         url = "/api/v1/firewall/states/size"
-        return self.call(url, payload=kwargs)
+        return self.call(url=url, payload=kwargs)
 
     def update_firewall_state_size(self, **args: Dict[str, Any]) -> requests.Response:
         """Modify the maximum number of firewall state table entries allowed by the system.
@@ -264,7 +264,7 @@ class FirewallMixin(ClientABC):
         """Read all configured traffic shapers.
         https://github.com/jaredhendrickson13/pfsense-api#3-read-traffic-shapers"""
         url = "/api/v1/firewall/traffic_shaper"
-        return self.call(url, payload=kwargs)
+        return self.call(url=url, payload=kwargs)
 
     def update_traffic_shaper(self, **args: Dict[str, Any]) -> requests.Response:
         """Update a traffic shaper policy for an interface.
@@ -291,7 +291,7 @@ class FirewallMixin(ClientABC):
         """Get the traffic shaper limiters.
         https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-limiters"""
         url = "/api/v1/firewall/traffic_shaper/limiter"
-        return self.call(url, payload=kwargs)
+        return self.call(url=url, payload=kwargs)
 
     def create_limiter_bandwidth(self, **args: Dict[str, Any]) -> requests.Response:
         """Create a limiter bandwidth setting.
@@ -319,7 +319,7 @@ class FirewallMixin(ClientABC):
         https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-limiter-queue"""
         method = "DELETE"
         url = "/api/v1/firewall/traffic_shaper/limiter/queue"
-        return self.call(url, method=method, payload=args)
+        return self.call(url=url, method=method, payload=args)
 
     def create_firewall_rule(self, **args: Dict[str, Any]) -> requests.Response:
         """Create firewall rules. https://github.com/jaredhendrickson13/pfsense-api#3-read-firewall-rules"""
