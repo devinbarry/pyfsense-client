@@ -1,21 +1,12 @@
 class BasePFSenseAPIClient:
-    def __init__(
-        self,
-        username: Optional[str] = None,
-        password: Optional[str] = None,
-        hostname: Optional[str] = None,
-        port: Optional[int] = None,
-        config_filename: Optional[str] = None,
-        mode: Optional[str] = None,
-        requests_session: Session = Session(),
-    ):
-
+    def __init__(self, username: Optional[str] = None, password: Optional[str] = None, hostname: Optional[str] = None,
+                 port: Optional[int] = None, config_filename: Optional[str] = None, mode: Optional[str] = None,
+                 requests_session: Session = Session()):
         self.session = requests_session
-
         if config_filename:
             self.config = self.load_config(config_filename)
         else:
-            config_data: Dict[str, Union[str,int]] = {}
+            config_data: Dict[str, Union[str, int]] = {}
             if username:
                 config_data["username"] = username
             if password:
@@ -28,8 +19,7 @@ class BasePFSenseAPIClient:
                 config_data["mode"] = mode
             self.config = PFSenseConfig.parse_obj(config_data)
 
-        if self.config.mode == "local" and \
-            (self.config.username is not None and self.config.password is not None):
+        if self.config.mode == "local" and (self.config.username is not None and self.config.password is not None):
             self.session.auth = (self.config.username, self.config.password)
         elif self.config.mode == "local":
             raise ValueError("Authentication Mode is set to local and username or password are not set!")
@@ -49,78 +39,41 @@ class BasePFSenseAPIClient:
             error = f"Filename {self.config_filename.as_posix()} does not exist."
             raise FileNotFoundError(error)
         with self.config_filename.open(encoding="utf8") as file_handle:
-            pydantic_config = PFSenseConfig(
-                **json.load(file_handle)
-            )
+            pydantic_config = PFSenseConfig(**json.load(file_handle))
         self.config = pydantic_config
-        # self.hostname = pydantic_config.hostname
-        # self.port = pydantic_config.port
-        # self.mode = pydantic_config.mode or "local"
-
         return pydantic_config
 
-    def call(
-        self,
-        url: str,
-        method: str = "GET",
-        payload: Optional[Any] = None,
-        params: Optional[Any] = None,
-        **kwargs: Dict[str, Any],
-    ) -> Response:
+    def call(self, url: str, method: str = "GET", payload: Optional[Any] = None, params: Optional[Any] = None,
+             **kwargs: Dict[str, Any]) -> Response:
         """mocking type for mypy inheritance"""
         if url.startswith("/"):
             url = f"{self.baseurl}{url}"
-
         if payload is not None and method == "GET":
             kwargs["params"] = payload
         elif payload is not None:
             kwargs["json"] = payload
-
         if params is not None:
             kwargs["params"] = params
-
         if "headers" not in kwargs:
             kwargs["headers"] = {}
-
         if self.config.mode == "jwt":
             kwargs["headers"]["Authorization"] = f"Bearer {self.config.jwt}"
         elif self.config.mode == "api_token":
             kwargs["headers"]["Authorization"] = f"{self.config.client_id} {self.config.client_token}"
+        return self.session.request(url=url, method=method, allow_redirects=True, **kwargs)
 
-        return self.session.request(
-            url=url,
-            method=method,
-            allow_redirects=True,
-            **kwargs,  # type: ignore
-            )
-
-    def call_api(
-        self,
-        url: str,
-        method: str = "GET",
-        payload: Optional[Dict[str, Any]] = None,
-    ) -> APIResponse:
+    def call_api(self, url: str, method: str = "GET", payload: Optional[Dict[str, Any]] = None) -> APIResponse:
         """makes a call, returns the JSON blob as a dict"""
         response = self.call(url, method, payload)
         return APIResponse.parse_obj(response.json())
 
-    def call_api_dict(
-        self,
-        url: str,
-        method: str = "GET",
-        payload: Optional[Dict[str, Any]] = None,
-    ) -> APIResponse:
+    def call_api_dict(self, url: str, method: str = "GET", payload: Optional[Dict[str, Any]] = None) -> APIResponse:
         """makes a call, returns the JSON blob as a dict"""
         response = self.call(url, method, payload)
         print(response.json())
         return APIResponse.parse_obj(response.json())
 
-    def call_json(
-        self,
-        url: str,
-        method: str = "GET",
-        payload: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
+    def call_json(self, url: str, method: str = "GET", payload: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """makes a call, returns the JSON blob as a dict"""
         response = self.call(url, method, payload)
         result: Dict[str, Any] = response.json()
