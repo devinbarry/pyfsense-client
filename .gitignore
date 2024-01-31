@@ -8,3 +8,6 @@ dist/
 build/
 site/
 poetry.lock
+
+# PyCharm
+.idea/
