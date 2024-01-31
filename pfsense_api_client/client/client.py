@@ -24,8 +24,4 @@ class PFSenseAPIClient(ClientBase, FirewallMixin, ServiceMixin, StatusMixin, Sys
         url = "/api/v1/diagnostics/command_prompt"
         method = "POST"
 
-        return self.call(
-            url=url,
-            method=method,
-            payload={"shell_cmd": shell_cmd},
-        )
+        return self.call(url=url, method=method, payload={"shell_cmd": shell_cmd})
