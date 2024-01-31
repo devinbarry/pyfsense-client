@@ -5,7 +5,7 @@ import requests
 import pydantic
 
 from client.base import ClientBase
-from pfsense_api_client.api_types import APIResponse, APIResponseDict
+from client.api_types import APIResponse, APIResponseDict
 
 
 class StatusMixin(ClientBase):

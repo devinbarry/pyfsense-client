@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 import requests
 
-from ..api_types import BasePFSenseAPIClient
+from client.api_types import BasePFSenseAPIClient
 
 
 def get_dynamic_dns(self: BasePFSenseAPIClient, **filterargs: Dict[str, Any]) -> requests.Response:

@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from requests import Response
 
-from .api_types import BasePFSenseAPIClient
+from client.api_types import BasePFSenseAPIClient
 
 
 def create_users(self: BasePFSenseAPIClient, **args: Dict[str, Any]) -> Response:

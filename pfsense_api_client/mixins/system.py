@@ -6,7 +6,7 @@ import pydantic
 import requests
 
 from client.base import ClientBase
-from pfsense_api_client.api_types import APIResponse
+from client.api_types import APIResponse
 
 
 class SystemMixin(ClientBase):
