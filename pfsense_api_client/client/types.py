@@ -1,10 +1,23 @@
+from __future__ import annotations
+import json
+from pathlib import Path
 from typing import Any, Dict, List
 from pydantic import BaseModel, Field, field_validator
 
 
-class PFSenseConfig(BaseModel):
+class ClientConfig(BaseModel):
     """
-    This defines the expected config file.
+    Configuration model for pfSense API client.
+
+    Attributes:
+        username (Optional[str]): Username for authentication.
+        password (Optional[str]): Password for authentication.
+        hostname (str): Hostname or IP address of the server.
+        port (int): Port number for the connection. Defaults to 443.
+        mode (str): Connection mode. Defaults to 'local'.
+        jwt (Optional[str]): JWT token for authentication. Required if mode is 'jwt'.
+        client_id (Optional[str]): Client ID for authentication. Required if mode is 'api_token'.
+        client_token (Optional[str]): Client token for authentication. Required if mode is 'api_token'.
 
     Example config file:
     ```json
@@ -24,6 +37,29 @@ class PFSenseConfig(BaseModel):
     jwt: str | None = None
     client_id: str | None = None
     client_token: str | None = None
+
+
+def load_client_config(filename: str) -> ClientConfig:
+    """
+    Loads the client configuration from a JSON file.
+
+    Args:
+        filename (str): Path to the configuration file.
+
+    Returns:
+        ClientConfig: An instance of ClientConfig with data loaded from the file.
+
+    Raises:
+        FileNotFoundError: If the specified file does not exist.
+        ValidationError: If the data in the file does not conform to the ClientConfig schema.
+    """
+    config_path = Path(filename).expanduser()
+    if not config_path.exists():
+        raise FileNotFoundError(f"Config file {config_path.as_posix()} does not exist.")
+
+    with config_path.open(encoding="utf8") as file:
+        return ClientConfig(**json.load(file))
+
 
 
 class APIResponse(BaseModel):
