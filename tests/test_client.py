@@ -1,99 +1,89 @@
-import pytest
+import unittest
+from tempfile import NamedTemporaryFile
+
 import requests_mock
 import json
 from requests.exceptions import HTTPError
 from pfsense_api_client.client import ClientConfig, ClientBase, APIResponse, load_client_config
 
-# Example test configuration
-test_config = {
-    "username": "test_user",
-    "password": "test_pass",
-    "hostname": "test.example.com",
-    "mode": "jwt",
-    "jwt": "test_jwt_token"
-}
+class TestPfsenseApiClient(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # Set up test configuration for all tests
+        cls.test_config = {
+            "username": "test_user",
+            "password": "test_pass",
+            "hostname": "test.example.com",
+            "mode": "jwt",
+            "jwt": "test_jwt_token"
+        }
 
-
-# Test ClientBase Initialization
-def test_client_base_initialization():
-    config = ClientConfig(**test_config)
-    client = ClientBase(config=config)
-    assert client.config.username == "test_user"
-    assert client.config.password == "test_pass"
-    assert client.config.hostname == "test.example.com"
-
-
-# Test ClientBase with Mocked Request
-def test_client_base_call():
-    with requests_mock.Mocker() as m:
-        # Mocking a GET request
-        test_url = "https://test.example.com/test"
-        m.get(test_url, json={"status": "success", "data": "test_data"})
-
-        config = ClientConfig(**test_config)
+    def test_client_base_initialization(self):
+        config = ClientConfig(**self.test_config)
         client = ClientBase(config=config)
-        response = client.call("/test")
+        self.assertEqual(client.config.username, "test_user")
+        self.assertEqual(client.config.password, "test_pass")
+        self.assertEqual(client.config.hostname, "test.example.com")
 
-        assert response.status_code == 200
-        assert response.json()["status"] == "success"
-        assert response.json()["data"] == "test_data"
+    def test_client_base_call(self):
+        with requests_mock.Mocker() as m:
+            test_url = "https://test.example.com/test"
+            m.get(test_url, json={"status": "success", "data": "test_data"})
 
+            config = ClientConfig(**self.test_config)
+            client = ClientBase(config=config)
+            response = client.call("/test")
 
-# Test ClientBase with Config File Loading
-def test_client_base_config_loading(tmp_path):
-    # Create a temporary config file
-    config_file = tmp_path / "config.json"
-    with config_file.open("w") as f:
-        json.dump(test_config, f)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.json()["status"], "success")
+            self.assertEqual(response.json()["data"], "test_data")
 
-    config = load_client_config(str(config_file))
-    client = ClientBase(config=config)
-    assert client.config.username == "test_user"
-    assert client.config.hostname == "test.example.com"
-
-
-@pytest.mark.parametrize("method, mock_method", [
-    ("GET", "get"),
-    ("POST", "post"),
-    ("PUT", "put"),
-    ("DELETE", "delete")
-])
-def test_client_base_http_methods(method, mock_method):
-    with requests_mock.Mocker() as m:
-        test_url = f"https://test.example.com/test_{method.lower()}"
-        getattr(m, mock_method)(test_url, json={"method": method})
-
-        config = ClientConfig(**test_config)
+    def test_client_base_config_loading(self):
+        tmp_path = self.create_temporary_file(self.test_config)
+        config = load_client_config(tmp_path)
         client = ClientBase(config=config)
-        response = client.call(f"/test_{method.lower()}", method=method)
+        self.assertEqual(client.config.username, "test_user")
+        self.assertEqual(client.config.hostname, "test.example.com")
 
-        assert response.status_code == 200
-        assert response.json()["method"] == method
+    def create_temporary_file(self, content):
+        # Helper method to create a temporary file
+        with NamedTemporaryFile(delete=False) as tmp_file:
+            tmp_file.write(json.dumps(content).encode())
+            return tmp_file.name
 
-# Test ClientBase error handling
-def test_client_base_error_handling():
-    with requests_mock.Mocker() as m:
-        test_url = "https://test.example.com/error"
-        m.get(test_url, status_code=400, json={"error": "Bad Request"})
+    def test_client_base_http_methods(self):
+        for method, mock_method in [("GET", "get"), ("POST", "post"), ("PUT", "put"), ("DELETE", "delete")]:
+            with requests_mock.Mocker() as m:
+                test_url = f"https://test.example.com/test_{method.lower()}"
+                getattr(m, mock_method)(test_url, json={"method": method})
 
-        config = ClientConfig(**test_config)
-        client = ClientBase(config=config)
-        with pytest.raises(HTTPError):
-            response = client.call("/error")
-            response.raise_for_status()
+                config = ClientConfig(**self.test_config)
+                client = ClientBase(config=config)
+                response = client.call(f"/test_{method.lower()}", method=method)
 
-# Test ClientBase call_api method
-def test_client_base_call_api():
-    with requests_mock.Mocker() as m:
-        test_url = "https://test.example.com/api"
-        m.get(test_url, json={"status": "success", "data": {"key": "value"}})
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.json()["method"], method)
 
-        config = ClientConfig(**test_config)
-        client = ClientBase(config=config)
-        api_response = client.call_api("/api")
+    def test_client_base_error_handling(self):
+        with requests_mock.Mocker() as m:
+            test_url = "https://test.example.com/error"
+            m.get(test_url, status_code=400, json={"error": "Bad Request"})
 
-        assert isinstance(api_response, APIResponse)
-        assert api_response.status == "success"
-        assert api_response.data == {"key": "value"}
+            config = ClientConfig(**self.test_config)
+            client = ClientBase(config=config)
+            with self.assertRaises(HTTPError):
+                response = client.call("/error")
+                response.raise_for_status()
 
+    def test_client_base_call_api(self):
+        with requests_mock.Mocker() as m:
+            test_url = "https://test.example.com/api"
+            m.get(test_url, json={"status": "success", "data": {"key": "value"}})
 
+            config = ClientConfig(**self.test_config)
+            client = ClientBase(config=config)
+            api_response = client.call_api("/api")
+
+            self.assertIsInstance(api_response, APIResponse)
+            self.assertEqual(api_response.status, "success")
+            self.assertEqual(api_response.data, {"key": "value"})

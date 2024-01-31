@@ -28,8 +28,11 @@ class ClientBase(ClientABC):
 
     @property
     def baseurl(self) -> str:
-        return f"https://{self.config.hostname}:{self.config.port}" if self.config.port else f"https://{self.config.hostname}"
-
+        # Check if the port is set and is not the default HTTPS port (443)
+        if self.config.port and self.config.port != 443:
+            return f"https://{self.config.hostname}:{self.config.port}"
+        else:
+            return f"https://{self.config.hostname}"
 
     def call(self, url: str, method: str = "GET", payload: Any = None, params: Any = None, **kwargs: Any) -> Response:
         url = f"{self.baseurl}{url}" if url.startswith("/") else url
@@ -46,4 +49,4 @@ class ClientBase(ClientABC):
 
     def call_api(self, url: str, method: str = "GET", payload: Dict[str, Any] | None = None) -> APIResponse:
         response = self.call(url, method, payload)
-        return APIResponse.parse_obj(response.json())
+        return APIResponse.model_validate(response.json())
