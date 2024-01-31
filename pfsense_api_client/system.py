@@ -7,11 +7,7 @@ import requests
 
 from .api_types import APIResponse, BasePFSenseAPIClient
 
-__all__ = [
-    "SystemMixin",
-]
 
-#pylint: disable=too-many-public-methods
 class SystemMixin(BasePFSenseAPIClient):
     """ system calls """
     def get_system_api_error(self) -> APIResponse:
