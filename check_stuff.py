@@ -6,11 +6,11 @@ import inspect
 
 from loguru import logger
 
-import pfsense_api_client.user
+import mixins.user
 import pfsense_api_client.mixins.status
 import pfsense_api_client.mixins.system
 import pfsense_api_client.mixins.firewall
-import pfsense_api_client.routing
+import mixins.routing
 import pfsense_api_client.service
 import pfsense_api_client.service.dns
 
@@ -31,11 +31,11 @@ TYPE_FOR_VERB = {
 }
 
 for module in [
-    pfsense_api_client.user,
+    mixins.user,
     pfsense_api_client.mixins.status,
     pfsense_api_client.mixins.system,
     pfsense_api_client.mixins.firewall,
-    pfsense_api_client.routing,
+    mixins.routing,
     pfsense_api_client.service,
     pfsense_api_client.service.dns,
 ]:
