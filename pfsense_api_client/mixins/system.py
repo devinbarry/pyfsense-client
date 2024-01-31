@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional
 import pydantic
 import requests
 
-from .api_types import APIResponse, BasePFSenseAPIClient
+from pfsense_api_client.api_types import APIResponse, BasePFSenseAPIClient
 
 
 class SystemMixin(BasePFSenseAPIClient):
