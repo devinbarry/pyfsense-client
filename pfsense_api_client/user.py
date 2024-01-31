@@ -6,25 +6,6 @@ from requests import Response
 
 from .api_types import BasePFSenseAPIClient
 
-__all__ = [
-    "create_ldap_auth_servers",
-    "create_radius_auth_servers",
-    "create_user_group",
-    "create_user_privileges",
-    "create_users",
-    "delete_auth_servers",
-    "delete_ldap_auth_servers",
-    "delete_radius_auth_servers",
-    "delete_user_group",
-    "delete_user_privileges",
-    "delete_users",
-    "get_auth_servers",
-    "get_ldap_auth_servers",
-    "get_radius_auth_servers",
-    "get_users",
-    "update_users",
-]
-
 
 def create_users(self: BasePFSenseAPIClient, **args: Dict[str, Any]) -> Response:
     """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-users"""

@@ -7,9 +7,9 @@ import inspect
 from loguru import logger
 
 import pfsense_api_client.user
-import pfsense_api_client.status
-import pfsense_api_client.system
-import pfsense_api_client.firewall
+import pfsense_api_client.mixins.status
+import pfsense_api_client.mixins.system
+import pfsense_api_client.mixins.firewall
 import pfsense_api_client.routing
 import pfsense_api_client.service
 import pfsense_api_client.service.dns
@@ -32,9 +32,9 @@ TYPE_FOR_VERB = {
 
 for module in [
     pfsense_api_client.user,
-    pfsense_api_client.status,
-    pfsense_api_client.system,
-    pfsense_api_client.firewall,
+    pfsense_api_client.mixins.status,
+    pfsense_api_client.mixins.system,
+    pfsense_api_client.mixins.firewall,
     pfsense_api_client.routing,
     pfsense_api_client.service,
     pfsense_api_client.service.dns,

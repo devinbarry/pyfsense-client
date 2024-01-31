@@ -7,7 +7,6 @@ from requests import Response
 from pfsense_api_client.api_types import APIResponse, BasePFSenseAPIClient
 
 
-#pylint: disable=too-many-public-methods
 class ServiceMixin(BasePFSenseAPIClient):
     """ mixin to add all the various service calls """
     def get_service(
