@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any, Dict
+from typing import Any
 from requests import Response
 
 from .abc import ClientABC
@@ -42,7 +42,7 @@ class ClientBase(ClientABC):
 
         return self.session.request(url=url, method=method, allow_redirects=False, **kwargs)
 
-    def call_api(self, url: str, method: str = "GET", payload: Dict[str, Any] | None = None) -> APIResponse:
+    def call_api(self, url: str, method: str = "GET", payload: dict[str, Any] | None = None) -> APIResponse:
         response = self.call(url=url, method=method, payload=payload)
         return APIResponse.model_validate(response.json())
 

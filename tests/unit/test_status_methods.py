@@ -36,7 +36,8 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.update_carp_status(enable=True, maintenance_mode=True)
 
-        mock_call.assert_called_once_with(url="/api/v1/status/carp", method="PUT", payload={"enable": True, "maintenance_mode": True})
+        mock_call.assert_called_once_with(url="/api/v1/status/carp", method="PUT",
+                                          payload={"enable": True, "maintenance_mode": True})
         self.assertEqual(response, mock_response)
 
     @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
@@ -48,3 +49,75 @@ class TestStatusMixin(unittest.TestCase):
 
         mock_call.assert_called_once_with(url="/api/v1/status/gateway", payload={})
         self.assertEqual(response, mock_response)
+
+    @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
+    def test_get_system_status(self, mock_call):
+        mock_response = MagicMock()
+        mock_call.return_value = mock_response
+
+        response = self.client.get_system_status()
+
+        mock_call.assert_called_once_with(url="/api/v1/status/system", payload={})
+        self.assertEqual(response, mock_response)
+
+
+    @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
+    def test_get_interface_status(self, mock_call):
+        mock_response = MagicMock()
+        mock_call.return_value = mock_response
+
+        response = self.client.get_interface_status()
+
+        mock_call.assert_called_once_with(url="/api/v1/status/interface", payload={})
+        self.assertEqual(response, mock_response)
+
+    @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
+    def test_get_configuration_history_status_log(self, mock_call):
+        mock_response = MagicMock()
+        mock_call.return_value = mock_response
+
+        response = self.client.get_configuration_history_status_log()
+
+        mock_call.assert_called_once_with(url="/api/v1/status/log/config_history", payload={})
+        self.assertEqual(response, mock_response)
+
+    @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
+    def test_get_dhcp_status_log(self, mock_call):
+        mock_response = MagicMock()
+        mock_call.return_value = mock_response
+
+        response = self.client.get_dhcp_status_log()
+
+        mock_call.assert_called_once_with(url="/api/v1/status/log/dhcp", payload={})
+        self.assertEqual(response, mock_response)
+
+    @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
+    def test_get_firewall_status_log(self, mock_call):
+        mock_response = MagicMock()
+        mock_call.return_value = mock_response
+
+        response = self.client.get_firewall_status_log()
+
+        mock_call.assert_called_once_with(url="/api/v1/status/log/firewall", payload={})
+        self.assertEqual(response, mock_response)
+
+    @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
+    def test_get_system_status_log(self, mock_call):
+        mock_response = MagicMock()
+        mock_call.return_value = mock_response
+
+        response = self.client.get_system_status_log()
+
+        mock_call.assert_called_once_with(url="/api/v1/status/log/system", payload={})
+        self.assertEqual(response, mock_response)
+
+    @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
+    def test_get_openvpn_status(self, mock_call):
+        mock_response = MagicMock()
+        mock_call.return_value = mock_response
+
+        response = self.client.get_openvpn_status()
+
+        mock_call.assert_called_once_with(url="/api/v1/status/openvpn", payload={})
+        self.assertEqual(response, mock_response)
+
