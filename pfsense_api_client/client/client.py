@@ -1,4 +1,5 @@
 from __future__ import annotations
+import logging
 from typing import Any
 from requests import Response
 
@@ -14,6 +15,7 @@ class ClientBase(ClientABC):
     def __init__(self, config:  ClientConfig):
         super().__init__()
         self.config = config
+        self.logger = logging.getLogger(__name__)
 
         if self.config.mode == "local" and not (self.config.username and self.config.password):
             raise ValueError("Authentication Mode is set to local but username or password are missing.")
@@ -40,8 +42,10 @@ class ClientBase(ClientABC):
         elif self.config.mode == "api_token":
             headers["Authorization"] = f"{self.config.client_id} {self.config.client_token}"
 
-        return self.session.request(url=url, method=method, allow_redirects=False, verify=self.config.verify_ssl,
+        response = self.session.request(url=url, method=method, allow_redirects=False, verify=self.config.verify_ssl,
                                     **kwargs)
+        self.logger.debug(f"API response: {response.json()}")
+        return response
 
     def call_api(self, url: str, method: str = "GET", payload: dict[str, Any] | None = None) -> APIResponse:
         response = self.call(url=url, method=method, payload=payload)
