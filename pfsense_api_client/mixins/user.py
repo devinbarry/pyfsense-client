@@ -21,7 +21,7 @@ class UserMixin(ClientABC):
     def get_users(self, *filterargs: Dict[str, Any]) -> Response:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-users"""
         url = "/api/v1/user"
-        return self.call(url, params=filterargs)
+        return self.call(url=url, params=filterargs)
     
     def update_users(self, **args: Dict[str, Any]) -> Response:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-users"""
@@ -62,17 +62,17 @@ class UserMixin(ClientABC):
     def get_auth_servers(self, *filterargs: Dict[str, Any]) -> Response:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#6-read-auth-servers"""
         url = "/api/v1/user/auth_server"
-        return self.call(url, payload=filterargs)
+        return self.call(url=url, payload=filterargs)
     
     def get_ldap_auth_servers(self, *filterargs: Dict[str, Any]) -> Response:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#7-read-ldap-auth-servers"""
         url = "/api/v1/user/auth_server/ldap"
-        return self.call(url, payload=filterargs)
+        return self.call(url=url, payload=filterargs)
     
     def get_radius_auth_servers(self, *filterargs: Dict[str, Any]) -> Response:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#8-read-radius-auth-servers"""
         url = "/api/v1/user/auth_server/radius"
-        return self.call(url, payload=filterargs)
+        return self.call(url=url, payload=filterargs)
     
     def create_user_group(self, **args: Dict[str, Any]) -> Response:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-user-group"""

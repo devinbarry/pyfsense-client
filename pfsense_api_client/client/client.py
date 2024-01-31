@@ -40,10 +40,10 @@ class ClientBase(ClientABC):
         elif self.config.mode == "api_token":
             headers["Authorization"] = f"{self.config.client_id} {self.config.client_token}"
 
-        return self.session.request(url=url, method=method, allow_redirects=True, **kwargs)
+        return self.session.request(url=url, method=method, allow_redirects=False, **kwargs)
 
     def call_api(self, url: str, method: str = "GET", payload: Dict[str, Any] | None = None) -> APIResponse:
-        response = self.call(url, method, payload)
+        response = self.call(url=url, method=method, payload=payload)
         return APIResponse.model_validate(response.json())
 
 
@@ -64,5 +64,4 @@ class PFSenseAPIClient(ClientBase, FirewallMixin, ServiceMixin, StatusMixin, Sys
         """
         url = "/api/v1/diagnostics/command_prompt"
         method = "POST"
-
         return self.call(url=url, method=method, payload={"shell_cmd": shell_cmd})
