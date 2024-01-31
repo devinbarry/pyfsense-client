@@ -5,8 +5,8 @@ from abc import ABC, abstractmethod
 
 
 class ClientABC(ABC):
-    def __init__(self, requests_session: Session | None = None):
-        self.session = requests_session if requests_session is not None else Session()
+    def __init__(self):
+        self.session = Session()
 
     @abstractmethod
     def call(self, url: str, method: str = "GET", payload: Any = None, params: Any = None, **kwargs: Any) -> Response:
