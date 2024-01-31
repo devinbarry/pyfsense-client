@@ -2,7 +2,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Any, Dict, List
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 class ClientConfig(BaseModel):
@@ -14,7 +14,7 @@ class ClientConfig(BaseModel):
         password (Optional[str]): Password for authentication.
         hostname (str): Hostname or IP address of the server.
         port (int): Port number for the connection. Defaults to 443.
-        mode (str): Connection mode. Defaults to 'local'.
+        mode (str): Authentication mode. Defaults to 'local'.
         jwt (Optional[str]): JWT token for authentication. Required if mode is 'jwt'.
         client_id (Optional[str]): Client ID for authentication. Required if mode is 'api_token'.
         client_token (Optional[str]): Client token for authentication. Required if mode is 'api_token'.
@@ -29,14 +29,38 @@ class ClientConfig(BaseModel):
     }
     ```
     """
-    username: str | None
-    password: str | None
+    username: str | None = None
+    password: str | None = None
     hostname: str
     port: int = 443
     mode: str = "local"
     jwt: str | None = None
     client_id: str | None = None
     client_token: str | None = None
+
+    @model_validator(mode='after')
+    def check_mode(self) -> ClientConfig:
+        if self.mode not in ('local', 'jwt', 'api_token'):
+            raise ValueError("Authentication mode must be one of 'local', 'jwt', or 'api_token'.")
+        return self
+
+    @model_validator(mode='after')
+    def check_mode_api_token(self) -> ClientConfig:
+        if self.mode == 'api_token' and not (self.client_id and self.client_token):
+            raise ValueError("client_id and client_token must be provided if mode is 'api_token'.")
+        return self
+
+    @model_validator(mode='after')
+    def check_mode_jwt(self) -> ClientConfig:
+        if self.mode == 'jwt' and not self.jwt:
+            raise ValueError("jwt must be provided if mode is 'jwt'.")
+        return self
+
+    @model_validator(mode='after')
+    def check_mode_local(self) -> ClientConfig:
+        if self.mode == 'local' and not (self.username and self.password):
+            raise ValueError("username and password must be provided if mode is 'local'.")
+        return self
 
 
 def load_client_config(filename: str) -> ClientConfig:

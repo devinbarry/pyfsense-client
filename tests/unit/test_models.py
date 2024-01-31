@@ -3,7 +3,7 @@ from pydantic import ValidationError
 from pfsense_api_client.client import ClientConfig, APIResponse
 
 # Test for ClientConfig
-def test_pfsense_config_valid():
+def test_pfsense_config_username_and_pass():
     config = ClientConfig(
         username="user",
         password="pass",
@@ -13,6 +13,21 @@ def test_pfsense_config_valid():
     assert config.password == "pass"
     assert config.hostname == "example.com"
     assert config.port == 443  # Default value
+
+def test_pfsense_config_token():
+    config = ClientConfig(
+        mode="api_token",
+        hostname="example.com",
+        client_id="client_id",
+        client_token="client_token",
+    )
+    assert config.username is None
+    assert config.password is None
+    assert config.hostname == "example.com"
+    assert config.port == 443  # Default value
+    assert config.mode == "api_token"
+    assert config.client_id == "client_id"
+    assert config.client_token == "client_token"
 
 def test_pfsense_config_invalid():
     with pytest.raises(ValidationError):
