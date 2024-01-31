@@ -11,4 +11,6 @@ COPY ./requirements /requirements
 RUN pip install --upgrade pip
 
 # Don't cache installers to reduce image size
-RUN pip install --no-cache-dir -r /requirements/requirements.txt
+RUN pip install --no-cache-dir -r /requirements/requirements_dev.txt
+
+WORKDIR /app

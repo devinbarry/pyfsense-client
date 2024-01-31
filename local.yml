@@ -5,5 +5,9 @@ services:
     build:
       context: .
       dockerfile: docker/local/Dockerfile
+    volumes:
+      - ./pfsense_api_client:/app/pfsense_api_client
+      - ./tests:/app/tests
+    command: pytest tests/
     stdin_open: true
     tty: true
