@@ -6,12 +6,7 @@ import pydantic
 
 from .api_types import APIResponse, APIResponseDict, BasePFSenseAPIClient
 
-__all__ = [
-    "StatusMixin",
-]
 
-
-#pylint: disable=too-many-public-methods
 class StatusMixin(BasePFSenseAPIClient):
     """ status calls """
     def get_carp_status(
