@@ -2,7 +2,7 @@
 
 from enum import Enum
 from typing import Any, Dict, List, Union, Optional
-import pydantic
+from pydantic import BaseModel, validate_call
 import requests
 
 from ..client.base import ClientABC
@@ -13,7 +13,7 @@ class AliasTypes(str, Enum):
     network = "network"
     port = "port"
 
-class FirewallAliasUpdate(pydantic.BaseModel):
+class FirewallAliasUpdate(BaseModel):
     """validating the firewall alias update"""
     name: str
     type: AliasTypes
@@ -31,14 +31,14 @@ class FirewallMixin(ClientABC):
         url = "/api/v1/firewall/alias"
         return self.call(url=url, payload=dict(kwargs))
 
-    @pydantic.validate_arguments()
+    @validate_call
     def create_firewall_alias(self, name: str, alias_type: str, descr: str, address: Union[str, List[str]],
                               detail: Union[str, List[str]], apply: bool = True) -> requests.Response:
         """Add a new host, network or port firewall alias.
         https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-firewall-aliases"""
         url = "/api/v1/firewall/alias"
         method = "POST"
-        class FirewallAlias(pydantic.BaseModel):
+        class FirewallAlias(BaseModel):
             """validating the firewall alias"""
             name: str
             type: AliasTypes
@@ -50,7 +50,7 @@ class FirewallMixin(ClientABC):
                                 apply=apply).dict()
         return self.call(url=url, method=method, payload=payload)
 
-    @pydantic.validate_arguments()
+    @validate_call
     def delete_firewall_alias(self, name: str, apply: bool = True) -> requests.Response:
         """Delete an existing alias and (optionally) reload filter.
         https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-firewall-aliases"""
@@ -59,7 +59,7 @@ class FirewallMixin(ClientABC):
         payload = {"id": name, "apply": apply}
         return self.call(url=url, method=method, payload=payload)
 
-    @pydantic.validate_arguments
+    @validate_call
     def update_firewall_alias(self, *args: FirewallAliasUpdate) -> requests.Response:
         """Modify an existing firewall alias.
         https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-firewall-aliases"""
@@ -327,7 +327,7 @@ class FirewallMixin(ClientABC):
         method = "POST"
         return self.call(url=url, method=method, payload=args)
 
-    @pydantic.validate_arguments
+    @validate_call
     def delete_firewall_rule(self, name: str, apply: Optional[bool]) -> requests.Response:
         """Delete firewall rules.
         https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-firewall-rules"""

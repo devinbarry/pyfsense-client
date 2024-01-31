@@ -2,7 +2,7 @@
 from typing import Any, Dict, Optional
 
 import requests
-import pydantic
+from pydantic import validate_call
 
 from ..client.base import ClientABC
 from ..client.types import APIResponse, APIResponseDict
@@ -16,7 +16,7 @@ class StatusMixin(ClientABC):
         return self.call(url, payload=filterargs)
 
 
-    @pydantic.validate_arguments()
+    @validate_call
     def update_carp_status(self, enable: Optional[bool], maintenance_mode: Optional[bool]) -> requests.Response:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-update-carp-status"""
         url = "/api/v1/status/carp"

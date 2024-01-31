@@ -1,5 +1,5 @@
 from typing import Any, Dict, List
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class PFSenseConfig(BaseModel):
@@ -36,7 +36,7 @@ class APIResponse(BaseModel):
     message: str
     data: Any
 
-    @validator("code")
+    @field_validator("code")
     def validate_code(cls, value: int) -> int:
         """
         Validates it's an integer in the expected list.
