@@ -168,36 +168,42 @@ class FirewallMixin(BasePFSenseAPIClient):
         return self.call(url=url, method=method)
 
     def create_firewall_schedule(self, **args: Dict[str, Any]) -> requests.Response:
-        """Add a firewall schedule. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-schedule"""
+        """Add a firewall schedule.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-schedule"""
         url = "/api/v1/firewall/schedule"
         method = "POST"
         return self.call(url=url, method=method, payload=args)
 
     def delete_firewall_schedule(self, **args: Dict[str, Any]) -> requests.Response:
-        """Delete a firewall schedule. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-schedule"""
+        """Delete a firewall schedule.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-schedule"""
         method = "DELETE"
         url = "/api/v1/firewall/schedule"
         return self.call(url=url, method=method, payload=args)
 
     def get_firewall_schedule(self, **kwargs: Dict[str, Any]) -> requests.Response:
-        """Read all existing firewall schedules. https://github.com/jaredhendrickson13/pfsense-api#3-read-firewall-schedules"""
+        """Read all existing firewall schedules.
+        https://github.com/jaredhendrickson13/pfsense-api#3-read-firewall-schedules"""
         url = "/api/v1/firewall/schedule"
         return self.call(url, payload=kwargs)
 
     def update_firewall_schedule(self, **args: Dict[str, Any]) -> requests.Response:
-        """Update a firewall schedule. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-schedule"""
+        """Update a firewall schedule.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-schedule"""
         method = "PUT"
         url = "/api/v1/firewall/schedule"
         return self.call(url=url, method=method, payload=args)
 
     def create_schedule_time_range(self, **args: Dict[str, Any]) -> requests.Response:
-        """Add a time range to an existing firewall schedule. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-schedule-time-range"""
+        """Add a time range to an existing firewall schedule.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-schedule-time-range"""
         method = "POST"
         url = "/api/v1/firewall/schedule/time_range"
         return self.call(url=url, method=method, payload=args)
 
     def delete_schedule_time_range(self, **args: Dict[str, Any]) -> requests.Response:
-        """Delete a time range from an existing firewall schedule. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-schedule-time-range"""
+        """Delete a time range from an existing firewall schedule.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-schedule-time-range"""
         method = "DELETE"
         url = "/api/v1/firewall/schedule/time_range"
         return self.call(url=url, method=method, payload=args)
@@ -223,65 +229,76 @@ class FirewallMixin(BasePFSenseAPIClient):
         return self.call(url=url, method=method, payload=args)
 
     def create_traffic_shaper(self, **args: Dict[str, Any]) -> requests.Response:
-        """Add a traffic shaper policy to an interface. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-traffic-shaper"""
+        """Add a traffic shaper policy to an interface.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-traffic-shaper"""
         method = "POST"
         url = "/api/v1/firewall/traffic_shaper"
         return self.call(url=url, method=method, payload=args)
 
     def delete_traffic_shaper(self, **args: Dict[str, Any]) -> requests.Response:
-        """Delete a traffic shaper policy from an interface. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-traffic-shaper"""
+        """Delete a traffic shaper policy from an interface.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-traffic-shaper"""
         method = "DELETE"
         url = "/api/v1/firewall/traffic_shaper"
         return self.call(url=url, method=method, payload=args)
 
     def get_traffic_shaper(self, **kwargs: Dict[str, Any]) -> requests.Response:
-        """Read all configured traffic shapers. https://github.com/jaredhendrickson13/pfsense-api#3-read-traffic-shapers"""
+        """Read all configured traffic shapers.
+        https://github.com/jaredhendrickson13/pfsense-api#3-read-traffic-shapers"""
         url = "/api/v1/firewall/traffic_shaper"
         return self.call(url, payload=kwargs)
 
     def update_traffic_shaper(self, **args: Dict[str, Any]) -> requests.Response:
-        """Update a traffic shaper policy for an interface. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-traffic-shaper"""
+        """Update a traffic shaper policy for an interface.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-traffic-shaper"""
         url = "/api/v1/firewall/traffic_shaper"
         method = "PUT"
         return self.call(url=url, method=method, payload=args)
 
     def create_traffic_shaper_limiter(self, **args: Dict[str, Any]) -> requests.Response:
-        """Add a traffic shaper limiter. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-limiter"""
+        """Add a traffic shaper limiter.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-limiter"""
         url = "/api/v1/firewall/traffic_shaper/limiter"
         method = "POST"
         return self.call(url=url, method=method, payload=args)
 
     def delete_traffic_shaper_limiter(self, **args: Dict[str, Any]) -> requests.Response:
-        """Delete a traffic shaper limiter. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-limiter"""
+        """Delete a traffic shaper limiter.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-limiter"""
         method = "DELETE"
         url = "/api/v1/firewall/traffic_shaper/limiter"
         return self.call(url=url, method=method, payload=args)
 
     def get_traffic_shaper_limiter(self, **kwargs: Dict[str, Any]) -> requests.Response:
-        """Get the traffic shaper limiters. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-limiters"""
+        """Get the traffic shaper limiters.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-limiters"""
         url = "/api/v1/firewall/traffic_shaper/limiter"
         return self.call(url, payload=kwargs)
 
     def create_limiter_bandwidth(self, **args: Dict[str, Any]) -> requests.Response:
-        """Create a limiter bandwidth setting. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-limiter-bandwidth"""
+        """Create a limiter bandwidth setting.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-limiter-bandwidth"""
         method = "POST"
         url = "/api/v1/firewall/traffic_shaper/limiter/bandwidth"
         return self.call(url=url, method=method, payload=args)
 
     def delete_limiter_bandwidth(self, **args: Dict[str, Any]) -> requests.Response:
-        """Delete a limiter bandwidth setting. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-limiter-bandwidth"""
+        """Delete a limiter bandwidth setting.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-limiter-bandwidth"""
         method = "DELETE"
         url = "/api/v1/firewall/traffic_shaper/limiter/bandwidth"
         return self.call(url=url, method=method, payload=args)
 
     def create_limiter_queue(self, **args: Dict[str, Any]) -> requests.Response:
-        """Add a child queue to an existing traffic shaper limiter. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-limiter-queue"""
+        """Add a child queue to an existing traffic shaper limiter.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-limiter-queue"""
         method = "POST"
         url = "/api/v1/firewall/traffic_shaper/limiter/queue"
         return self.call(url=url, method=method, payload=args)
 
     def delete_limiter_queue(self, **args: Dict[str, Any]) -> requests.Response:
-        """Delete a child queue from an existing traffic shaper limiter. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-limiter-queue"""
+        """Delete a child queue from an existing traffic shaper limiter.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-limiter-queue"""
         method = "DELETE"
         url = "/api/v1/firewall/traffic_shaper/limiter/queue"
         return self.call(url, method=method, payload=args)
@@ -294,7 +311,8 @@ class FirewallMixin(BasePFSenseAPIClient):
 
     @pydantic.validate_arguments
     def delete_firewall_rule(self, name: str, apply: Optional[bool]) -> requests.Response:
-        """Delete firewall rules. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-firewall-rules"""
+        """Delete firewall rules.
+        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-firewall-rules"""
         url = "/api/v1/firewall/rule"
         method = "DELETE"
         payload: Dict[str, Union[str, bool]] = {"name": name}
@@ -316,25 +334,25 @@ class FirewallMixin(BasePFSenseAPIClient):
     def create_traffic_shaper_queue(self, **args: Dict[str, Any]) -> requests.Response:
         """Add a queue to a traffic shaper interface. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-traffic-shaper-queue"""
         method = "POST"
-        url = "https://{{$hostname}}/api/v1/firewall/traffic_shaper/queue"
+        url = "/api/v1/firewall/traffic_shaper/queue"
         return self.call(url=url, method=method, payload=args)
 
     def delete_traffic_shaper_queue(self, **args: Dict[str, Any]) -> requests.Response:
         """Delete a queue from a traffic shaper interface. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-traffic-shaper-queue"""
         method = "DELETE"
-        url = "https://{{$hostname}}/api/v1/firewall/traffic_shaper/queue"
+        url = "/api/v1/firewall/traffic_shaper/queue"
         return self.call(url=url, method=method, payload=args)
 
     def create_virtual_ip(self, **args: Dict[str, Any]) -> requests.Response:
         """Add a new virtual IP. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-virtual-ips"""
         method = "POST"
-        url = "https://{{$hostname}}/api/v1/firewall/virtual_ip"
+        url = "/api/v1/firewall/virtual_ip"
         return self.call(url=url, method=method, payload=args)
 
     def delete_virtual_ip(self, **args: Dict[str, Any]) -> requests.Response:
         """Delete a virtual IP. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-virtual-ips"""
         method = "DELETE"
-        url = "https://{{$hostname}}/api/v1/firewall/virtual_ip"
+        url = "/api/v1/firewall/virtual_ip"
         return self.call(url=url, method=method, payload=args)
 
     def get_virtual_ip(self, **kwargs: Dict[str, Any]) -> requests.Response:
@@ -344,5 +362,5 @@ class FirewallMixin(BasePFSenseAPIClient):
     def update_virtual_ip(self, **args: Dict[str, Any]) -> requests.Response:
         """Update a virtual IP. https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-virtual-ips"""
         method = "PUT"
-        url = "https://{{$hostname}}/api/v1/firewall/virtual_ip"
+        url = "/api/v1/firewall/virtual_ip"
         return self.call(url=url, method=method, payload=args)
