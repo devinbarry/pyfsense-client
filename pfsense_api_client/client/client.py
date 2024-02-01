@@ -4,10 +4,8 @@ from requests import Response, Session
 
 from .abc import ClientABC
 from .types import ClientConfig, APIResponse
-from ..mixins.firewall import FirewallMixin
-from ..mixins.service  import ServiceMixin
-from ..mixins.status import StatusMixin
-from ..mixins.system import SystemMixin
+from ..mixins import (DNSMixin, FirewallMixin, InterfaceMixin, RoutingMixin, ServiceMixin, StatusMixin, SystemMixin,
+                      UserMixin)
 
 
 class ClientBase(ClientABC):
@@ -30,11 +28,11 @@ class ClientBase(ClientABC):
         else:
             return f"https://{self.config.hostname}"
 
-    def call(self, url, method="GET", payload=None, params=None, **kwargs) -> Response:
-        url = f"{self.baseurl}{url}" if url.startswith("/") else url
+    def _call(self, url, method="GET", payload=None, params=None, **kwargs) -> Response:
         kwargs.setdefault("params", params)
         kwargs.setdefault("json", payload if method != "GET" else None)
         headers = kwargs.setdefault("headers", {})
+        headers.setdefault("Content-Type", "application/json")
 
         if self.config.mode == "jwt":
             headers["Authorization"] = f"Bearer {self.config.jwt}"
@@ -46,13 +44,15 @@ class ClientBase(ClientABC):
         self.logger.debug(f"API response: {response.json()}")
         return response
 
-    def call_api(self, url, method="GET", payload=None) -> APIResponse:
-        response = self.call(url=url, method=method, payload=payload)
+    def call(self, url, method="GET", payload=None) -> APIResponse:
+        url = f"{self.baseurl}{url}"
+        response = self._call(url=url, method=method, payload=payload)
         return APIResponse.model_validate(response.json())
 
 
 
-class PFSenseAPIClient(ClientBase, FirewallMixin, ServiceMixin, StatusMixin, SystemMixin):
+class PFSenseAPIClient(ClientBase, DNSMixin, FirewallMixin, InterfaceMixin, RoutingMixin, ServiceMixin, StatusMixin,
+                       SystemMixin, UserMixin):
     """pfSense API Client"""
 
     def request_access_token(self) -> Response:

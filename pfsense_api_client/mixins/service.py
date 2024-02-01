@@ -14,7 +14,7 @@ class ServiceMixin(ClientABC):
         self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-services"""
         url = "/api/v1/services"
-        return self.call_api(url, payload=filterargs)
+        return self.call(url, payload=filterargs)
 
 
     def restart_all_service(self, **args: Dict[str, Any]) -> Response:
@@ -42,7 +42,7 @@ class ServiceMixin(ClientABC):
         self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-dhcpd-service-configuration"""
         url = "/api/v1/services/dhcpd"
-        return self.call_api(url, payload=filterargs)
+        return self.call(url, payload=filterargs)
 
 
     def restart_dhcpd_service(
@@ -80,7 +80,7 @@ class ServiceMixin(ClientABC):
         self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-dhcpd-leases"""
         url = "/api/v1/services/dhcpd/lease"
-        return self.call_api_dict(url, payload=filterargs)
+        return self.call(url, payload=filterargs)
 
 
     def create_dhcpd_static_mappings(
