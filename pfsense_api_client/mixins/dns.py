@@ -7,7 +7,7 @@ class DNSMixin(ClientABC):
     def get_dynamic_dns(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-dynamic-dns"""
         url = "/api/v1/services/ddns"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def apply_pending_dnsmasq_changes(self, **args: Dict[str, Any]) -> APIResponse:
@@ -20,7 +20,7 @@ class DNSMixin(ClientABC):
     def get_dnsmasq_configuration(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-read-dnsmasq-configuration"""
         url = "/api/v1/services/dnsmasq"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def create_dnsmasq_host_override(self, **args: Dict[str, Any]) -> APIResponse:
@@ -40,7 +40,7 @@ class DNSMixin(ClientABC):
     def get_dnsmasq_host_override(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-dnsmasq-host-override"""
         url = "/api/v1/services/dnsmasq/host_override"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def update_dnsmasq_host_override(self, **args: Dict[str, Any]) -> APIResponse:
@@ -67,7 +67,7 @@ class DNSMixin(ClientABC):
     def get_unbound_configuration(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-read-unbound-configuration"""
         url = "/api/v1/services/unbound"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def create_unbound_access_list(self, **args: Dict[str, Any]) -> APIResponse:
@@ -87,7 +87,7 @@ class DNSMixin(ClientABC):
     def get_unbound_access_lists(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-unbound-access-lists"""
         url = "/api/v1/services/unbound/access_list"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def update_unbound_access_list(self, **args: Dict[str, Any]) -> APIResponse:
@@ -121,7 +121,7 @@ class DNSMixin(ClientABC):
     def get_unbound_host_override(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-unbound-host-override"""
         url = "/api/v1/services/unbound/host_override"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def update_unbound_host_override(self, **args: Dict[str, Any]) -> APIResponse:

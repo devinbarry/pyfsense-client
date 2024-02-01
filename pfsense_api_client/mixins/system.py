@@ -62,13 +62,13 @@ class SystemMixin(ClientABC):
     def get_system_api_configuration(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-system-api-configuration"""
         url = "/api/v1/system/api"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def get_system_api_error_library(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-read-system-api-error-library"""
         url = "/api/v1/system/api/error"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def delete_system_arp_table(self, **args: Dict[str, Any]) -> APIResponse:
@@ -81,7 +81,7 @@ class SystemMixin(ClientABC):
     def get_system_arp_table(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-read-system-arp-table"""
         url = "/api/v1/system/arp"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def create_system_ca(self, **args: Dict[str, Any]) -> APIResponse:
@@ -101,7 +101,7 @@ class SystemMixin(ClientABC):
     def get_system_cas(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-system-cas"""
         url = "/api/v1/system/ca"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def create_system_certificates(self, **args: Dict[str, Any]) -> APIResponse:
@@ -121,13 +121,13 @@ class SystemMixin(ClientABC):
     def get_system_certificates(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-system-certificates"""
         url = "/api/v1/system/certificate"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def get_system_configuration(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-system-configuration"""
         url = "/api/v1/system/config"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def update_system_configuration(self, **args: Dict[str, Any]) -> APIResponse:
@@ -147,7 +147,7 @@ class SystemMixin(ClientABC):
     def get_system_dns(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-system-dns"""
         url = "/api/v1/system/dns"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def update_system_dns(self, **args: Dict[str, Any]) -> APIResponse:
@@ -181,7 +181,7 @@ class SystemMixin(ClientABC):
     def get_system_hostname(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-system-hostname"""
         url = "/api/v1/system/hostname"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def update_system_hostname(self, **args: Dict[str, Any]) -> APIResponse:
@@ -194,7 +194,7 @@ class SystemMixin(ClientABC):
     def get_system_email_notification_settings(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-system-email-notification-settings"""
         url = "/api/v1/system/notifications/email"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def update_system_email_notification_settings(self, **args: Dict[str, Any]) -> APIResponse:
@@ -214,7 +214,7 @@ class SystemMixin(ClientABC):
     def get_system_tables(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-system-tables"""
         url = "/api/v1/system/table"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def create_system_tunables(self, **args: Dict[str, Any]) -> APIResponse:
@@ -234,7 +234,7 @@ class SystemMixin(ClientABC):
     def get_system_tunables(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-system-tunables"""
         url = "/api/v1/system/tunable"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def update_system_tunables(self, **args: Dict[str, Any]) -> APIResponse:
@@ -247,4 +247,4 @@ class SystemMixin(ClientABC):
     def get_system_version(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-system-version"""
         url = "/api/v1/system/version"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
