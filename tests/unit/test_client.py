@@ -25,14 +25,14 @@ class TestPfsenseApiClient(unittest.TestCase):
         self.assertEqual(client.config.password, "test_pass")
         self.assertEqual(client.config.hostname, "test.example.com")
 
-    def test_client_base_call(self):
+    def test_client_base_request(self):
         with requests_mock.Mocker() as m:
             test_url = "https://test.example.com/test"
             m.get(test_url, json={"status": "success", "data": "test_data"})
 
             config = ClientConfig(**self.test_config)
             client = ClientBase(config=config)
-            response = client.call("/test")
+            response = client._request("/test")
 
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.json()["status"], "success")
@@ -59,7 +59,7 @@ class TestPfsenseApiClient(unittest.TestCase):
 
                 config = ClientConfig(**self.test_config)
                 client = ClientBase(config=config)
-                response = client.call(f"/test_{method.lower()}", method=method)
+                response = client._request(f"/test_{method.lower()}", method=method)
 
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.json()["method"], method)
@@ -72,10 +72,10 @@ class TestPfsenseApiClient(unittest.TestCase):
             config = ClientConfig(**self.test_config)
             client = ClientBase(config=config)
             with self.assertRaises(HTTPError):
-                response = client.call("/error")
+                response = client._request("/error")
                 response.raise_for_status()
 
-    def test_client_base_call_api(self):
+    def test_client_base_call_method(self):
         with requests_mock.Mocker() as m:
             test_url = "https://test.example.com/api"
             mock_response = {
@@ -89,7 +89,7 @@ class TestPfsenseApiClient(unittest.TestCase):
 
             config = ClientConfig(**self.test_config)
             client = ClientBase(config=config)
-            api_response = client.call_api("/api")
+            api_response = client.call("/api")
 
             self.assertIsInstance(api_response, APIResponse)
             self.assertEqual(api_response.status, "success")
