@@ -2,6 +2,8 @@ import unittest
 from unittest.mock import patch, MagicMock
 from pfsense_api_client.client import ClientConfig, PFSenseAPIClient
 
+from ..mocks import get_response_json
+
 class TestStatusMixin(unittest.TestCase):
     
     @classmethod
@@ -53,12 +55,13 @@ class TestStatusMixin(unittest.TestCase):
     @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
     def test_get_system_status(self, mock_call):
         mock_response = MagicMock()
+        mock_response.json.return_value = get_response_json()
         mock_call.return_value = mock_response
 
         response = self.client.get_system_status()
 
-        mock_call.assert_called_once_with(url="/api/v1/status/system", payload={})
-        self.assertEqual(response, mock_response)
+        mock_call.assert_called_once_with(url='/api/v1/status/system', method='GET', payload={})
+        self.assertEqual(response.model_dump(by_alias=True), get_response_json())
 
 
     @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
@@ -84,12 +87,13 @@ class TestStatusMixin(unittest.TestCase):
     @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
     def test_get_dhcp_status_log(self, mock_call):
         mock_response = MagicMock()
+        mock_response.json.return_value = get_response_json()
         mock_call.return_value = mock_response
 
         response = self.client.get_dhcp_status_log()
 
-        mock_call.assert_called_once_with(url="/api/v1/status/log/dhcp", payload={})
-        self.assertEqual(response, mock_response)
+        mock_call.assert_called_once_with(url='/api/v1/status/log/dhcp', method='GET', payload={})
+        self.assertEqual(response.model_dump(by_alias=True), get_response_json())
 
     @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
     def test_get_firewall_status_log(self, mock_call):
