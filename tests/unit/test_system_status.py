@@ -1,12 +1,12 @@
 import json
 import unittest
-from unittest.mock import patch, MagicMock
 from requests.models import Response
+from unittest.mock import patch
 
 from pfsense_api_client.client import ClientConfig, PFSenseAPIClient
 
 
-class TestStatusMixin(unittest.TestCase):
+class TestSystemStatus(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -24,8 +24,8 @@ class TestStatusMixin(unittest.TestCase):
         self.client = PFSenseAPIClient(config=config)
 
 
-    @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
-    def test_get_system_status_with_mock_response(self, mock_call):
+    @patch('pfsense_api_client.client.client.PFSenseAPIClient._request')
+    def test_get_system_status_with_mock_response(self, mock_request):
         # Create a mock response
         mock_response = Response()
         mock_response.status_code = 200
@@ -60,7 +60,7 @@ class TestStatusMixin(unittest.TestCase):
         }).encode('utf-8')
 
         # Set the return value of the call method to the mock response
-        mock_call.return_value = mock_response
+        mock_request.return_value = mock_response
 
         # Call the get_system_status method
         response = self.client.get_system_status()
@@ -69,4 +69,4 @@ class TestStatusMixin(unittest.TestCase):
         self.assertEqual(response.model_dump(by_alias=True), mock_response.json())
 
         # Verify if the call method was called with the correct arguments
-        mock_call.assert_called_once_with(url="/api/v1/status/system", method="GET", payload={})
+        mock_request.assert_called_once_with(url="/api/v1/status/system", method="GET", payload={})

@@ -28,7 +28,7 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_carp_status()
 
-        mock_call.assert_called_once_with(url="/api/v1/status/carp", payload={})
+        mock_call.assert_called_once_with(url="/api/v1/status/carp", method='GET', payload={})
         self.assertEqual(response, mock_response)
 
     @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
@@ -49,7 +49,7 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_gateway_status()
 
-        mock_call.assert_called_once_with(url="/api/v1/status/gateway", payload={})
+        mock_call.assert_called_once_with(url="/api/v1/status/gateway", method='GET', payload={})
         self.assertEqual(response, mock_response)
 
     @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
@@ -61,7 +61,7 @@ class TestStatusMixin(unittest.TestCase):
         response = self.client.get_system_status()
 
         mock_call.assert_called_once_with(url='/api/v1/status/system', method='GET', payload={})
-        self.assertEqual(response.model_dump(by_alias=True), get_response_json())
+        self.assertEqual(response, mock_response)
 
 
     @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
@@ -71,7 +71,7 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_interface_status()
 
-        mock_call.assert_called_once_with(url="/api/v1/status/interface", payload={})
+        mock_call.assert_called_once_with(url="/api/v1/status/interface", method='GET', payload={})
         self.assertEqual(response, mock_response)
 
     @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
@@ -81,7 +81,7 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_configuration_history_status_log()
 
-        mock_call.assert_called_once_with(url="/api/v1/status/log/config_history", payload={})
+        mock_call.assert_called_once_with(url="/api/v1/status/log/config_history", method='GET', payload={})
         self.assertEqual(response, mock_response)
 
     @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
@@ -93,7 +93,7 @@ class TestStatusMixin(unittest.TestCase):
         response = self.client.get_dhcp_status_log()
 
         mock_call.assert_called_once_with(url='/api/v1/status/log/dhcp', method='GET', payload={})
-        self.assertEqual(response.model_dump(by_alias=True), get_response_json())
+        self.assertEqual(response, mock_response)
 
     @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
     def test_get_firewall_status_log(self, mock_call):
@@ -102,7 +102,7 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_firewall_status_log()
 
-        mock_call.assert_called_once_with(url="/api/v1/status/log/firewall", payload={})
+        mock_call.assert_called_once_with(url="/api/v1/status/log/firewall", method='GET', payload={})
         self.assertEqual(response, mock_response)
 
     @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
@@ -112,7 +112,7 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_system_status_log()
 
-        mock_call.assert_called_once_with(url="/api/v1/status/log/system", payload={})
+        mock_call.assert_called_once_with(url="/api/v1/status/log/system", method='GET', payload={})
         self.assertEqual(response, mock_response)
 
     @patch('pfsense_api_client.client.client.PFSenseAPIClient.call')
@@ -122,6 +122,6 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_openvpn_status()
 
-        mock_call.assert_called_once_with(url="/api/v1/status/openvpn", payload={})
+        mock_call.assert_called_once_with(url="/api/v1/status/openvpn", method='GET', payload={})
         self.assertEqual(response, mock_response)
 
