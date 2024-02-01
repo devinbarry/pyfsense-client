@@ -86,16 +86,16 @@ def load_client_config(filename: str) -> ClientConfig:
         return ClientConfig(**json.load(file))
 
 
-
+# TODO: Write a better validator for the data field. It should always be a JSON dict
 class APIResponse(BaseModel):
     """
-    Standard JSON API response from the pFsense API.
+    Standard JSON API response from the pfSense API.
     """
     status: str
     code: int
     return_code: int = Field(default=..., title="return", alias="return", description="The return field from the API")
     message: str
-    data: Any
+    data: dict[str, Any] | list[Any]
 
     @field_validator("code")
     def validate_code(cls, value: int) -> int:
@@ -106,17 +106,3 @@ class APIResponse(BaseModel):
         if value not in valid_codes:
             raise ValueError(f"Got an invalid status code ({value}).")
         return value
-
-
-class APIResponseDict(APIResponse):
-    """
-    Dict-style JSON API response from the pFsense API.
-    """
-    data: Dict[str, Any]
-
-
-class APIResponseList(APIResponse):
-    """
-    List-style JSON API response from the pFsense API.
-    """
-    data: List[Any]

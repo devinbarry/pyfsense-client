@@ -1,7 +1,7 @@
 from __future__ import annotations
 import logging
 from typing import Any
-from requests import Response
+from requests import Response, Session
 
 from .abc import ClientABC
 from .types import ClientConfig, APIResponse
@@ -13,8 +13,8 @@ from ..mixins.system import SystemMixin
 
 class ClientBase(ClientABC):
     def __init__(self, config:  ClientConfig):
-        super().__init__()
         self.config = config
+        self.session = Session()
         self.logger = logging.getLogger(__name__)
 
         if self.config.mode == "local" and not (self.config.username and self.config.password):
