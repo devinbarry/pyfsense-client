@@ -50,7 +50,7 @@ class StatusMixin(ClientABC):
     def get_dhcp_status_log(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-read-dhcp-status-log"""
         url = "/api/v1/status/log/dhcp"
-        return self.call_api(url, payload=filterargs)
+        return self.call(url, payload=filterargs)
 
 
     def get_firewall_status_log(self, **filterargs: Dict[str, Any]) -> requests.Response:
@@ -74,4 +74,4 @@ class StatusMixin(ClientABC):
     def get_system_status(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-system-status"""
         url = "/api/v1/status/system"
-        return self.call_api(url, payload=filterargs)
+        return self.call(url, payload=filterargs)
