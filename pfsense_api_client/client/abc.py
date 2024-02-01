@@ -1,6 +1,7 @@
 from __future__ import annotations
 from requests import Response
 from abc import ABC, abstractmethod
+from .types import APIResponse
 
 
 class ClientABC(ABC):
@@ -10,5 +11,5 @@ class ClientABC(ABC):
         pass
 
     @abstractmethod
-    def call(self, url, method="GET", payload=None):
+    def call(self, url, method="GET", payload=None)  -> APIResponse:
         pass
