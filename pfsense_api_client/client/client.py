@@ -55,14 +55,14 @@ class PFSenseAPIClient(ClientBase, DNSMixin, FirewallMixin, InterfaceMixin, Rout
                        SystemMixin, UserMixin):
     """pfSense API Client"""
 
-    def request_access_token(self) -> Response:
+    def request_access_token(self) -> APIResponse:
         """gets a temporary access token
         https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-request-access-token
         """
         url = "/api/v1/access_token"
         return self.call(url=url, method="POST")
 
-    def execute_shell_command(self, shell_cmd: str) -> Response:
+    def execute_shell_command(self, shell_cmd: str) -> APIResponse:
         """execute a shell command on the firewall
         https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-execute-shell-command
         """
