@@ -37,5 +37,6 @@ class TestClientAuth(unittest.TestCase):
 
         response = self.client.execute_shell_command(shell_cmd)
 
-        mock_call.assert_called_once_with(url="/api/v1/diagnostics/command_prompt", method="POST", payload={"shell_cmd": shell_cmd})
+        mock_call.assert_called_once_with(url="/api/v1/diagnostics/command_prompt", method="POST",
+                                          payload={"shell_cmd": shell_cmd})
         self.assertEqual(response, mock_response)
