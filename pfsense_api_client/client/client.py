@@ -28,7 +28,12 @@ class ClientBase(ClientABC):
         else:
             return f"https://{self.config.hostname}"
 
+    def get_url(self, url: str) -> str:
+        assert url.startswith("/")
+        return f"{self.baseurl}{url}"
+
     def _request(self, url, method="GET", payload=None, params=None, **kwargs) -> Response:
+        url = self.get_url(url)
         kwargs.setdefault("params", params)
         kwargs.setdefault("json", payload if method != "GET" else None)
         headers = kwargs.setdefault("headers", {})
@@ -45,7 +50,6 @@ class ClientBase(ClientABC):
         return response
 
     def call(self, url, method="GET", payload=None) -> APIResponse:
-        url = f"{self.baseurl}{url}"
         response = self._request(url=url, method=method, payload=payload)
         return APIResponse.model_validate(response.json())
 
