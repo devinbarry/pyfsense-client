@@ -5,7 +5,7 @@ import requests
 from pydantic import validate_call
 
 from ..client import ClientABC
-from ..client.types import APIResponse, APIResponseDict
+from ..client.types import APIResponse
 
 
 class StatusMixin(ClientABC):
@@ -71,7 +71,7 @@ class StatusMixin(ClientABC):
         return self.call(url=url, payload=filterargs)
 
 
-    def get_system_status(self, **filterargs: Dict[str, Any]) -> APIResponseDict:
+    def get_system_status(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-system-status"""
         url = "/api/v1/status/system"
-        return APIResponseDict.parse_obj(self.call_api(url, payload=filterargs))
+        return self.call_api(url, payload=filterargs)
