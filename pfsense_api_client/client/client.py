@@ -1,6 +1,5 @@
 from __future__ import annotations
 import logging
-from typing import Any
 from requests import Response, Session
 
 from .abc import ClientABC
@@ -31,7 +30,7 @@ class ClientBase(ClientABC):
         else:
             return f"https://{self.config.hostname}"
 
-    def call(self, url: str, method: str = "GET", payload: Any = None, params: Any = None, **kwargs: Any) -> Response:
+    def call(self, url, method="GET", payload=None, params=None, **kwargs) -> Response:
         url = f"{self.baseurl}{url}" if url.startswith("/") else url
         kwargs.setdefault("params", params)
         kwargs.setdefault("json", payload if method != "GET" else None)
@@ -47,7 +46,7 @@ class ClientBase(ClientABC):
         self.logger.debug(f"API response: {response.json()}")
         return response
 
-    def call_api(self, url: str, method: str = "GET", payload: dict[str, Any] | None = None) -> APIResponse:
+    def call_api(self, url, method="GET", payload=None) -> APIResponse:
         response = self.call(url=url, method=method, payload=payload)
         return APIResponse.model_validate(response.json())
 

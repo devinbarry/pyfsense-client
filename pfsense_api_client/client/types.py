@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 
@@ -95,7 +95,7 @@ class APIResponse(BaseModel):
     code: int
     return_code: int = Field(default=..., title="return", alias="return", description="The return field from the API")
     message: str
-    data: dict[str, Any] | list[Any]
+    data: dict[str, Any] | list
 
     @field_validator("code")
     def validate_code(cls, value: int) -> int:
