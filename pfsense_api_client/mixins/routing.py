@@ -26,7 +26,7 @@ class RoutingMixin(ClientABC):
         return self.call(url=url, method=method, payload=args)
 
 
-    def get_routing_gateway(self: ClientBase, **filterargs: Dict[str, Any]) -> requests.Response:
+    def get_routing_gateway(self, **filterargs: Dict[str, Any]) -> requests.Response:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-routing-gateways"""
 
         url = "/api/v1/routing/gateway"
@@ -61,7 +61,7 @@ class RoutingMixin(ClientABC):
         return self.call(url=url, method=method, payload=args)
 
 
-    def get_static_route(self: ClientBase, **filterargs: Dict[str, Any]) -> requests.Response:
+    def get_static_route(self, **filterargs: Dict[str, Any]) -> requests.Response:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-static-routes"""
         url = "/api/v1/routing/static_route"
         return self.call(url=url, payload=filterargs)

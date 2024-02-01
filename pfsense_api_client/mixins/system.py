@@ -17,7 +17,7 @@ class SystemMixin(ClientABC):
         https://github.com/jaredhendrickson13/pfsense-api#2-read-system-api-error-library
         """
         url = "/api/v1/system/api/error"
-        return self.call_api(url)
+        return self.call(url)
 
 
     def get_system_api_version(self) -> APIResponse:
@@ -27,7 +27,7 @@ class SystemMixin(ClientABC):
         """
         url = "/api/v1/system/api/version"
         method = "GET"
-        return self.call_api_dict(url, method)
+        return self.call(url, method)
 
 
     def update_system_api_configuration(self, readonly: Optional[bool] = None,
