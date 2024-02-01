@@ -13,7 +13,7 @@ class ServiceMixin(ClientABC):
         self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-services"""
         url = "/api/v1/services"
-        return self.call(url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def restart_all_service(self, **args: Dict[str, Any]) -> APIResponse:
@@ -41,7 +41,7 @@ class ServiceMixin(ClientABC):
         self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-dhcpd-service-configuration"""
         url = "/api/v1/services/dhcpd"
-        return self.call(url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def restart_dhcpd_service(
@@ -79,7 +79,7 @@ class ServiceMixin(ClientABC):
         self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-dhcpd-leases"""
         url = "/api/v1/services/dhcpd/lease"
-        return self.call(url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def create_dhcpd_static_mappings(
@@ -102,7 +102,7 @@ class ServiceMixin(ClientABC):
         self, *filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-dhcpd-static-mappings"""
         url = "/api/v1/services/dhcpd/static_mapping"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def update_dhcpd_static_mappings(
@@ -165,7 +165,7 @@ class ServiceMixin(ClientABC):
         self, *filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-ntpd-service_"""
         url = "/api/v1/services/ntpd"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def restart_ntpd_service(
@@ -233,7 +233,7 @@ class ServiceMixin(ClientABC):
         self, *filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-openvpn-client-specific-overrides"""
         url = "/api/v1/services/openvpn/csc"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def update_openvpn_client_specific_overrides(
@@ -248,7 +248,7 @@ class ServiceMixin(ClientABC):
         self, *filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-sshd-configuration"""
         url = "/api/v1/services/sshd"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
 
 
     def restart_sshd_service(

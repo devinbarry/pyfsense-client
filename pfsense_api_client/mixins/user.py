@@ -61,17 +61,17 @@ class UserMixin(ClientABC):
     def get_auth_servers(self, *filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#6-read-auth-servers"""
         url = "/api/v1/user/auth_server"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
     
     def get_ldap_auth_servers(self, *filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#7-read-ldap-auth-servers"""
         url = "/api/v1/user/auth_server/ldap"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
     
     def get_radius_auth_servers(self, *filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#8-read-radius-auth-servers"""
         url = "/api/v1/user/auth_server/radius"
-        return self.call(url=url, payload=filterargs)
+        return self.call(url=url, method='GET', payload=filterargs)
     
     def create_user_group(self, **args: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-user-group"""
