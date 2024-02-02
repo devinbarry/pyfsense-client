@@ -1,45 +1,55 @@
-# pfsense-api-client
+# pfSense API Client
 
-Provides python methods to call the pfsense API endpoint provided by the package at https://github.com/jaredhendrickson13/pfsense-api
+pfSense API client is a Python client for pfsense API endpoints provided by the package at https://github.com/jaredhendrickson13/pfsense-api.
 
-# ⚠️ WARNING ⚠️
-# This is very early in development.
+This repository is a rewrite of the code at https://github.com/yaleman/pfsense-api-client.
 
-### Configuring authentication
+This code is currently being tested against pfSense 23.09 and the V1 API endpoints (also version 23.09).
 
-Configure it one of two ways 
+### ⚠️ WARNING ⚠️
+This is code is experimental and might not be suitable for production use for all methods.
 
-1. Pass the `config_filename` which is a JSON file with username/password/host (and optionally port).
-2. Directly pass username/password/hostname (and optionally port).
+## Configuring authentication
 
-At the moment it only supports the "Local Database" authentication method of username/password, but it should be relatively trivial to add JWT/API Token support at a later time.
+Technically this library supports all authentication methods but we are only testing with API token.
 
-(If you're going to do this, modify init to have a "mode" setting, which `call()` checks, then modifies things as needed.)
+```python
+config_data = {
+    "hostname": "example.com",
+    "mode": "api_token",
+    "client_id": "3490580384",
+    "client_token": "3495739084",
+    "verify_ssl": False,
+}
 
-### Example JSON file
+config = ClientConfig(**config_data)
+client = PFSenseAPIClient(config=config)
+```
+
+Support exists for passing credentials as a JSON file.
 
 ```json
 {
-        "username" : "me",
-        "password" : "mysupersecretpassword",
-        "hostname" : "example.com",
-        "port" : 8443
+    "username" : "me",
+    "password" : "mysupersecretpassword",
+    "hostname" : "example.com",
+    "port" : 8443
 }
 ```
 
 ## Ignoring Certificate validation
 
-You can specify a `requests_session` option on construction, which one could configure to ignore verification.
+Pass `verify_ssl=False` into the config to disable SSL checking.
 
-```python
-import requests
 
-from pfsense_api_client import PFSenseAPIClient
+## Development
 
-session = requests.Session()
-session.verify = False
-api = PFSenseAPIClient(
-        config_filename="~/.config/pfsense.json",
-        requests_session=session,
-        )
+You can build a docker image of the source code using docker compose. This will install all the dependencies from the requirements file and volume mount the code for development.
+```bash
+docker compose -f local.yml build
+```
+
+You can run the unit tests with:
+```bash
+docker compose -f local.yml up
 ```
