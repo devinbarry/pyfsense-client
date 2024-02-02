@@ -12,6 +12,7 @@ class AliasTypes(str, Enum):
 
 class FirewallAliasUpdate(BaseModel):
     """validating the firewall alias update"""
+    id: str
     name: str
     type: AliasTypes
     descr: Optional[str]
@@ -38,14 +39,11 @@ class FirewallAliasMixin(ClientABC):
         return self.call(url=url, method="GET", payload=dict(kwargs))
 
     @validate_call
-    def create_firewall_alias(self, name: str, alias_type: str, descr: str, address: Union[str, List[str]],
-                              detail: Union[str, List[str]], apply: bool = True) -> APIResponse:
+    def create_firewall_alias(self, alias: FirewallAlias) -> APIResponse:
         """Add a new host, network or port firewall alias."""
         url = "/api/v1/firewall/alias"
         method = "POST"
-        payload = FirewallAlias(name=name, type=alias_type, descr=descr, address=address, detail=detail,
-                                apply=apply).dict()
-        return self.call(url=url, method=method, payload=payload)
+        return self.call(url=url, method=method, payload=alias.dict())
 
     @validate_call
     def delete_firewall_alias(self, name: str, apply: bool = True) -> APIResponse:
@@ -56,16 +54,15 @@ class FirewallAliasMixin(ClientABC):
         return self.call(url=url, method=method, payload=payload)
 
     @validate_call
-    def update_firewall_alias(self, *args: FirewallAliasUpdate) -> APIResponse:
+    def update_firewall_alias(self, item: FirewallAliasUpdate) -> APIResponse:
         """Modify an existing firewall alias."""
         method = "PUT"
         url = "/api/v1/firewall/alias"
-        payload = FirewallAliasUpdate(*args).dict()
-        return self.call(url=url, method=method, payload=payload)
+        return self.call(url=url, method=method, payload=item.dict())
 
-    def get_firewall_alias_advanced(self, **kwargs) -> APIResponse:
+    def get_firewall_alias_advanced(self) -> APIResponse:
         url = "/api/v1/firewall/alias/advanced"
-        return self.call(url=url, method="GET", payload=dict(kwargs))
+        return self.call(url=url, method="GET")
 
     @validate_call
     def delete_firewall_alias_advanced(self, name: str, apply: bool = True) -> APIResponse:
