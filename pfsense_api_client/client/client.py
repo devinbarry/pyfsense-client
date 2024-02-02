@@ -4,8 +4,8 @@ from requests import Response, Session
 
 from .abc import ClientABC
 from .types import ClientConfig, APIResponse
-from ..mixins import (DNSMixin, FirewallMixin, InterfaceMixin, RoutingMixin, ServiceMixin, StatusMixin, SystemMixin,
-                      UserMixin)
+from ..mixins import (DNSMixin, FirewallMixin, FirewallAliasMixin, InterfaceMixin, RoutingMixin, ServiceMixin,
+                      StatusMixin, SystemMixin, UserMixin)
 
 
 class ClientBase(ClientABC):
@@ -55,8 +55,8 @@ class ClientBase(ClientABC):
 
 
 
-class PFSenseAPIClient(ClientBase, DNSMixin, FirewallMixin, InterfaceMixin, RoutingMixin, ServiceMixin, StatusMixin,
-                       SystemMixin, UserMixin):
+class PFSenseAPIClient(ClientBase, DNSMixin, FirewallMixin, FirewallAliasMixin, InterfaceMixin, RoutingMixin,
+                       ServiceMixin, StatusMixin, SystemMixin, UserMixin):
     """pfSense API Client"""
 
     def request_access_token(self) -> APIResponse:

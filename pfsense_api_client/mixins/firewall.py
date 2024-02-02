@@ -1,85 +1,11 @@
-""" firewall-rule related things """
-
-from enum import Enum
-from typing import Any, Dict, List, Union, Optional
-from pydantic import BaseModel, validate_call
+from typing import Any, Dict, Union, Optional
+from pydantic import validate_call
 
 from ..client import ClientABC, APIResponse
-
-class AliasTypes(str, Enum):
-    """types for firewall aliases"""
-    host = "host"
-    network = "network"
-    port = "port"
-
-class FirewallAliasUpdate(BaseModel):
-    """validating the firewall alias update"""
-    name: str
-    type: AliasTypes
-    descr: Optional[str]
-    address: Union[str, List[str]]
-    detail: Union[str, List[str]]
-    apply: bool
 
 
 class FirewallMixin(ClientABC):
     """ mixin class for firewall functions """
-
-    def get_firewall_alias(self, **kwargs: Any) -> APIResponse:
-        """get a list of firewall aliases https://github.com/jaredhendrickson13/pfsense-api#3-read-firewall-aliases"""
-        url = "/api/v1/firewall/alias"
-        return self.call(url=url, payload=dict(kwargs))
-
-    @validate_call
-    def create_firewall_alias(self, name: str, alias_type: str, descr: str, address: Union[str, List[str]],
-                              detail: Union[str, List[str]], apply: bool = True) -> APIResponse:
-        """Add a new host, network or port firewall alias.
-        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-firewall-aliases"""
-        url = "/api/v1/firewall/alias"
-        method = "POST"
-        class FirewallAlias(BaseModel):
-            """validating the firewall alias"""
-            name: str
-            type: AliasTypes
-            descr: str
-            address: Union[str, List[str]]
-            detail: Union[str, List[str]]
-            apply: bool
-        payload = FirewallAlias(name=name, type=alias_type, descr=descr, address=address, detail=detail,
-                                apply=apply).dict()
-        return self.call(url=url, method=method, payload=payload)
-
-    @validate_call
-    def delete_firewall_alias(self, name: str, apply: bool = True) -> APIResponse:
-        """Delete an existing alias and (optionally) reload filter.
-        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-firewall-aliases"""
-        url = "/api/v1/firewall/alias"
-        method = "DELETE"
-        payload = {"id": name, "apply": apply}
-        return self.call(url=url, method=method, payload=payload)
-
-    @validate_call
-    def update_firewall_alias(self, *args: FirewallAliasUpdate) -> APIResponse:
-        """Modify an existing firewall alias.
-        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-firewall-aliases"""
-        method = "PUT"
-        url = "/api/v1/firewall/alias"
-        payload = FirewallAliasUpdate(*args).dict()
-        return self.call(url=url, method=method, payload=payload)
-
-    def create_firewall_alias_entry(self, **args: Dict[str, Any]) -> APIResponse:
-        """Add new entries to an existing firewall alias.
-        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-firewall-alias-entries"""
-        method = "POST"
-        url = "/api/v1/firewall/alias/entry"
-        return self.call(url=url, method=method, payload=args)
-
-    def delete_firewall_alias_entry(self, **args: Dict[str, Any]) -> APIResponse:
-        """Delete existing entries from an existing firewall alias.
-        https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-firewall-alias-entries"""
-        method = "DELETE"
-        url = "/api/v1/firewall/alias/entry"
-        return self.call(url=url, method=method, payload=args)
 
     def apply_firewall_changes(self) -> APIResponse:
         """Apply pending firewall changes. This will reload all filter items. This endpoint returns no data.

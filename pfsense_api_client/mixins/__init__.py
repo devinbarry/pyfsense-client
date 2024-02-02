@@ -1,5 +1,6 @@
 from .dns import DNSMixin
 from .firewall import FirewallMixin
+from .firewall_alias import FirewallAliasMixin
 from .interface import InterfaceMixin
 from .routing import RoutingMixin
 from .service  import ServiceMixin
