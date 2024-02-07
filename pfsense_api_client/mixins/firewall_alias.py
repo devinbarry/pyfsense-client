@@ -1,35 +1,8 @@
-from enum import Enum
-from typing import Any, Dict, List, Union, Optional
-from pydantic import BaseModel, validate_call
+from typing import Any, Dict
+from pydantic import validate_call
 
 from ..client import ClientABC, APIResponse
-
-class AliasTypes(str, Enum):
-    """types for firewall aliases"""
-    host = "host"
-    network = "network"
-    port = "port"
-
-class FirewallAliasUpdate(BaseModel):
-    """validating the firewall alias update"""
-    id: str
-    name: str
-    type: AliasTypes
-    descr: Optional[str]
-    address: Union[str, List[str]]
-    detail: Union[str, List[str]]
-    apply: bool
-
-
-class FirewallAlias(BaseModel):
-    """validating the firewall alias"""
-    name: str
-    type: AliasTypes
-    descr: str
-    address: Union[str, List[str]]
-    detail: Union[str, List[str]]
-    apply: bool
-
+from ..models import FirewallAliasCreate, FirewallAliasUpdate
 
 class FirewallAliasMixin(ClientABC):
 
@@ -39,7 +12,7 @@ class FirewallAliasMixin(ClientABC):
         return self.call(url=url, method="GET", payload=dict(kwargs))
 
     @validate_call
-    def create_firewall_alias(self, alias: FirewallAlias) -> APIResponse:
+    def create_firewall_alias(self, alias: FirewallAliasCreate) -> APIResponse:
         """Add a new host, network or port firewall alias."""
         url = "/api/v1/firewall/alias"
         method = "POST"
