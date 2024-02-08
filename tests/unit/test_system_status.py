@@ -3,7 +3,7 @@ import unittest
 from requests.models import Response
 from unittest.mock import patch
 
-from pfsense_api_client.client import ClientConfig, PFSenseAPIClient
+from pyfsense_client.client import ClientConfig, PFSenseAPIClient
 
 
 class TestSystemStatus(unittest.TestCase):
@@ -24,7 +24,7 @@ class TestSystemStatus(unittest.TestCase):
         self.client = PFSenseAPIClient(config=config)
 
 
-    @patch('pfsense_api_client.client.client.PFSenseAPIClient._request')
+    @patch('pyfsense_client.client.client.PFSenseAPIClient._request')
     def test_get_system_status_with_mock_response(self, mock_request):
         # Create a mock response
         mock_response = Response()

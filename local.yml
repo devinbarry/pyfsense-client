@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: docker/local/Dockerfile
     volumes:
-      - ./pfsense_api_client:/app/pfsense_api_client
+      - ./pyfsense_client:/app/pyfsense_client
       - ./tests:/app/tests
       - ./pfsense-api.json:/root/.config/pfsense-api.json
     command: pytest tests/unit/

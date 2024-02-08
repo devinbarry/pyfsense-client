@@ -2,7 +2,7 @@
 
 import pytest
 
-from pfsense_api_client import PFSenseAPIClient
+from pyfsense_client import PFSenseAPIClient
 
 @pytest.fixture()
 def client() -> PFSenseAPIClient:

@@ -2,7 +2,7 @@
 
 import json
 
-from pfsense_api_client import PFSenseAPIClient
+from pyfsense_client import PFSenseAPIClient
 
 from .utils import client
 

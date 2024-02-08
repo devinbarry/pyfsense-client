@@ -8,7 +8,7 @@ import click
 from loguru import logger
 import questionary
 
-from pfsense_api_client import PFSenseAPIClient
+from pyfsense_client import PFSenseAPIClient
 
 
 LOGGER_FORMAT = '<level>{message}</level>'
