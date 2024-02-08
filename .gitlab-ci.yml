@@ -63,12 +63,14 @@ build_and_publish:
     - python
   needs: [init, test_pyfsense_client]
   rules:
+    # Don't build if the project version is the same as the PyPI project version
+    - if: '$SHOULD_BUILD == "false"'
+      when: never
+    # Build on master branch and tags if SHOULD_BUILD is true
     - if: '$CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_TAG'
       when: on_success
       exists:
         - src/pyfsense_client/__init__.py
-    - if: $SHOULD_BUILD == "true"
-      when: on_success
   script:
     - |
       if [[ -n "$CI_COMMIT_TAG" ]]; then
