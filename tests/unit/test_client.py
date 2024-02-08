@@ -4,7 +4,7 @@ from tempfile import NamedTemporaryFile
 import requests_mock
 import json
 from requests.exceptions import HTTPError
-from pfsense_api_client.client import ClientConfig, ClientBase, APIResponse, load_client_config
+from pyfsense_client.client import ClientConfig, ClientBase, APIResponse, load_client_config
 
 class TestPfsenseApiClient(unittest.TestCase):
     @classmethod
