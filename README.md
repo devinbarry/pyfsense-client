@@ -1,6 +1,6 @@
-# pfSense API Client
+# Pyfsense Client
 
-pfSense API client is a Python client for pfsense API endpoints provided by the package at https://github.com/jaredhendrickson13/pfsense-api.
+Pyfsense Client is a Python API client for pfsense API endpoints provided by the package at https://github.com/jaredhendrickson13/pfsense-api.
 
 This repository is a rewrite of the code at https://github.com/yaleman/pfsense-api-client.
 
@@ -11,7 +11,7 @@ This is code is experimental and might not be suitable for production use for al
 
 ## Configuring authentication
 
-Technically this library supports all authentication methods but we are only testing with API token.
+Technically this library supports all authentication methods, but we are only testing with API token.
 
 ```python
 config_data = {
