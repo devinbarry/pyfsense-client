@@ -12,7 +12,7 @@ plugins:
         # rendering:
         show_source: true
     watch:
-    - pfsense_api_client/
+    - pyfsense_client/
 nav:
 - Home: README.md
 - Client Module: client.md
