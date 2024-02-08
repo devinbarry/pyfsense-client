@@ -1,26 +1,85 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 stages:
-- build
-- test
-- deploy
-- review
-- dast
-- staging
-- canary
-- production
-- incremental rollout 10%
-- incremental rollout 25%
-- incremental rollout 50%
-- incremental rollout 100%
-- performance
-- cleanup
-sast:
+  - init
+  - test
+  - build
+
+# Setup global environmental variables
+init:
+  stage: init
+  image: python:3.11
+  tags:
+    - python
+  only:
+    - branches
+    - tags
+  before_script:
+    - apt-get update && apt-get install -y jq
+    # Get the project version from PyPI
+    - export PYPI_PROJECT_VERSION=$(curl $UNOBTAIN_INDEX_URL/pyfsense-client/json | jq -r '.info.version')
+    - echo "PyPI project version - $PYPI_PROJECT_VERSION"
+    # Get the project version from the project source code
+    - export PROJECT_VERSION=$(grep "__version__" src/pyfsense_client/__init__.py | awk -F "[\"']" '{print $2}')
+    - echo "Project version - $PROJECT_VERSION"
+    - |
+      if [ -z "${PROJECT_VERSION}" ]; then
+        echo "ERROR: PROJECT_VERSION is empty"
+        exit 1
+      fi
+    # Determine if the build should proceed based on version comparison
+    - export SHOULD_BUILD=$(echo -e "$PYPI_PROJECT_VERSION\n$PROJECT_VERSION" | sort -V | tail -n1 | grep -q "$PROJECT_VERSION" && echo "true" || echo "false")
+    - echo "Should build - $SHOULD_BUILD"
+  script:
+    - echo "PROJECT_VERSION=$PROJECT_VERSION" >> init.env
+    - echo "SHOULD_BUILD=$SHOULD_BUILD" >> init.env
+  artifacts:
+    reports:
+      dotenv: init.env
+
+test_pyfsense_client:
   stage: test
-include:
-- template: Auto-DevOps.gitlab-ci.yml
+  image: python:3.11
+  tags:
+    - python
+  only:
+    - branches
+    - tags
+  before_script:
+    - python --version
+    - pip --version
+    # This is needed to run tests
+    - touch src/pyfsense_client/.env
+  script:
+    - pip install -r requirements/requirements_dev.txt
+    # Install pyfsense_client in editable mode
+    - pip install -e .
+    # We can remove this when boto3 is updated.
+    - pip install --no-cache-dir --upgrade urllib3
+    # Run all tests
+    - pytest tests/unit/
+
+
+build_and_publish:
+  image: python:3.11
+  stage: build
+  tags:
+    - python
+  needs: [init, test_pyfsense_client]
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_TAG'
+      when: on_success
+      exists:
+        - src/pyfsense_client/__init__.py
+    - if: $SHOULD_BUILD == "true"
+      when: on_success
+  script:
+    - |
+      if [[ -n "$CI_COMMIT_TAG" ]]; then
+        echo "Building on tag - $CI_COMMIT_TAG"
+        # Check that the project version matches the commit tag
+        if [ "$CI_COMMIT_TAG" != "v$PROJECT_VERSION" ]; then exit 1; fi
+      else
+        echo "Building on branch - $CI_COMMIT_REF_NAME"
+      fi
+    - pip install hatch
+    - hatch build
+    - hatch publish --repo $PYPI_REPO_URL --user $PYPI_REPO_USER --auth $PYPI_REPO_AUTH
