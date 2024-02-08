@@ -270,10 +270,10 @@ class FirewallMixin(ClientABC):
         method = "PUT"
         return self.call(url=url, method=method, payload=args)
 
-    def get_firewall_rule(self, **kwargs: Optional[Any]) -> APIResponse:
-        """Read firewall rules. https://github.com/jaredhendrickson13/pfsense-api#3-read-firewall-rules"""
+    def get_firewall_rules(self) -> APIResponse:
+        """Read existing firewall rules."""
         url = "/api/v1/firewall/rule"
-        return self.call(url=url, payload=kwargs)
+        return self.call(url=url, method="GET")
 
     def create_traffic_shaper_queue(self, **args: Dict[str, Any]) -> APIResponse:
         """Add a queue to a traffic shaper interface.
