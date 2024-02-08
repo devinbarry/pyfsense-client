@@ -1,17 +1,18 @@
-[tool.poetry]
-name = "pfsense-api-client"
-version = "0.1.0"
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pyfsense_client"
+requires-python = ">=3.11"
+dynamic = ["version"]
 description = "A client for the unofficial pfSense API https://github.com/jaredhendrickson13/pfsense-api"
-authors = [
-    "James Hodgkinson <james@terminaloutcomes.com>",
-]
-license = "MIT"
-
 readme = "README.md"
-homepage = "https://github.com/yaleman/pfsense-api-client/"
-repository = "https://github.com/yaleman/pfsense-api-client/"
-documentation = "https://yaleman.github.io/pfsense-api-client/"
-
+license = "MIT"
+authors = [
+    { name = "James Hodgkinson", email = "james@terminaloutcomes.com" },
+    { name = "Devin Barry", email = "devinbarry@users.noreply.github.com" },
+]
 keywords = [
     "pfsense",
     "API",
@@ -19,6 +20,21 @@ keywords = [
 classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
+
+[project.urls]
+homepage = "https://github.com/yaleman/pfsense-api-client/"
+repository = "https://github.com/yaleman/pfsense-api-client/"
+documentation = "https://yaleman.github.io/pfsense-api-client/"
+
+[tool.hatch.version]
+path = "src/pyfsense_client/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+packages = ["src/pyfsense_client"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pyfsense_client"]
+
 [tool.poetry.dependencies]
 python = "^3.8"
 requests = "^2.28.1"
@@ -41,30 +57,3 @@ click = "^8.1.2"
 questionary = "^1.10.0"
 mkdocstrings-python = "^0.8.0"
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.2.1"
-
-[build-system]
-requires = [
-    "poetry-core>=1.0.0",
-]
-build-backend = "poetry.core.masonry.api"
-
-[project]
-name = "pfsense-api-client"
-description = "A client for the unofficial pfSense API https://github.com/jaredhendrickson13/pfsense-api"
-license = "MIT"
-version = "0.0.1"
-authors = [
-    { name = "James Hodgkinson", email = "james@terminaloutcomes.com" },
-]
-
-[tool.pylint.MASTER]
-disable="W0511,R0801"
-# https://github.com/samuelcolvin/pydantic/issues/1961#issuecomment-759522422
-extension-pkg-whitelist="pydantic"
-max-line-length=200
-load-plugins="pylint_pydantic,pylint_pytest"
-
-[tool.pytest]
-ignore="site/"
