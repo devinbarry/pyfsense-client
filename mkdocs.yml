@@ -1,4 +1,4 @@
-site_name: pfsense-api-client
+site_name: pyfsense_client
 theme:
   name: material
   features:
