@@ -3,7 +3,7 @@ stages:
   - test
   - build
 
-# Setup global environmental variables
+# Setup project environmental variables
 init:
   stage: init
   image: python:3.11
@@ -25,7 +25,7 @@ init:
         echo "ERROR: PROJECT_VERSION is empty"
         exit 1
       fi
-    # We should build the project if the project version is different from the PyPI project version
+    # We should build the project if the source version is different from the PyPI project version
     - export SHOULD_BUILD=$([ "$PYPI_PROJECT_VERSION" == "$PROJECT_VERSION" ] && echo "false" || echo "true")
     - echo "Should build - $SHOULD_BUILD"
   script:
