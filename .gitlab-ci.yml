@@ -25,8 +25,8 @@ init:
         echo "ERROR: PROJECT_VERSION is empty"
         exit 1
       fi
-    # Determine if the build should proceed based on version comparison
-    - export SHOULD_BUILD=$(echo -e "$PYPI_PROJECT_VERSION\n$PROJECT_VERSION" | sort -V | tail -n1 | grep -q "$PROJECT_VERSION" && echo "true" || echo "false")
+    # We should build the project if the project version is different from the PyPI project version
+    - export SHOULD_BUILD=$([ "$PYPI_PROJECT_VERSION" == "$PROJECT_VERSION" ] && echo "false" || echo "true")
     - echo "Should build - $SHOULD_BUILD"
   script:
     - echo "PROJECT_VERSION=$PROJECT_VERSION" >> init.env
