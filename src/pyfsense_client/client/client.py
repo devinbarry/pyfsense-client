@@ -46,7 +46,10 @@ class ClientBase(ClientABC):
 
         response = self.session.request(url=url, method=method, allow_redirects=False, verify=self.config.verify_ssl,
                                     **kwargs)
-        self.logger.debug(f"API response: {response.json()}")
+        try:
+            self.logger.debug(f"API response: {response.json()}")
+        except JSONDecodeError:
+            self.logger.debug(f"API response: {response.text}")
         return response
 
     def call(self, url, method="GET", payload=None) -> APIResponse:
