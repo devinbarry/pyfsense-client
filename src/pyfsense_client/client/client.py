@@ -1,4 +1,5 @@
 from __future__ import annotations
+from json import JSONDecodeError
 import logging
 from requests import Response, Session
 
