@@ -51,6 +51,8 @@ class ClientBase(ClientABC):
             self.logger.debug(f"API response: {response.json()}")
         except JSONDecodeError:
             self.logger.debug(f"API response: {response.text}")
+
+        response.raise_for_status()
         return response
 
     def call(self, url, method="GET", payload=None) -> APIResponse:
