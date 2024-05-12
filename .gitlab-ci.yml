@@ -1,39 +1,6 @@
 stages:
-  - init
   - test
   - build
-
-# Setup project environmental variables
-init:
-  stage: init
-  image: python:3.11
-  tags:
-    - python
-  only:
-    - branches
-    - tags
-  before_script:
-    - apt-get update && apt-get install -y jq
-    # Get the project version from PyPI
-    - export PYPI_PROJECT_VERSION=$(curl $UNOBTAIN_INDEX_URL/pyfsense-client/json | jq -r '.info.version')
-    - echo "PyPI project version - $PYPI_PROJECT_VERSION"
-    # Get the project version from the project source code
-    - export PROJECT_VERSION=$(grep "__version__" src/pyfsense_client/__init__.py | awk -F "[\"']" '{print $2}')
-    - echo "Project version - $PROJECT_VERSION"
-    - |
-      if [ -z "${PROJECT_VERSION}" ]; then
-        echo "ERROR: PROJECT_VERSION is empty"
-        exit 1
-      fi
-    # We should build the project if the source version is different from the PyPI project version
-    - export SHOULD_BUILD=$([ "$PYPI_PROJECT_VERSION" == "$PROJECT_VERSION" ] && echo "false" || echo "true")
-    - echo "Should build - $SHOULD_BUILD"
-  script:
-    - echo "PROJECT_VERSION=$PROJECT_VERSION" >> init.env
-    - echo "SHOULD_BUILD=$SHOULD_BUILD" >> init.env
-  artifacts:
-    reports:
-      dotenv: init.env
 
 test_pyfsense_client:
   stage: test
@@ -61,17 +28,35 @@ build_and_publish:
   stage: build
   tags:
     - python
-  needs: [init, test_pyfsense_client]
   rules:
-    # Don't build if the project version is the same as the PyPI project version
-    - if: '$SHOULD_BUILD != "true"'
-      when: never
-    # Build on master branch and tags if SHOULD_BUILD is true
+    # Build on master branch and tags
     - if: '$CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_TAG'
       when: on_success
       exists:
         - src/pyfsense_client/__init__.py
+  before_script:
+    - apt-get update && apt-get install -y jq
+    # Get the project version from PyPI
+    - export PYPI_PROJECT_VERSION=$(curl $UNOBTAIN_INDEX_URL/pyfsense-client/json | jq -r '.info.version')
+    - echo "PyPI project version - $PYPI_PROJECT_VERSION"
+    # Get the project version from the project source code
+    - export PROJECT_VERSION=$(grep "__version__" src/pyfsense_client/__init__.py | awk -F "[\"']" '{print $2}')
+    - echo "Project version - $PROJECT_VERSION"
+    - |
+      if [ -z "${PROJECT_VERSION}" ]; then
+        echo "ERROR: PROJECT_VERSION is empty"
+        exit 1
+      fi
+    # We should build the project if the source version is different from the PyPI project version
+    - export SHOULD_BUILD=$([ "$PYPI_PROJECT_VERSION" == "$PROJECT_VERSION" ] && echo "false" || echo "true")
+    - echo "Should build - $SHOULD_BUILD"
   script:
+    # Don't build if the project version is the same as the PyPI project version
+    - |
+      if [ "$SHOULD_BUILD" != "true" ]; then
+        echo "Skipping build as SHOULD_BUILD is not true"
+        exit 0
+      fi
     - |
       if [[ -n "$CI_COMMIT_TAG" ]]; then
         echo "Building on tag - $CI_COMMIT_TAG"
