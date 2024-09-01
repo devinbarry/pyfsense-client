@@ -11,3 +11,4 @@ poetry.lock
 
 # PyCharm
 .idea/
+fix_email.sh
