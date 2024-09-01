@@ -1,6 +1,7 @@
 from __future__ import annotations
-from json import JSONDecodeError
 import logging
+import requests
+from json import JSONDecodeError
 from requests import Response, Session
 from requests.exceptions import HTTPError
 
@@ -8,6 +9,7 @@ from .abc import ClientABC
 from .types import ClientConfig, APIResponse
 from ..mixins import (DNSMixin, FirewallMixin, FirewallAliasMixin, InterfaceMixin, RoutingMixin, ServiceMixin,
                       StatusMixin, SystemMixin, UserMixin)
+
 
 class CustomHTTPError(HTTPError):
     def __init__(self, *args, **kwargs):
@@ -65,7 +67,7 @@ class ClientBase(ClientABC):
         try:
             response_data = response.json()
             self.logger.debug(f"API response: {response_data}")
-        except json.JSONDecodeError:
+        except JSONDecodeError:
             self.logger.debug(f"API response: {response.text}")
             return response
 
@@ -84,7 +86,6 @@ class ClientBase(ClientABC):
     def call(self, url, method="GET", payload=None) -> APIResponse:
         response = self._request(url=url, method=method, payload=payload)
         return APIResponse.model_validate(response.json())
-
 
 
 class PFSenseAPIClient(ClientBase, DNSMixin, FirewallMixin, FirewallAliasMixin, InterfaceMixin, RoutingMixin,
