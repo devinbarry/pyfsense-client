@@ -12,3 +12,6 @@ poetry.lock
 # PyCharm
 .idea/
 fix_email.sh
+
+# Private env file
+.env
