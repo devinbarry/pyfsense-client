@@ -2,11 +2,24 @@ from __future__ import annotations
 from json import JSONDecodeError
 import logging
 from requests import Response, Session
+from requests.exceptions import HTTPError
 
 from .abc import ClientABC
 from .types import ClientConfig, APIResponse
 from ..mixins import (DNSMixin, FirewallMixin, FirewallAliasMixin, InterfaceMixin, RoutingMixin, ServiceMixin,
                       StatusMixin, SystemMixin, UserMixin)
+
+class CustomHTTPError(HTTPError):
+    def __init__(self, *args, **kwargs):
+        self.api_code = kwargs.pop('api_code', None)
+        self.return_code = kwargs.pop('return_code', None)
+        self.api_message = kwargs.pop('api_message', None)
+        self.api_data = kwargs.pop('api_data', None)
+        super().__init__(*args, **kwargs)
+
+    def __str__(self):
+        base_str = super().__str__()
+        return f"{base_str} (API Code: {self.api_code}, Return Code: {self.return_code}, Message: {self.api_message})"
 
 
 class ClientBase(ClientABC):
@@ -46,13 +59,26 @@ class ClientBase(ClientABC):
             headers["Authorization"] = f"{self.config.client_id} {self.config.client_token}"
 
         response = self.session.request(url=url, method=method, allow_redirects=False, verify=self.config.verify_ssl,
-                                    **kwargs)
-        try:
-            self.logger.debug(f"API response: {response.json()}")
-        except JSONDecodeError:
-            self.logger.debug(f"API response: {response.text}")
-
+                                        **kwargs)
+        # raise exceptions for invalid status codes before trying anything else.
         response.raise_for_status()
+        try:
+            response_data = response.json()
+            self.logger.debug(f"API response: {response_data}")
+        except json.JSONDecodeError:
+            self.logger.debug(f"API response: {response.text}")
+            return response
+
+        # Check for API-specific error information in the response
+        if 'code' in response_data and response_data['code'] != requests.codes.ok:
+            raise CustomHTTPError(
+                response=response,
+                api_code=response_data.get('code'),
+                return_code=response_data.get('return_code'),
+                api_message=response_data.get('message'),
+                api_data=response_data.get('data')
+            )
+
         return response
 
     def call(self, url, method="GET", payload=None) -> APIResponse:
