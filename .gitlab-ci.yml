@@ -91,6 +91,5 @@ sync_public_repo:
     - bash ./scripts/sync_public_repo.sh
   only:
     - master
-  when: manual
   variables:
     FORCE_SYNC: ${FORCE_SYNC:-"false"}
