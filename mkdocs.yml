@@ -23,6 +23,8 @@ nav:
   - System: mixin_system.md
 
 
-repo_name: yaleman/pfsense-api-client
-repo_url: https://github.com/yaleman/pfsense-api-client
+
+
+repo_name: devinbarry/pyfsense-client
+repo_url: https://github.com/devinbarry/pyfsense-client
 site_url: https://yaleman.github.io/pfsense-api-client/
