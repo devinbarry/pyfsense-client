@@ -74,7 +74,7 @@ build_and_publish:
 # Push a public copy of this repo up to GitHub
 sync_public_repo:
   stage: sync
-  image: alpine:latest
+  image: python:3.12-alpine
   before_script:
     - apk add --no-cache git openssh-client bash
     - wget https://github.com/newren/git-filter-repo/raw/main/git-filter-repo -O /usr/local/bin/git-filter-repo
