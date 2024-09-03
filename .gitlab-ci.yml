@@ -9,8 +9,7 @@ test_pyfsense_client:
   tags:
     - python
   only:
-    - branches
-    - tags
+    - master
   before_script:
     - python --version
     - pip --version
