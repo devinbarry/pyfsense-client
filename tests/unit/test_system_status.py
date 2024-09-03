@@ -1,9 +1,15 @@
+import uuid
 import json
+import random
 import unittest
 from requests.models import Response
 from unittest.mock import patch
 
 from pyfsense_client.client import ClientConfig, PFSenseAPIClient
+
+
+def randomize_string(length=16):
+    return ''.join(random.choices('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=length))
 
 
 class TestSystemStatus(unittest.TestCase):
@@ -23,7 +29,6 @@ class TestSystemStatus(unittest.TestCase):
         config = ClientConfig(**self.test_config)
         self.client = PFSenseAPIClient(config=config)
 
-
     @patch('pyfsense_client.client.client.PFSenseAPIClient._request')
     def test_get_system_status_with_mock_response(self, mock_request):
         # Create a mock response
@@ -35,23 +40,27 @@ class TestSystemStatus(unittest.TestCase):
             "return": 0,
             "message": "Success",
             "data": {
-                "system_platform": "Netgate pfSense Plus",
-                "system_serial": "D349058X0983450",
-                "system_netgate_id": "deff37aedcee1e2c6834",
-                "bios_vendor": "American Megatrends Inc.",
-                "bios_version": "1.3a",
-                "bios_date": "04/23/2019",
-                "cpu_model": "Intel(R) Xeon(R) D-2123IT CPU @ 2.20GHz",
-                "kernel_pti": True,
-                "mds_mitigation": "inactive",
-                "temp_c": 60,
-                "temp_f": 136.4,
-                "load_avg": [0.01, 0.05, 0.01],
-                "cpu_count": 8,
-                "mbuf_usage": 0.04,
-                "mem_usage": 0.06,
-                "swap_usage": 0,
-                "disk_usage": 0.01
+                "system_platform": random.choice(["Netgate pfSense Plus", "Linux Ubuntu", "Windows Server"]),
+                "system_serial": randomize_string(16),
+                "system_netgate_id": uuid.uuid4().hex,
+                "bios_vendor": random.choice(["American Megatrends Inc.", "Phoenix Technologies Ltd.", "Dell Inc."]),
+                "bios_version": f"{random.randint(1, 5)}.{random.randint(0, 9)}{chr(random.randint(97, 102))}",
+                "bios_date": f"{random.randint(1, 12):02d}/{random.randint(1, 31):02d}/{random.randint(2010, 2024)}",
+                "cpu_model": random.choice([
+                    "Intel(R) Xeon(R) D-2123IT CPU @ 2.20GHz",
+                    "AMD Ryzen 5 3600 6-Core Processor",
+                    "Intel(R) Core(TM) i7-10700K CPU @ 3.80GHz"
+                ]),
+                "kernel_pti": random.choice([True, False]),
+                "mds_mitigation": random.choice(["active", "inactive"]),
+                "temp_c": round(random.uniform(20, 80), 1),
+                "temp_f": round(random.uniform(68, 176), 1),
+                "load_avg": [round(random.uniform(0.0, 2.0), 2) for _ in range(3)],
+                "cpu_count": random.choice([4, 8, 16, 32]),
+                "mbuf_usage": round(random.uniform(0.01, 0.10), 2),
+                "mem_usage": round(random.uniform(0.05, 0.50), 2),
+                "swap_usage": round(random.uniform(0.0, 0.10), 2),
+                "disk_usage": round(random.uniform(0.01, 0.20), 2)
             }
         }).encode('utf-8')
 
