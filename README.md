@@ -1,3 +1,5 @@
+[![PythonSupport][1]][1l] [![License: GPL v3][2]][2l]
+
 # Pyfsense Client
 
 Pyfsense Client is a Python API client for pfSense API endpoints provided by the package at https://github.com/jaredhendrickson13/pfsense-api.
@@ -60,3 +62,8 @@ You can run the unit tests with:
 ```bash
 docker compose -f local.yml up
 ```
+
+[1]: https://img.shields.io/badge/python-3.10+-blue.svg
+[1l]: https://github.com/devinbarry/pyfsense-client
+[2]: https://img.shields.io/badge/License-GPLv3-blue.svg
+[2l]: https://www.gnu.org/licenses/gpl-3.0
