@@ -11,5 +11,5 @@ class ClientABC(ABC):
         pass
 
     @abstractmethod
-    def call(self, url, method="GET", payload=None)  -> APIResponse:
+    def call(self, url, method="GET", payload=None) -> APIResponse:
         pass
