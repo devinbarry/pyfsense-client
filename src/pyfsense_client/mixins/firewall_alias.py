@@ -4,6 +4,7 @@ from pydantic import validate_call
 from ..client import ClientABC, APIResponse
 from ..models import FirewallAliasCreate, FirewallAliasUpdate
 
+
 class FirewallAliasMixin(ClientABC):
 
     def get_firewall_alias(self, **kwargs) -> APIResponse:
