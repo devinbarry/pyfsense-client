@@ -17,10 +17,11 @@ class UserMixin(ClientABC):
         method = "DELETE"
         return self.call(url=url, method=method, payload=args)
     
-    def get_users(self, *filterargs: Dict[str, Any]) -> APIResponse:
+    def get_users(self, *args: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-users"""
         url = "/api/v1/user"
-        return self.call(url=url, params=filterargs)
+        method = "GET"
+        return self.call(url=url, method=method, payload=args)
     
     def update_users(self, **args: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-users"""

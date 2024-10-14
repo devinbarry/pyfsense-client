@@ -2,11 +2,13 @@ from enum import Enum
 from typing import Optional
 from pydantic import BaseModel, field_serializer
 
+
 class AliasTypes(str, Enum):
     """types for firewall aliases"""
     host = "host"
     network = "network"
     port = "port"
+
 
 class FirewallAlias(BaseModel):
     """validating the firewall alias"""
@@ -27,6 +29,7 @@ class FirewallAlias(BaseModel):
         if isinstance(detail, list) or "||" not in detail:
             return detail
         return detail.split('||')
+
 
 class FirewallAliasUpdate(FirewallAlias):
     """validating the firewall alias update"""
