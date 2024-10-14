@@ -36,10 +36,10 @@ fi
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 # Get the common ancestor of the current branch and the source branch
-common_ancestor=$(git merge-base $current_branch $source_branch)
+common_ancestor=$(git merge-base "$current_branch" "$source_branch")
 
 # Get all commit hashes from dependabot in the specified branch that are not in the current branch
-commit_hashes=$(git log $common_ancestor..$source_branch --author="dependabot\[bot\]" --pretty=format:"%H")
+commit_hashes=$(git log "$common_ancestor".."$source_branch" --author="dependabot\[bot\]" --pretty=format:"%H")
 
 # Check if there are any commits to cherry-pick
 if [[ -z "$commit_hashes" ]]; then
@@ -52,14 +52,14 @@ process_commits() {
     local action=$1
     for commit in $commit_hashes; do
         # Check if the commit already exists in the current branch
-        if git branch --contains $commit | grep -q "$current_branch"; then
+        if git branch --contains "$commit" | grep -q "$current_branch"; then
             echo "Commit $commit already exists in the current branch. Skipping."
         else
-            commit_message=$(git log -1 --pretty=format:"%s" $commit)
+            commit_message=$(git log -1 --pretty=format:"%s" "$commit")
             if [[ "$action" == "dry-run" ]]; then
                 echo "Would cherry-pick: $commit - $commit_message"
             elif [[ "$action" == "cherry-pick" ]]; then
-                if git cherry-pick $commit; then
+                if git cherry-pick "$commit"; then
                     echo "Successfully cherry-picked commit $commit - $commit_message"
                 else
                     echo "Failed to cherry-pick commit $commit - $commit_message"
