@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Function to print usage information
+# Cherry-pick dependabot commits from Github to our source master branch
+
 print_usage() {
     echo "Usage: $0 [-d|--dry-run] <source_branch>"
     echo "  -d, --dry-run    Perform a dry run without actually cherry-picking"
