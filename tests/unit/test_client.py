@@ -86,7 +86,7 @@ class TestPfsenseApiClient(unittest.TestCase):
                 "status": "success",
                 "data": {"key": "value"}
             }
-            m.get(test_url, json=mock_response)
+            m.get(test_url, json=mock_response, headers={'Content-Type': 'application/json'})
 
             config = ClientConfig(**self.test_config)
             client = ClientBase(config=config)

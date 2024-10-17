@@ -35,13 +35,14 @@ class TestClientConfig(unittest.TestCase):
         with self.assertRaises(ValidationError):
             ClientConfig(hostname="example.com")
 
+
 class TestAPIResponse(unittest.TestCase):
 
     def test_apiresponse_valid(self):
         response_data = {
             "status": "success",
             "code": 200,
-            "return": 0,  # Access using the alias
+            "return": 0,
             "message": "OK",
             "data": {"key": "value"}
         }
@@ -49,7 +50,7 @@ class TestAPIResponse(unittest.TestCase):
 
         self.assertEqual(response.status, "success")
         self.assertEqual(response.code, 200)
-        self.assertEqual(response.return_code, 0)  # Access using the actual field name
+        self.assertEqual(response.return_code, 0)
         self.assertEqual(response.message, "OK")
         self.assertEqual(response.data, {"key": "value"})
 
@@ -58,9 +59,9 @@ class TestAPIResponse(unittest.TestCase):
             response_data = {
                 "status": "error",
                 "code": 999,  # Invalid code
-                "return": 0,  # Access using the alias
+                "return": 0,
                 "message": "Error",
-                "data": None
+                "data": {}
             }
             APIResponse(**response_data)
 
@@ -71,7 +72,7 @@ class TestAPIResponse(unittest.TestCase):
                 "code": 200,
                 "return": 0,
                 "message": "Invalid data",
-                "data": "This should be a dict or list"
+                "data": "This should be a dict"
             }
             APIResponse(**response_data)
 
@@ -85,15 +86,3 @@ class TestAPIResponse(unittest.TestCase):
         }
         response = APIResponse(**response_data)
         self.assertEqual(response.data, {"key": "value"})
-
-    def test_apiresponse_list(self):
-        response_data = {
-            "status": "success",
-            "code": 200,
-            "return": 0,
-            "message": "OK",
-            "data": ["item1", "item2"]
-        }
-        response = APIResponse(**response_data)
-        self.assertEqual(response.data, ["item1", "item2"])
-
