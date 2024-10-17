@@ -1,5 +1,6 @@
 from __future__ import annotations
 import json
+from typing import Any
 from pathlib import Path
 from pydantic import BaseModel, Field, field_validator, model_validator
 
@@ -77,23 +78,33 @@ def load_client_config(filename: str) -> ClientConfig:
         return ClientConfig(**json.load(file))
 
 
-# TODO: Write a better validator for the data field. It should always be a JSON dict
 class APIResponse(BaseModel):
     """
     Standard JSON API response from the pfSense API.
     """
     status: str
     code: int
-    return_code: int = Field(default=..., title="return", alias="return", description="The return field from the API")
+    return_code: int = Field(
+        default=..., title="return", alias="return", description="The return field from the API"
+    )
     message: str
-    data: dict[str, Any] | list
+    data: dict[str, Any]
 
     @field_validator("code")
     def validate_code(cls, value: int) -> int:
         """
-        Validates it's an integer in the expected list.
+        Validates that the code is an integer in the expected list.
         """
         valid_codes = {200, 400, 401, 403, 404, 500}
         if value not in valid_codes:
             raise ValueError(f"Got an invalid status code ({value}).")
+        return value
+
+    @field_validator("data")
+    def validate_data(cls, value):
+        """
+        Validates that data is a json dictionary.
+        """
+        if not isinstance(value, dict):
+            raise ValueError("The 'data' field must be a dictionary.")
         return value

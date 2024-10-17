@@ -7,13 +7,13 @@ from ..models import FirewallAliasCreate, FirewallAliasUpdate
 class FirewallAliasMixin(ClientABC):
 
     def get_firewall_alias(self, **kwargs) -> APIResponse:
-        """get a list of firewall aliases"""
+        """Get a list of firewall aliases."""
         url = "/api/v1/firewall/alias"
         return self.call(url=url, method="GET", payload=dict(kwargs))
 
     @validate_call
     def create_firewall_alias(self, alias: FirewallAliasCreate) -> APIResponse:
-        """Add a new host, network or port firewall alias."""
+        """Add a new host, network, or port firewall alias."""
         url = "/api/v1/firewall/alias"
         method = "POST"
         return self.call(url=url, method=method, payload=alias.dict())

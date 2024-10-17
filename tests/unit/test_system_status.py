@@ -64,14 +64,18 @@ class TestSystemStatus(unittest.TestCase):
             }
         }).encode('utf-8')
 
-        # Set the return value of the call method to the mock response
+        mock_response.headers = {'Content-Type': 'application/json'}  # Add this line
+
+        # Set the return value of the _request method to the mock response
         mock_request.return_value = mock_response
 
         # Call the get_system_status method
         response = self.client.get_system_status()
 
-        # Check if the returned response is equal to the mock response
-        self.assertEqual(response.model_dump(by_alias=True), mock_response.json())
+        # Now response should be an APIResponse object
+        # Check if the returned response data matches the mock data
+        expected_data = json.loads(mock_response._content)
+        self.assertEqual(response.model_dump(by_alias=True), expected_data)
 
         # Verify if the call method was called with the correct arguments
         mock_request.assert_called_once_with(url="/api/v1/status/system", method="GET", payload={})
