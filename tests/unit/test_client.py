@@ -1,13 +1,13 @@
 import unittest
 from tempfile import NamedTemporaryFile
-
-import requests_mock
 import json
+import requests_mock
 from requests.exceptions import HTTPError
 from pyfsense_client.client import ClientConfig, ClientBase, APIResponse, load_client_config
 
 
 class TestPfsenseApiClient(unittest.TestCase):
+
     @classmethod
     def setUpClass(cls):
         # Set up test configuration for all tests
@@ -18,6 +18,12 @@ class TestPfsenseApiClient(unittest.TestCase):
             "mode": "jwt",
             "jwt": "test_jwt_token"
         }
+
+    def create_temporary_file(self, content):
+        # Helper method to create a temporary file
+        with NamedTemporaryFile(delete=False, mode='w', encoding='utf-8') as tmp_file:
+            json.dump(content, tmp_file)
+            return tmp_file.name
 
     def test_client_base_initialization(self):
         config = ClientConfig(**self.test_config)
@@ -45,12 +51,6 @@ class TestPfsenseApiClient(unittest.TestCase):
         client = ClientBase(config=config)
         self.assertEqual(client.config.username, "test_user")
         self.assertEqual(client.config.hostname, "test.example.com")
-
-    def create_temporary_file(self, content):
-        # Helper method to create a temporary file
-        with NamedTemporaryFile(delete=False) as tmp_file:
-            tmp_file.write(json.dumps(content).encode())
-            return tmp_file.name
 
     def test_client_base_http_methods(self):
         for method, mock_method in [("GET", "get"), ("POST", "post"), ("PUT", "put"), ("DELETE", "delete")]:
@@ -96,3 +96,26 @@ class TestPfsenseApiClient(unittest.TestCase):
             self.assertEqual(api_response.status, "success")
             self.assertEqual(api_response.data, {"key": "value"})
             self.assertEqual(api_response.code, 200)
+
+    def test_request_non_json_error_response(self):
+        with requests_mock.Mocker() as m:
+            test_url = "https://test.example.com/error"
+            m.get(test_url, status_code=500, text="Internal Server Error", headers={'Content-Type': 'text/plain'})
+
+            config = ClientConfig(**self.test_config)
+            client = ClientBase(config=config)
+
+            with self.assertRaises(HTTPError):
+                client._request("/error")
+
+    def test_non_json_success_response(self):
+        with requests_mock.Mocker() as m:
+            test_url = "https://test.example.com/non_json"
+            m.get(test_url, status_code=200, text="Plain text response", headers={'Content-Type': 'text/plain'})
+
+            config = ClientConfig(**self.test_config)
+            client = ClientBase(config=config)
+            response = client._request("/non_json")
+
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.text, "Plain text response")

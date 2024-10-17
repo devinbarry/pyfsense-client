@@ -1,6 +1,5 @@
 from __future__ import annotations
 import logging
-import requests
 from json import JSONDecodeError
 from requests import Response, Session
 from requests.exceptions import HTTPError
@@ -25,7 +24,7 @@ class CustomHTTPError(HTTPError):
 
 
 class ClientBase(ClientABC):
-    def __init__(self, config:  ClientConfig):
+    def __init__(self, config: ClientConfig):
         self.config = config
         self.session = Session()
         self.logger = logging.getLogger(__name__)
@@ -95,6 +94,9 @@ class ClientBase(ClientABC):
 
     def call(self, url, method="GET", payload=None) -> APIResponse:
         response = self._request(url=url, method=method, payload=payload)
+        # If the response content is not JSON, return as is
+        if not response.headers.get('Content-Type', '').startswith('application/json'):
+            return response
         return APIResponse.model_validate(response.json())
 
 
