@@ -1,4 +1,3 @@
-from typing import Any, Dict
 from pydantic import validate_call
 
 from ..client import ClientABC, APIResponse
@@ -45,14 +44,18 @@ class FirewallAliasMixin(ClientABC):
         payload = {"id": name, "apply": apply}
         return self.call(url=url, method=method, payload=payload)
 
-    def create_firewall_alias_entry(self, **args: Dict[str, Any]) -> APIResponse:
+    @validate_call
+    def create_firewall_alias_entry(self, name: str, address: str | list[str], apply: bool = True) -> APIResponse:
         """Add new entries to an existing firewall alias."""
         method = "POST"
         url = "/api/v1/firewall/alias/entry"
-        return self.call(url=url, method=method, payload=args)
+        payload = {"name": name, "address": address, "apply": apply}
+        return self.call(url=url, method=method, payload=payload)
 
-    def delete_firewall_alias_entry(self, **args: Dict[str, Any]) -> APIResponse:
+    @validate_call
+    def delete_firewall_alias_entry(self, name: str, address: str | list[str], apply: bool = True) -> APIResponse:
         """Delete existing entries from an existing firewall alias."""
         method = "DELETE"
         url = "/api/v1/firewall/alias/entry"
-        return self.call(url=url, method=method, payload=args)
+        payload = {"name": name, "address": address, "apply": apply}
+        return self.call(url=url, method=method, payload=payload)
