@@ -3,17 +3,17 @@ from typing import Optional
 from pydantic import BaseModel, field_serializer
 
 
-class AliasTypes(str, Enum):
-    """types for firewall aliases"""
-    host = "host"
-    network = "network"
-    port = "port"
+class AliasType(Enum):
+    HOST = "host"
+    NETWORK = "network"
+    PORT = "port"
+    URL = "url"
 
 
 class FirewallAlias(BaseModel):
     """validating the firewall alias"""
     name: str
-    type: AliasTypes
+    type: AliasType
     address: str | list[str]
     descr: str
     detail: str | list[str]
@@ -35,7 +35,7 @@ class FirewallAliasUpdate(FirewallAlias):
     """validating the firewall alias update"""
     id: str
     name: str
-    type: AliasTypes
+    type: AliasType
     descr: Optional[str]
     address: str | list[str]
     detail: str | list[str]
@@ -43,9 +43,9 @@ class FirewallAliasUpdate(FirewallAlias):
 
 
 class FirewallAliasCreate(FirewallAlias):
-    """validating the firewall alias update"""
+    """validating the firewall alias create"""
     name: str
-    type: AliasTypes
+    type: AliasType
     descr: Optional[str]
     address: str | list[str]
     detail: str | list[str]
