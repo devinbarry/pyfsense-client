@@ -60,19 +60,25 @@ class ClientBase(ClientABC):
         elif self.config.mode == "api_token":
             headers["Authorization"] = f"{self.config.client_id} {self.config.client_token}"
 
-        response = self.session.request(url=url, method=method, allow_redirects=False, verify=self.config.verify_ssl,
-                                        **kwargs)
-        # raise exceptions for invalid status codes before trying anything else.
-        response.raise_for_status()
+        response = self.session.request(
+            url=url, method=method, allow_redirects=False, verify=self.config.verify_ssl, **kwargs
+        )
+
+        # Attempt to parse the JSON response, regardless of status code
         try:
             response_data = response.json()
             self.logger.debug(f"API response: {response_data}")
         except JSONDecodeError:
-            self.logger.debug(f"API response: {response.text}")
-            return response
+            self.logger.debug(f"Non-JSON response: {response.text}")
+            if not response.ok:
+                # If status code is not 2xx, raise HTTPError
+                response.raise_for_status()
+            else:
+                # If status code is 2xx but response isn't JSON, return the raw response
+                return response
 
         # Check for API-specific error information in the response
-        if 'code' in response_data and response_data['code'] != requests.codes.ok:
+        if 'code' in response_data and response_data['code'] != 200:
             raise CustomHTTPError(
                 response=response,
                 api_code=response_data.get('code'),
@@ -80,6 +86,10 @@ class ClientBase(ClientABC):
                 api_message=response_data.get('message'),
                 api_data=response_data.get('data')
             )
+
+        # If the HTTP status code is not 2xx, raise HTTPError
+        if not response.ok:
+            response.raise_for_status()
 
         return response
 
