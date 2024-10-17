@@ -39,28 +39,20 @@ class ClientConfig(BaseModel):
     verify_ssl: bool = True
 
     @model_validator(mode='after')
-    def check_mode(self) -> ClientConfig:
-        if self.mode not in ('local', 'jwt', 'api_token'):
+    def validate_config(cls, values: ClientConfig) -> ClientConfig:
+        if values.mode not in ('local', 'jwt', 'api_token'):
             raise ValueError("Authentication mode must be one of 'local', 'jwt', or 'api_token'.")
-        return self
 
-    @model_validator(mode='after')
-    def check_mode_api_token(self) -> ClientConfig:
-        if self.mode == 'api_token' and not (self.client_id and self.client_token):
-            raise ValueError("client_id and client_token must be provided if mode is 'api_token'.")
-        return self
-
-    @model_validator(mode='after')
-    def check_mode_jwt(self) -> ClientConfig:
-        if self.mode == 'jwt' and not self.jwt:
-            raise ValueError("jwt must be provided if mode is 'jwt'.")
-        return self
-
-    @model_validator(mode='after')
-    def check_mode_local(self) -> ClientConfig:
-        if self.mode == 'local' and not (self.username and self.password):
-            raise ValueError("username and password must be provided if mode is 'local'.")
-        return self
+        if values.mode == 'local':
+            if not (values.username and values.password):
+                raise ValueError("username and password must be provided if mode is 'local'.")
+        elif values.mode == 'jwt':
+            if not values.jwt:
+                raise ValueError("jwt must be provided if mode is 'jwt'.")
+        elif values.mode == 'api_token':
+            if not (values.client_id and values.client_token):
+                raise ValueError("client_id and client_token must be provided if mode is 'api_token'.")
+        return values
 
 
 def load_client_config(filename: str) -> ClientConfig:
