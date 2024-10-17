@@ -2,6 +2,7 @@ import pytest
 from pydantic import ValidationError
 from pyfsense_client.client import ClientConfig, APIResponse
 
+
 # Test for ClientConfig
 def test_pfsense_config_username_and_pass():
     config = ClientConfig(
@@ -13,6 +14,7 @@ def test_pfsense_config_username_and_pass():
     assert config.password == "pass"
     assert config.hostname == "example.com"
     assert config.port == 443  # Default value
+
 
 def test_pfsense_config_token():
     config = ClientConfig(
@@ -29,9 +31,11 @@ def test_pfsense_config_token():
     assert config.client_id == "client_id"
     assert config.client_token == "client_token"
 
+
 def test_pfsense_config_invalid():
     with pytest.raises(ValidationError):
         ClientConfig(hostname="example.com")
+
 
 # Test for APIResponse
 def test_apiresponse_valid():
@@ -51,7 +55,6 @@ def test_apiresponse_valid():
     assert response.data == {"key": "value"}
 
 
-
 def test_apiresponse_invalid_code():
     with pytest.raises(ValidationError):
         response_data = {
@@ -62,6 +65,7 @@ def test_apiresponse_invalid_code():
             "data": None
         }
         APIResponse(**response_data)
+
 
 # Test for APIResponseDict
 def test_apiresponse_dict():
@@ -74,6 +78,7 @@ def test_apiresponse_dict():
     }
     response = APIResponse(**response_data)
     assert response.data == {"key": "value"}
+
 
 # Test for APIResponseList
 def test_apiresponse_list():

@@ -6,6 +6,7 @@ import json
 from requests.exceptions import HTTPError
 from pyfsense_client.client import ClientConfig, ClientBase, APIResponse, load_client_config
 
+
 class TestPfsenseApiClient(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

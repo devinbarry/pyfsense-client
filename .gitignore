@@ -15,3 +15,7 @@ scripts/fix_email.sh
 
 # Private env file
 .env
+
+# Crev files
+.crev-config.yaml
+crev-project.txt

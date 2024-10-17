@@ -4,6 +4,7 @@ from pyfsense_client.client import ClientConfig, PFSenseAPIClient
 
 from ..mocks import get_response_json
 
+
 class TestStatusMixin(unittest.TestCase):
     
     @classmethod

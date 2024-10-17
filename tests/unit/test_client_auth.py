@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from pyfsense_client.client import ClientConfig, PFSenseAPIClient
 
+
 class TestClientAuth(unittest.TestCase):
 
     @classmethod
