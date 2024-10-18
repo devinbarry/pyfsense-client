@@ -8,7 +8,7 @@ requires-python = ">=3.11"
 dynamic = ["version"]
 description = "A client for the unofficial pfSense API https://github.com/jaredhendrickson13/pfsense-api"
 readme = "README.md"
-license = "MIT"
+license = {file = "LICENSE"}
 authors = [
     { name = "Devin Barry", email = "devinbarry@users.noreply.github.com" },
     { name = "James Hodgkinson", email = "james@terminaloutcomes.com" },
