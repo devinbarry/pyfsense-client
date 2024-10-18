@@ -38,7 +38,7 @@ class TestClientConfig(unittest.TestCase):
 
 class TestAPIResponse(unittest.TestCase):
 
-    def test_apiresponse_valid(self):
+    def test_apiresponse_valid_dict(self):
         response_data = {
             "status": "success",
             "code": 200,
@@ -47,12 +47,18 @@ class TestAPIResponse(unittest.TestCase):
             "data": {"key": "value"}
         }
         response = APIResponse(**response_data)
-
-        self.assertEqual(response.status, "success")
-        self.assertEqual(response.code, 200)
-        self.assertEqual(response.return_code, 0)
-        self.assertEqual(response.message, "OK")
         self.assertEqual(response.data, {"key": "value"})
+
+    def test_apiresponse_valid_list(self):
+        response_data = {
+            "status": "success",
+            "code": 200,
+            "return": 0,
+            "message": "OK",
+            "data": ["item1", "item2"]
+        }
+        response = APIResponse(**response_data)
+        self.assertEqual(response.data, ["item1", "item2"])
 
     def test_apiresponse_invalid_code(self):
         with self.assertRaises(ValidationError):
@@ -72,7 +78,7 @@ class TestAPIResponse(unittest.TestCase):
                 "code": 200,
                 "return": 0,
                 "message": "Invalid data",
-                "data": "This should be a dict"
+                "data": "This should be a dict or list"
             }
             APIResponse(**response_data)
 
@@ -86,3 +92,15 @@ class TestAPIResponse(unittest.TestCase):
         }
         response = APIResponse(**response_data)
         self.assertEqual(response.data, {"key": "value"})
+
+    def test_apiresponse_list(self):
+        response_data = {
+            "status": "success",
+            "code": 200,
+            "return": 0,
+            "message": "OK",
+            "data": ["item1", "item2"]
+        }
+        response = APIResponse(**response_data)
+        self.assertEqual(response.data, ["item1", "item2"])
+

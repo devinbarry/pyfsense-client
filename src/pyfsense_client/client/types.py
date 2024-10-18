@@ -88,7 +88,7 @@ class APIResponse(BaseModel):
         default=..., title="return", alias="return", description="The return field from the API"
     )
     message: str
-    data: dict[str, Any]
+    data: dict[str, Any] | list
 
     @field_validator("code")
     def validate_code(cls, value: int) -> int:
@@ -103,8 +103,8 @@ class APIResponse(BaseModel):
     @field_validator("data")
     def validate_data(cls, value):
         """
-        Validates that data is a json dictionary.
+        Validates that data is a json dictionary or list.
         """
-        if not isinstance(value, dict):
-            raise ValueError("The 'data' field must be a dictionary.")
+        if not isinstance(value, (dict, list)):
+            raise ValueError("The 'data' field must be either a dictionary or a list.")
         return value

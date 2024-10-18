@@ -97,6 +97,27 @@ class TestPfsenseApiClient(unittest.TestCase):
             self.assertEqual(api_response.data, {"key": "value"})
             self.assertEqual(api_response.code, 200)
 
+    def test_client_base_call_method_with_list_data(self):
+        with requests_mock.Mocker() as m:
+            test_url = "https://test.example.com/api_list"
+            mock_response = {
+                "code": 200,
+                "return": 0,
+                "message": "Success",
+                "status": "success",
+                "data": ["item1", "item2", "item3"]
+            }
+            m.get(test_url, json=mock_response, headers={'Content-Type': 'application/json'})
+
+            config = ClientConfig(**self.test_config)
+            client = ClientBase(config=config)
+            api_response = client.call("/api_list")
+
+            self.assertIsInstance(api_response, APIResponse)
+            self.assertEqual(api_response.status, "success")
+            self.assertEqual(api_response.data, ["item1", "item2", "item3"])
+            self.assertEqual(api_response.code, 200)
+
     def test_request_non_json_error_response(self):
         with requests_mock.Mocker() as m:
             test_url = "https://test.example.com/error"
