@@ -79,3 +79,35 @@ class TestSystemStatus(unittest.TestCase):
 
         # Verify if the call method was called with the correct arguments
         mock_request.assert_called_once_with(url="/api/v1/status/system", method="GET", payload={})
+
+    @patch('pyfsense_client.client.client.PFSenseAPIClient._request')
+    def test_get_system_status_with_list_data(self, mock_request):
+        # Create a mock response with list data
+        mock_response = Response()
+        mock_response.status_code = 200
+        mock_response._content = json.dumps({
+            "status": "ok",
+            "code": 200,
+            "return": 0,
+            "message": "Success",
+            "data": [
+                {"name": "System 1", "status": "online"},
+                {"name": "System 2", "status": "offline"},
+                {"name": "System 3", "status": "online"}
+            ]
+        }).encode('utf-8')
+
+        mock_response.headers = {'Content-Type': 'application/json'}
+
+        # Set the return value of the _request method to the mock response
+        mock_request.return_value = mock_response
+
+        # Call the get_system_status method
+        response = self.client.get_system_status()
+
+        # Check if the returned response data matches the mock data
+        expected_data = json.loads(mock_response._content)
+        self.assertEqual(response.model_dump(by_alias=True), expected_data)
+
+        # Verify if the call method was called with the correct arguments
+        mock_request.assert_called_once_with(url="/api/v1/status/system", method="GET", payload={})
