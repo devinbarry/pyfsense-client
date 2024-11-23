@@ -1,9 +1,9 @@
-from enum import Enum
+from enum import StrEnum
 from typing import Optional
 from pydantic import BaseModel, field_validator
 
 
-class AliasType(Enum):
+class AliasType(StrEnum):
     HOST = "host"
     NETWORK = "network"
     PORT = "port"

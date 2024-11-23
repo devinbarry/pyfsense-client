@@ -1,9 +1,20 @@
+import json
 import unittest
 from pydantic import ValidationError
 from pyfsense_client.models.firewall_alias import FirewallAlias, FirewallAliasCreate, FirewallAliasUpdate, AliasType
 
 
 class TestFirewallAliasModels(unittest.TestCase):
+
+    def setUp(self):
+        # Sample alias data for testing
+        self.test_alias = {
+            'name': 'test_alias',
+            'type': AliasType.HOST,
+            'address': ['192.168.1.1', '192.168.1.2'],
+            'detail': ['Server1', 'Server2'],
+            'descr': 'Test alias description'
+        }
 
     def test_firewall_alias_base_with_string_fields(self):
         alias = FirewallAlias(
@@ -67,3 +78,43 @@ class TestFirewallAliasModels(unittest.TestCase):
                 type=AliasType.HOST
                 # Missing 'address' and 'detail'
             )
+
+    def test_alias_create_json_serialization(self):
+        """Test that a FirewallAliasCreate object can be serialized to JSON"""
+        alias = FirewallAliasCreate(**self.test_alias, apply=True)
+        json_str = json.dumps(alias.model_dump())
+        json_data = json.loads(json_str)
+
+        self.assertEqual(json_data['type'], 'host')
+        self.assertEqual(json_data['name'], 'test_alias')
+        self.assertEqual(json_data['address'], ['192.168.1.1', '192.168.1.2'])
+        self.assertEqual(json_data['apply'], True)
+
+    def test_alias_update_json_serialization(self):
+        """Test that a FirewallAliasUpdate object can be serialized to JSON"""
+        update_data = {**self.test_alias, 'id': 'test_alias'}
+        alias = FirewallAliasUpdate(**update_data, apply=True)
+        json_str = json.dumps(alias.model_dump())
+        json_data = json.loads(json_str)
+
+        self.assertEqual(json_data['type'], 'host')
+        self.assertEqual(json_data['id'], 'test_alias')
+        self.assertEqual(json_data['name'], 'test_alias')
+        self.assertEqual(json_data['address'], ['192.168.1.1', '192.168.1.2'])
+        self.assertEqual(json_data['apply'], True)
+
+    def test_firewall_alias_json_serialization(self):
+        """Test that a FirewallAlias object can be serialized to JSON"""
+        alias = FirewallAlias(**self.test_alias)
+        json_str = json.dumps(alias.model_dump())
+        json_data = json.loads(json_str)
+
+        self.assertEqual(json_data['type'], 'host')
+        self.assertEqual(json_data['name'], 'test_alias')
+        self.assertEqual(json_data['address'], ['192.168.1.1', '192.168.1.2'])
+
+    def test_alias_type_json_serialization(self):
+        """Test that an AliasType enum serializes to its string value"""
+        alias_type = AliasType.HOST
+        json_str = json.dumps(alias_type.value)
+        self.assertEqual(json_str, '"host"')
