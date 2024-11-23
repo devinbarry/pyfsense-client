@@ -1,9 +1,15 @@
+import uuid
 import json
+import random
 import unittest
 from requests.models import Response
 from unittest.mock import patch
 
 from pyfsense_client.client import ClientConfig, PFSenseAPIClient
+
+
+def randomize_string(length=16):
+    return ''.join(random.choices('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=length))
 
 
 class TestSystemStatus(unittest.TestCase):
@@ -22,7 +28,6 @@ class TestSystemStatus(unittest.TestCase):
     def setUp(self):
         config = ClientConfig(**self.test_config)
         self.client = PFSenseAPIClient(config=config)
-
 
     @patch('pyfsense_client.client.client.PFSenseAPIClient._request')
     def test_get_system_status_with_mock_response(self, mock_request):
