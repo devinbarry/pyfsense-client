@@ -12,8 +12,9 @@ This code is currently being tested against pfSense 24.03 and the v1.7.6 API end
 
 Project is under development and likely will not have working methods for all endpoints.
 
-All the integration tests copied from [yaleman](https://github.com/yaleman/pfsense-api-client) don't work, and many endpoints
-that I don't personally use have not been tested. Writing mocked tests for all the endpoints is a large task and is unlikely to
+
+This project has not been tested against all endpoints. Integration tests from the original repo have been converted
+to unit test stubs but hae not all been written. Writing mocked tests for all the endpoints is a large task and is unlikely to
 be finished considering the API has been recently upgraded to version 2. It makes more sense to transition this project to using
 version 2 endpoints and write tests for those instead.
 
