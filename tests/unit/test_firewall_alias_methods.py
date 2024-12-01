@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
-from pyfsense_client.client import ClientConfig, PFSenseAPIClient
-from pyfsense_client.models import FirewallAliasCreate, FirewallAliasUpdate
+from v1.client import ClientConfig, PFSenseAPIClient
+
 
 class TestFirewallAliasMethods(unittest.TestCase):
 

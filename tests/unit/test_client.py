@@ -3,7 +3,7 @@ from tempfile import NamedTemporaryFile
 import json
 import requests_mock
 from requests.exceptions import HTTPError
-from pyfsense_client.client import ClientConfig, ClientBase, APIResponse, load_client_config
+from v1.client import ClientConfig, ClientBase, APIResponse, load_client_config
 
 
 class TestPfsenseApiClient(unittest.TestCase):

@@ -1,6 +1,6 @@
 import unittest
 from pydantic import ValidationError
-from pyfsense_client.client import ClientConfig, APIResponse
+from v1.client import ClientConfig, APIResponse
 
 
 class TestClientConfig(unittest.TestCase):

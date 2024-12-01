@@ -5,7 +5,7 @@ import unittest
 from requests.models import Response
 from unittest.mock import patch
 
-from pyfsense_client.client import ClientConfig, PFSenseAPIClient
+from v1.client import ClientConfig, PFSenseAPIClient
 
 
 def randomize_string(length=16):

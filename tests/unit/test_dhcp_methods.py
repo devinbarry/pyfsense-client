@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from pyfsense_client.client import ClientConfig, PFSenseAPIClient
+from v1.client import ClientConfig, PFSenseAPIClient
 
 class TestDHCPMethods(unittest.TestCase):
 

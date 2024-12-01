@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from pyfsense_client.client import ClientConfig, PFSenseAPIClient
+from v1.client import ClientConfig, PFSenseAPIClient
 
 from ..mocks import get_response_json
 

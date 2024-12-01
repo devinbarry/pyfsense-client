@@ -1,7 +1,7 @@
 import json
 import unittest
 from pydantic import ValidationError
-from pyfsense_client.models.firewall_alias import FirewallAlias, FirewallAliasCreate, FirewallAliasUpdate, AliasType
+from v1.models.firewall_alias import FirewallAlias, FirewallAliasCreate, FirewallAliasUpdate, AliasType
 
 
 class TestFirewallAliasModels(unittest.TestCase):
