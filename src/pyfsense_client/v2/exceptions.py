@@ -10,7 +10,7 @@ class APIError(Exception):
 
 
 class AuthenticationError(APIError):
-    """Raised when authentication fails."""
+    """Raised when authentication fails (HTTP 401)."""
     pass
 
 
