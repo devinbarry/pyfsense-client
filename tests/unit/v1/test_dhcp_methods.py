@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from v1.client import ClientConfig, PFSenseAPIClient
+from pyfsense_client.v1.client import ClientConfig, PFSenseAPIClient
 
 class TestDHCPMethods(unittest.TestCase):
 
@@ -18,14 +18,14 @@ class TestDHCPMethods(unittest.TestCase):
         config = ClientConfig(**self.test_config)
         self.client = PFSenseAPIClient(config=config)
 
-    @patch('pyfsense_client.client.client.PFSenseAPIClient.call')
+    @patch('pyfsense_client.v1.client.client.PFSenseAPIClient.call')
     def test_get_dhcp_status_log(self, mock_call):
         pass
 
-    @patch('pyfsense_client.client.client.PFSenseAPIClient.call')
+    @patch('pyfsense_client.v1.client.client.PFSenseAPIClient.call')
     def test_get_dhcpd_leases(self, mock_call):
         pass
 
-    @patch('pyfsense_client.client.client.PFSenseAPIClient.call')
+    @patch('pyfsense_client.v1.client.client.PFSenseAPIClient.call')
     def test_get_dhcpd_service_configuration(self, mock_call):
         pass

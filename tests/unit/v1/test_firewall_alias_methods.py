@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from v1.client import ClientConfig, PFSenseAPIClient
+from pyfsense_client.v1.client import ClientConfig, PFSenseAPIClient
 
 
 class TestFirewallAliasMethods(unittest.TestCase):
@@ -19,18 +19,18 @@ class TestFirewallAliasMethods(unittest.TestCase):
         config = ClientConfig(**self.test_config)
         self.client = PFSenseAPIClient(config=config)
 
-    @patch('pyfsense_client.client.client.PFSenseAPIClient.call')
+    @patch('pyfsense_client.v1.client.client.PFSenseAPIClient.call')
     def test_get_firewall_alias(self, mock_call):
         pass
 
-    @patch('pyfsense_client.client.client.PFSenseAPIClient.call')
+    @patch('pyfsense_client.v1.client.client.PFSenseAPIClient.call')
     def test_get_firewall_alias_by_name(self, mock_call):
         pass
 
-    @patch('pyfsense_client.client.client.PFSenseAPIClient.call')
+    @patch('pyfsense_client.v1.client.client.PFSenseAPIClient.call')
     def test_create_firewall_alias(self, mock_call):
         pass
 
-    @patch('pyfsense_client.client.client.PFSenseAPIClient.call')
+    @patch('pyfsense_client.v1.client.client.PFSenseAPIClient.call')
     def test_delete_firewall_alias(self, mock_call):
         pass

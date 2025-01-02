@@ -5,7 +5,7 @@ import unittest
 from requests.models import Response
 from unittest.mock import patch
 
-from v1.client import ClientConfig, PFSenseAPIClient
+from pyfsense_client.v1.client import ClientConfig, PFSenseAPIClient
 
 
 def randomize_string(length=16):
@@ -29,7 +29,7 @@ class TestSystemStatus(unittest.TestCase):
         config = ClientConfig(**self.test_config)
         self.client = PFSenseAPIClient(config=config)
 
-    @patch('pyfsense_client.client.client.PFSenseAPIClient._request')
+    @patch('pyfsense_client.v1.client.client.PFSenseAPIClient._request')
     def test_get_system_status_with_mock_response(self, mock_request):
         # Create a mock response
         mock_response = Response()
@@ -80,7 +80,7 @@ class TestSystemStatus(unittest.TestCase):
         # Verify if the call method was called with the correct arguments
         mock_request.assert_called_once_with(url="/api/v1/status/system", method="GET", payload={})
 
-    @patch('pyfsense_client.client.client.PFSenseAPIClient._request')
+    @patch('pyfsense_client.v1.client.client.PFSenseAPIClient._request')
     def test_get_system_status_with_list_data(self, mock_request):
         # Create a mock response with list data
         mock_response = Response()
