@@ -8,13 +8,7 @@ from .exceptions import (
     AuthenticationError,
     ValidationError
 )
-from .models import (
-    APIResponse,
-    JWTAuthResponse,
-    FirewallAliasCreate,
-    FirewallAliasUpdate,
-    FirewallAlias
-)
+from .models import APIResponse, JWTAuthResponse, FirewallAlias, FirewallAliasCreate, FirewallAliasUpdate, DHCPLease
 
 __all__ = [
     "PfSenseClient",
@@ -24,7 +18,8 @@ __all__ = [
     "ValidationError",
     "APIResponse",
     "JWTAuthResponse",
+    "FirewallAlias",
     "FirewallAliasCreate",
     "FirewallAliasUpdate",
-    "FirewallAlias"
+    "DHCPLease",
 ]

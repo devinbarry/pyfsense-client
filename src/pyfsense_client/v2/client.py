@@ -3,12 +3,12 @@ from typing import Any
 
 import requests
 
-from .models import APIResponse, FirewallAlias, FirewallAliasCreate, FirewallAliasUpdate
 from .exceptions import (
     APIError,
     AuthenticationError,
     ValidationError
 )
+from .models import APIResponse, FirewallAlias, FirewallAliasCreate, FirewallAliasUpdate, DHCPLease
 
 
 @dataclass
@@ -62,9 +62,6 @@ class PfSenseClient:
 
         # Configure request session
         self._session.verify = self.config.verify_ssl
-
-        # By default, requests.Session doesn't have a built-in "timeout" parameter,
-        # so we'll pass `timeout` in the request method itself.
         self._default_timeout = self.config.timeout
 
         # If we already have an API key or JWT token, attach it to the session headers
@@ -161,8 +158,6 @@ class PfSenseClient:
             raise AuthenticationError("No token returned in JWT auth response.", None)
 
         token = raw_resp.data["token"]
-
-        # Store the JWT in the session
         self._session.headers.update({'Authorization': f'Bearer {token}'})
         self.config.jwt_token = token
         return token
