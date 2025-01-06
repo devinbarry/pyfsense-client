@@ -1,5 +1,5 @@
 stages:
-  - sync
+  # - sync
   - test
   - build
 
