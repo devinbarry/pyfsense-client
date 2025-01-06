@@ -16,7 +16,7 @@ class FirewallAliasMixin(ClientABC):
         """Add a new host, network, or port firewall alias."""
         url = "/api/v1/firewall/alias"
         method = "POST"
-        return self.call(url=url, method=method, payload=alias.dict())
+        return self.call(url=url, method=method, payload=alias.model_dump())
 
     @validate_call
     def delete_firewall_alias(self, name: str, apply: bool = True) -> APIResponse:
@@ -31,7 +31,7 @@ class FirewallAliasMixin(ClientABC):
         """Modify an existing firewall alias."""
         method = "PUT"
         url = "/api/v1/firewall/alias"
-        return self.call(url=url, method=method, payload=item.dict())
+        return self.call(url=url, method=method, payload=item.model_dump())
 
     def get_firewall_alias_advanced(self) -> APIResponse:
         url = "/api/v1/firewall/alias/advanced"
