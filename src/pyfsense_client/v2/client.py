@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import Any
+
 import requests
 
 from .models import APIResponse, FirewallAlias, FirewallAliasCreate, FirewallAliasUpdate
@@ -14,18 +15,15 @@ from .exceptions import (
 class ClientConfig:
     """
     Configuration for the pfSense API client.
-    host:
-        The base URL or IP of the pfSense instance, e.g. "https://192.168.1.1"
-    verify_ssl:
-        Whether to verify SSL certificates.
-    timeout:
-        Request timeout in seconds.
-    username/password:
-        For JWT-based auth calls if needed.
-    api_key:
-        If using API key-based authentication (the server expects "Authorization: Bearer <api_key>").
-    jwt_token:
-        If you already have a JWT token or want to store it after calling authenticate_jwt().
+
+    Attributes:
+        host (str): The base URL or IP of the pfSense instance, e.g. "https://192.168.1.1"
+        verify_ssl (bool): Whether to verify SSL certificates.
+        timeout (int): Request timeout in seconds.
+        username (str | None): For JWT-based auth calls.
+        password (str | None): For JWT-based auth calls.
+        api_key (str | None): If using API key-based authentication (the server expects "X-API-Key: <api_key>").
+        jwt_token (str | None): If you already have a JWT token or want to store it after calling `authenticate_jwt()`.
     """
     host: str
     verify_ssl: bool = True
@@ -43,7 +41,8 @@ class PfSenseClient:
     Features:
       - API Key or JWT-based auth
       - Endpoints for firewall aliases
-      - Generic request handling with exceptions
+      - Endpoints for DHCP leases
+      - Apply/pending changes endpoints
     """
 
     def __init__(self, config: ClientConfig):
@@ -51,7 +50,7 @@ class PfSenseClient:
         Initialize the pfSense V2 API Client.
 
         Args:
-            config: A ClientConfig dataclass with all config options.
+            config (ClientConfig): The configuration object with host, credentials, etc.
         """
         self.config = config
         self._session = requests.Session()
@@ -80,15 +79,14 @@ class PfSenseClient:
 
     def _handle_response(self, response: requests.Response) -> APIResponse:
         """
-        Handle the raw response from requests and convert to an APIResponse or a derived model.
+        Handle the raw response from requests and convert to an APIResponse or raise an error.
 
         Raises:
-          AuthenticationError: If the response is 401
-          ValidationError: If the response is 400
-          APIError: For other 4xx/5xx errors or JSON parse issues
+            AuthenticationError: If the response is 401
+            ValidationError: If the response is 400
+            APIError: For other 4xx/5xx errors or JSON parse issues
         """
         try:
-            # Raise for 4xx or 5xx
             response.raise_for_status()
         except requests.exceptions.HTTPError as exc:
             if response.status_code == 401:
@@ -106,23 +104,23 @@ class PfSenseClient:
             raise APIError(f"Failed to parse JSON response: {str(exc)}", response)
 
     def _request(
-            self,
-            method: str,
-            endpoint: str,
-            params: dict[str, Any] | None = None,
-            json: dict[str, Any] | None = None
+        self,
+        method: str,
+        endpoint: str,
+        params: dict[str, Any] | None = None,
+        json: dict[str, Any] | list[dict] | None = None
     ) -> APIResponse:
         """
         Core request method that returns an APIResponse (or raises an error).
 
         Args:
-            method: One of GET, POST, PATCH, PUT, DELETE
-            endpoint: Path part of the URL, e.g. '/api/v2/firewall/alias'
-            params: Optional query params
-            json: Optional JSON body
+            method (str): One of GET, POST, PATCH, DELETE
+            endpoint (str): Path part of the URL, e.g. '/api/v2/firewall/alias'
+            params (Optional[dict[str, Any]]): Optional query params
+            json (list[dict] or dict): Optional JSON body
 
         Returns:
-            APIResponse object
+            APIResponse: The parsed API response
         """
         url = f"{self.base_url}/{endpoint.lstrip('/')}"
 
@@ -142,17 +140,19 @@ class PfSenseClient:
     def authenticate_jwt(self, username: str | None = None, password: str | None = None) -> str:
         """
         Obtain a JWT token from the pfSense V2 API by calling POST /api/v2/auth/jwt.
-        If `username` or `password` is not provided, uses the ones from ClientConfig.
+
+        Args:
+            username (str | None): If not provided, uses config.username
+            password (str | None): If not provided, uses config.password
 
         Returns:
-            The JWT token as a string.
+            str: The JWT token
         """
         username = username or self.config.username
         password = password or self.config.password
         if not username or not password:
             raise ValueError("No username/password provided for JWT auth.")
 
-        # Make the POST request to /api/v2/auth/jwt with the username/password
         endpoint = "/api/v2/auth/jwt"
         body = {"username": username, "password": password}
         raw_resp = self._request("POST", endpoint, json=body)
@@ -168,29 +168,52 @@ class PfSenseClient:
         return token
 
     #
-    # Firewall Aliases
+    # Firewall Aliases (plural)
     #
 
     def get_firewall_aliases(self) -> list[FirewallAlias]:
         """
         GET /api/v2/firewall/aliases
-        Returns a list of firewall aliases (if any).
+        Returns a list of all firewall aliases.
         """
         endpoint = "/api/v2/firewall/aliases"
         resp = self._request("GET", endpoint)
-        # Expecting a list in resp.data
         if not resp.data or not isinstance(resp.data, list):
             return []
         return [FirewallAlias.model_validate(item) for item in resp.data]
 
-    def get_firewall_alias(self, name: str) -> FirewallAlias:
+    def replace_all_firewall_aliases(self, aliases: list[FirewallAliasCreate]) -> list[FirewallAlias]:
         """
-        GET /api/v2/firewall/alias?name=<alias_name>
-        Retrieve a single firewall alias by name.
-        Adjust if your API uses path parameters, e.g. "/alias/{name}".
+        PUT /api/v2/firewall/aliases
+        Returns a list of all firewall aliases.
+        """
+        endpoint = "/api/v2/firewall/aliases"
+        resp = self._request("PUT", endpoint, json=[alias.model_dump() for alias in aliases])
+        if not resp.data or not isinstance(resp.data, list):
+            return []
+        return [FirewallAlias.model_validate(item) for item in resp.data]
+
+    def _delete_all_firewall_alias(self) -> None:
+        """
+        DELETE /api/v2/firewall/aliases
+        Delete an existing firewall alias that match the query.
+        This query seems to only be a limit and offset, so be careful.
+        This is not implemented yet
+        """
+        endpoint = "/api/v2/firewall/aliases"
+        self._request("DELETE", endpoint)
+
+    #
+    # Firewall Alias (singular)
+    #
+
+    def get_firewall_alias(self, alias_id: int) -> FirewallAlias:
+        """
+        GET /api/v2/firewall/alias?id=<alias_id>
+        Retrieve a single firewall alias by its integer ID.
         """
         endpoint = "/api/v2/firewall/alias"
-        params = {"name": name}
+        params = {"id": alias_id}
         resp = self._request("GET", endpoint, params=params)
         return FirewallAlias.model_validate(resp.data)
 
@@ -200,10 +223,10 @@ class PfSenseClient:
         Create a new firewall alias.
 
         Args:
-            alias: FirewallAliasCreate object describing the alias.
+            alias (FirewallAliasCreate): The alias creation model.
 
         Returns:
-            The created FirewallAlias object (as returned by the API).
+            FirewallAlias: The created alias as returned by the API.
         """
         endpoint = "/api/v2/firewall/alias"
         resp = self._request("POST", endpoint, json=alias.model_dump())
@@ -213,55 +236,28 @@ class PfSenseClient:
         """
         PATCH /api/v2/firewall/alias
         Update an existing firewall alias.
-        (If your API actually uses PUT or requires an 'id' param, adapt accordingly.)
 
         Args:
-            alias: FirewallAliasUpdate object describing the updated info.
+            alias (FirewallAliasUpdate): The alias update model (must include id).
 
         Returns:
-            The updated FirewallAlias object.
+            FirewallAlias: The updated firewall alias.
         """
         endpoint = "/api/v2/firewall/alias"
         resp = self._request("PATCH", endpoint, json=alias.model_dump())
         return FirewallAlias.model_validate(resp.data)
 
-    def delete_firewall_alias(self, name: str) -> None:
+    def delete_firewall_alias(self, alias_id: int) -> None:
         """
-        DELETE /api/v2/firewall/alias?name=<alias_name>
-        Delete an existing firewall alias by name.
+        DELETE /api/v2/firewall/alias?id=<alias_id>
+        Delete an existing firewall alias by ID.
         """
         endpoint = "/api/v2/firewall/alias"
-        params = {"name": name}
+        params = {"id": alias_id}
         self._request("DELETE", endpoint, params=params)
 
     #
-    # Bulk endpoints for aliases (if you need them):
-    #
-
-    def bulk_update_firewall_aliases(self, aliases: list[FirewallAliasUpdate]) -> None:
-        """
-        PUT /api/v2/firewall/aliases
-        Possibly used for bulk creation/updates.
-        Adjust to match your actual OpenAPI spec.
-        """
-        endpoint = "/api/v2/firewall/aliases"
-        payload = [alias.model_dump() for alias in aliases]
-        self._request("PUT", endpoint, json=payload)
-
-    def bulk_delete_firewall_aliases(self, names: list[str]) -> None:
-        """
-        DELETE /api/v2/firewall/aliases
-        Possibly used for bulk deletions.
-
-        Some APIs might expect `DELETE /api/v2/firewall/aliases` with a JSON body or query params.
-        Adjust as needed.
-        """
-        endpoint = "/api/v2/firewall/aliases"
-        payload = {"names": names}
-        self._request("DELETE", endpoint, json=payload)
-
-    #
-    # Apply endpoints
+    # Apply endpoints (pending changes)
     #
 
     def get_firewall_apply_status(self) -> APIResponse:
@@ -279,3 +275,48 @@ class PfSenseClient:
         """
         endpoint = "/api/v2/firewall/apply"
         return self._request("POST", endpoint)
+
+    #
+    # DHCP Leases
+    #
+
+    def get_dhcp_leases(
+        self,
+        limit: int = 0,
+        offset: int = 0,
+        sort_by: list[str] | None = None,
+        sort_order: str = "SORT_ASC",
+        query: dict[str, Any] | None = None
+    ) -> list[DHCPLease]:
+        """
+        GET /api/v2/status/dhcp_server/leases
+
+        Fetches DHCP leases from the system.
+
+        Args:
+            limit (int): Number of objects to get at once (0 = no limit).
+            offset (int): Starting point in the dataset.
+            sort_by (list[str]): Fields to sort response data by.
+            sort_order (str): 'SORT_ASC' or 'SORT_DESC'.
+            query (dict[str, Any]): Additional query parameters.
+
+        Returns:
+            list[DHCPLease]: The list of DHCP leases
+        """
+        endpoint = "/api/v2/status/dhcp_server/leases"
+        params: dict[str, Any] = {
+            "limit": limit,
+            "offset": offset,
+            "sort_order": sort_order
+        }
+        if sort_by:
+            params["sort_by"] = sort_by
+        if query:
+            # The doc mentions "query" is an object;
+            # depending on server behavior, you may need to flatten it or send differently.
+            params["query"] = query
+
+        resp = self._request("GET", endpoint, params=params)
+        if not resp.data or not isinstance(resp.data, list):
+            return []
+        return [DHCPLease.model_validate(item) for item in resp.data]
