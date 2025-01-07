@@ -37,7 +37,7 @@ def test_firewall_alias():
     alias = FirewallAlias(
         id=1,
         name="TestAlias",
-        type=firewall_alias.FirewallAliasType.HOST,
+        type=firewall_alias.AliasType.HOST,
         descr="Test Description",
         address=["192.168.1.100"],
         detail=[]
@@ -52,7 +52,7 @@ def test_firewall_alias():
 def test_firewall_alias_create():
     fac = FirewallAliasCreate(
         name="CreateAlias",
-        type=firewall_alias.FirewallAliasType.URL,
+        type=firewall_alias.AliasType.URL,
         descr="A new alias",
         address=["http://example.com"]
     )
@@ -66,7 +66,7 @@ def test_firewall_alias_update():
     fau = FirewallAliasUpdate(
         id=2,
         name="UpdateAlias",
-        type=firewall_alias.FirewallAliasType.NETWORK,
+        type=firewall_alias.AliasType.NETWORK,
         descr="Updating alias",
         address=["10.0.0.0/24"],
         detail=["some detail"]

@@ -38,12 +38,9 @@ def test_auth_and_get_aliases():
             pytest.fail("JWT authentication failed. Check username/password.")
 
     # Get aliases
-    try:
-        aliases = client.get_firewall_aliases()
-        print(f"Retrieved {len(aliases)} firewall alias(es).")
-        assert isinstance(aliases, list)
-    except Exception as ex:
-        pytest.fail(f"Failed to get firewall aliases: {ex}")
+    aliases = client.get_firewall_aliases()
+    print(f"Retrieved {len(aliases)} firewall alias(es).")
+    assert isinstance(aliases, list)
 
 
 @pytest.mark.skipif(

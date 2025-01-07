@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from enum import StrEnum
 
 
-class FirewallAliasType(StrEnum):
+class AliasType(StrEnum):
     HOST = "host"
     NETWORK = "network"
     PORT = "port"
@@ -18,14 +18,13 @@ class FirewallAlias(BaseModel):
         "name": "ExampleAlias",
         "type": "host",
         "descr": "Example alias",
-        "enabled": true,
-        "content": ["192.168.1.1"]
+        "address": ["192.168.1.1"],
+        "detail": ["Some detail"]
       }
-    We unify "content" -> "address", etc.
     """
     id: int
     name: str
-    type: FirewallAliasType
+    type: AliasType
     descr: str
     address: list[str] = Field(default_factory=list)
     detail: list[str] = Field(default_factory=list)
@@ -43,7 +42,7 @@ class FirewallAliasCreate(BaseModel):
     }
     """
     name: str
-    type: FirewallAliasType
+    type: AliasType
     descr: str | None = None
     address: list[str] = Field(default_factory=list)
     detail: list[str] = Field(default_factory=list)
@@ -63,7 +62,7 @@ class FirewallAliasUpdate(BaseModel):
     """
     id: int
     name: str
-    type: FirewallAliasType
+    type: AliasType
     descr: str | None = None
     address: list[str] = Field(default_factory=list)
     detail: list[str] = Field(default_factory=list)

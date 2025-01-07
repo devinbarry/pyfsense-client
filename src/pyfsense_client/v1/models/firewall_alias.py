@@ -1,5 +1,4 @@
 from enum import StrEnum
-from typing import Optional
 from pydantic import BaseModel, field_validator
 
 
@@ -15,7 +14,7 @@ class FirewallAlias(BaseModel):
     type: AliasType
     address: str | list[str]
     detail: str | list[str]
-    descr: Optional[str] = None
+    descr: str | None = None
 
     @field_validator('address')
     @classmethod
