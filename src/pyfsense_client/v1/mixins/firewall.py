@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 from pydantic import validate_call
 
 from ..client import ClientABC, APIResponse
@@ -253,7 +253,7 @@ class FirewallMixin(ClientABC):
         return self.call(url=url, method=method, payload=args)
 
     @validate_call
-    def delete_firewall_rule(self, name: str, apply: Optional[bool] = None) -> APIResponse:
+    def delete_firewall_rule(self, name: str, apply: bool | None = None) -> APIResponse:
         """Delete firewall rules.
         https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-firewall-rules"""
         url = "/api/v1/firewall/rule"

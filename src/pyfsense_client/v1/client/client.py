@@ -100,7 +100,7 @@ class ClientBase(ClientABC):
         return APIResponse.model_validate(response.json())
 
 
-class PFSenseAPIClient(ClientBase, DNSMixin, FirewallMixin, FirewallAliasMixin, InterfaceMixin, RoutingMixin,
+class PfSenseV1Client(ClientBase, DNSMixin, FirewallMixin, FirewallAliasMixin, InterfaceMixin, RoutingMixin,
                        ServiceMixin, StatusMixin, SystemMixin, UserMixin):
     """pfSense API Client"""
 

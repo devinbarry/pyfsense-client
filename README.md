@@ -33,7 +33,7 @@ config_data = {
 }
 
 config = ClientConfig(**config_data)
-client = PFSenseAPIClient(config=config)
+client = PfSenseV1Client(config=config)
 ```
 
 Support exists for passing credentials as a JSON file.
