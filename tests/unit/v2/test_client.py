@@ -3,7 +3,7 @@ import requests
 from unittest.mock import patch, MagicMock
 
 from pyfsense_client.v2 import (
-    PfSenseClient,
+    PfSenseV2Client,
     ClientConfig,
     APIError,
     AuthenticationError,
@@ -27,15 +27,15 @@ def client_config():
 
 @pytest.fixture
 def pf_client(client_config):
-    """Fixture that returns a PfSenseClient with the above config."""
-    return PfSenseClient(client_config)
+    """Fixture that returns a PfSenseV2Client with the above config."""
+    return PfSenseV2Client(client_config)
 
 #
-# Tests for the PfSenseClient initialization
+# Tests for the PfSenseV2Client initialization
 #
 
 def test_pf_client_initialization(client_config):
-    client = PfSenseClient(client_config)
+    client = PfSenseV2Client(client_config)
     assert client.base_url == "https://example-pfsense"
     assert client._session.verify is False
     assert client._default_timeout == 5
@@ -45,12 +45,12 @@ def test_pf_client_initialization(client_config):
 
 def test_pf_client_initialization_with_key(client_config):
     client_config.api_key = "12345"
-    client = PfSenseClient(client_config)
+    client = PfSenseV2Client(client_config)
     assert client._session.headers["X-API-Key"] == "12345"
 
 def test_pf_client_initialization_with_jwt(client_config):
     client_config.jwt_token = "my-jwt-token"
-    client = PfSenseClient(client_config)
+    client = PfSenseV2Client(client_config)
     assert client._session.headers["Authorization"] == "Bearer my-jwt-token"
 
 #
@@ -148,7 +148,7 @@ def test_request_success(mock_request, pf_client):
 # Tests for authenticate_jwt
 #
 
-@patch.object(PfSenseClient, "_request")
+@patch.object(PfSenseV2Client, "_request")
 def test_authenticate_jwt_success(mock_request, pf_client):
     mock_request.return_value.data = {"token": "fake-jwt-token"}
     token = pf_client.authenticate_jwt()
@@ -163,7 +163,7 @@ def test_authenticate_jwt_no_credentials(pf_client):
         pf_client.authenticate_jwt()
     assert "No username/password provided" in str(excinfo.value)
 
-@patch.object(PfSenseClient, "_request")
+@patch.object(PfSenseV2Client, "_request")
 def test_authenticate_jwt_missing_token(mock_request, pf_client):
     mock_request.return_value.data = {}  # No 'token' key
     with pytest.raises(AuthenticationError) as excinfo:
@@ -174,7 +174,7 @@ def test_authenticate_jwt_missing_token(mock_request, pf_client):
 # Tests for firewall alias endpoints
 #
 
-@patch.object(PfSenseClient, "_request")
+@patch.object(PfSenseV2Client, "_request")
 def test_get_firewall_aliases(mock_request, pf_client):
     mock_request.return_value.data = [
         {"id": 1, "name": "TestAlias", "type": "host", "descr": "", "address": [], "detail": []}
@@ -184,7 +184,7 @@ def test_get_firewall_aliases(mock_request, pf_client):
     assert aliases[0].id == 1
     assert aliases[0].name == "TestAlias"
 
-@patch.object(PfSenseClient, "_request")
+@patch.object(PfSenseV2Client, "_request")
 def test_create_firewall_alias(mock_request, pf_client):
     mock_request.return_value.data = {
         "id": 5, "name": "NewAlias", "type": "host", "descr": "", "address": [], "detail": []
@@ -194,7 +194,7 @@ def test_create_firewall_alias(mock_request, pf_client):
     assert alias.id == 5
     assert alias.name == "NewAlias"
 
-@patch.object(PfSenseClient, "_request")
+@patch.object(PfSenseV2Client, "_request")
 def test_update_firewall_alias(mock_request, pf_client):
     mock_request.return_value.data = {
         "id": 5, "name": "UpdatedAlias", "type": "host", "descr": "", "address": [], "detail": []
@@ -204,7 +204,7 @@ def test_update_firewall_alias(mock_request, pf_client):
     assert alias.id == 5
     assert alias.name == "UpdatedAlias"
 
-@patch.object(PfSenseClient, "_request")
+@patch.object(PfSenseV2Client, "_request")
 def test_delete_firewall_alias(mock_request, pf_client):
     pf_client.delete_firewall_alias(123)
     mock_request.assert_called_once_with(
@@ -217,7 +217,7 @@ def test_delete_firewall_alias(mock_request, pf_client):
 # Tests for DHCP Leases
 #
 
-@patch.object(PfSenseClient, "_request")
+@patch.object(PfSenseV2Client, "_request")
 def test_get_dhcp_leases(mock_request, pf_client):
     mock_request.return_value.data = [
         {
@@ -238,13 +238,13 @@ def test_get_dhcp_leases(mock_request, pf_client):
 # Tests for Apply Endpoints
 #
 
-@patch.object(PfSenseClient, "_request")
+@patch.object(PfSenseV2Client, "_request")
 def test_get_firewall_apply_status(mock_request, pf_client):
     mock_request.return_value.data = {"pending_changes": True}
     resp = pf_client.get_firewall_apply_status()
     assert resp.data["pending_changes"] is True
 
-@patch.object(PfSenseClient, "_request")
+@patch.object(PfSenseV2Client, "_request")
 def test_apply_firewall_changes(mock_request, pf_client):
     mock_request.return_value.data = {"applied": True}
     resp = pf_client.apply_firewall_changes()

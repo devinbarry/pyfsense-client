@@ -3,7 +3,7 @@ import pytest
 from dotenv import load_dotenv
 
 from pyfsense_client.v2 import (
-    PfSenseClient,
+    PfSenseV2Client,
     ClientConfig,
     AuthenticationError,
 )
@@ -27,7 +27,7 @@ def test_auth_and_get_aliases():
         password=os.getenv("PFSENSE_PASS"),
         api_key=os.getenv("PFSENSE_API_KEY"),
     )
-    client = PfSenseClient(config)
+    client = PfSenseV2Client(config)
 
     # Attempt JWT auth if needed
     if not config.api_key and not config.jwt_token:
@@ -59,7 +59,7 @@ def test_fetch_dhcp_leases():
         password=os.getenv("PFSENSE_PASS"),
         api_key=os.getenv("PFSENSE_API_KEY"),
     )
-    client = PfSenseClient(config)
+    client = PfSenseV2Client(config)
 
     # Attempt JWT auth if not already set
     if not config.api_key and not config.jwt_token:

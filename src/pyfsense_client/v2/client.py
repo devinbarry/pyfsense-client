@@ -34,7 +34,7 @@ class ClientConfig:
     jwt_token: str | None = None
 
 
-class PfSenseClient:
+class PfSenseV2Client:
     """
     Client for interacting with pfSense V2 REST API.
 
