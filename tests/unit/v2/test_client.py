@@ -205,14 +205,53 @@ def test_update_firewall_alias(mock_request, pf_client):
     assert alias.id == 5
     assert alias.name == "UpdatedAlias"
 
+
 @patch.object(PfSenseV2Client, "_request")
 def test_delete_firewall_alias(mock_request, pf_client):
-    pf_client.delete_firewall_alias(123)
+    """Test successful and error cases for firewall alias deletion."""
+    # Test successful deletion
+    mock_request.return_value.data = {"deleted": True}
+    mock_request.return_value.code = 200
+    mock_request.return_value.message = "Alias deleted successfully"
+    mock_request.return_value.status = "success"
+
+    response = pf_client.delete_firewall_alias(123)
+
+    # Verify request
     mock_request.assert_called_once_with(
         "DELETE",
         "/api/v2/firewall/alias",
         params={"id": 123},
     )
+
+    # Verify response
+    assert response.code == 200
+    assert response.status == "success"
+    assert response.message == "Alias deleted successfully"
+    assert response.data == {"deleted": True}
+
+    # Reset mock for next test
+    mock_request.reset_mock()
+
+    # Test deleting non-existent alias
+    mock_request.return_value.data = {"error": "Alias not found"}
+    mock_request.return_value.code = 404
+    mock_request.return_value.message = "Alias with ID 999 not found"
+    mock_request.return_value.status = "error"
+
+    response = pf_client.delete_firewall_alias(999)
+
+    mock_request.assert_called_once_with(
+        "DELETE",
+        "/api/v2/firewall/alias",
+        params={"id": 999},
+    )
+
+    assert response.code == 404
+    assert response.status == "error"
+    assert response.message == "Alias with ID 999 not found"
+    assert response.data == {"error": "Alias not found"}
+
 
 #
 # Tests for DHCP Leases
