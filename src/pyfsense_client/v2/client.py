@@ -188,15 +188,27 @@ class PfSenseV2Client:
             return []
         return [FirewallAlias.model_validate(item) for item in resp.data]
 
-    def _delete_all_firewall_alias(self) -> None:
+    def delete_all_firewall_alias(self, limit: int = 0, offset: int = 0,
+                                  query: dict[str, str | int | bool] | None = None) -> APIResponse:
         """
         DELETE /api/v2/firewall/aliases
-        Delete an existing firewall alias that match the query.
-        This query seems to only be a limit and offset, so be careful.
-        This is not implemented yet
+        Deletes multiple existing Firewall Aliases using a query.
+
+        WARNING: This will delete all objects that match the query, use with caution.
+
+        Args:
+            limit (int): The maximum number of objects to delete at once. Set to 0 for no limit. Default is 0.
+            offset (int): The starting point in the dataset to begin fetching objects. Default is 0.
+            query (dict[str, Any] | None): The arbitrary query parameters to include in the request. Default is None.
         """
         endpoint = "/api/v2/firewall/aliases"
-        self._request("DELETE", endpoint)
+        params = {
+            "limit": limit,
+            "offset": offset
+        }
+        if query:
+            params.update(query)
+        return self._request("DELETE", endpoint, params=params)
 
     #
     # Firewall Alias (singular)
@@ -242,14 +254,14 @@ class PfSenseV2Client:
         resp = self._request("PATCH", endpoint, json=alias.model_dump())
         return FirewallAlias.model_validate(resp.data)
 
-    def delete_firewall_alias(self, alias_id: int) -> None:
+    def delete_firewall_alias(self, alias_id: int) -> APIResponse:
         """
         DELETE /api/v2/firewall/alias?id=<alias_id>
         Delete an existing firewall alias by ID.
         """
         endpoint = "/api/v2/firewall/alias"
         params = {"id": alias_id}
-        self._request("DELETE", endpoint, params=params)
+        return self._request("DELETE", endpoint, params=params)
 
     #
     # Apply endpoints (pending changes)
