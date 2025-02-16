@@ -3,13 +3,16 @@
 # Pyfsense Client
 
 Pyfsense Client is a Python API client for interacting with pfSense REST API endpoints provided by the package
-at https://github.com/jaredhendrickson13/pfsense-api. This project now provides **two versions** of the API client:
+at https://github.com/jaredhendrickson13/pfsense-api.
 
-- **V2 API (Current):** Developed entirely from scratch, this is the actively maintained version. It supports modern authentication methods (API key and JWT-based) and targets the latest pfSense implementations.
+This project now provides **two versions** of the API client:
+
+- **V2 API (Current):** Developed entirely from scratch, this is the actively maintained version. It supports modern authentication methods (API key and JWT-based) and targets the latest pfSense API implementations.
 - **V1 API (Legacy Support):** Full support for the original V1 endpoints remains available for backward compatibility, though new development is focused on V2.
 
 The V1 code is currently being tested against pfSense 24.03 and the v1.7.6 API endpoints.
 The V2 code is currently being tested against pfSense 24.11 and the v2.3.3 API endpoints.
+
 ---
 
 ## Table of Contents

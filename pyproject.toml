@@ -3,10 +3,10 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "pyfsense_client"
+name = "pyfsense-client"
 requires-python = ">=3.11"
 dynamic = ["version"]
-description = "A client for the unofficial pfSense API https://github.com/jaredhendrickson13/pfsense-api"
+description = "A client for the unofficial pfSense API at https://github.com/jaredhendrickson13/pfsense-api"
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [
