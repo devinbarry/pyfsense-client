@@ -1,9 +1,0 @@
-{
-  "username" : "me",
-  "password" : "mysupersecretpassword",
-  "hostname" : "example.com",
-  "port" : "8443",
-  "jwt" : "8443",
-  "client_id" : "8443",
-  "client_token" : "8443"
-}
