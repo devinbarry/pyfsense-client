@@ -16,6 +16,7 @@ class DHCPLease(BaseModel):
       "descr": "string"
     }
     """
+
     ip: str
     mac: str
     hostname: str | None = None

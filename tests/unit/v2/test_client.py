@@ -13,6 +13,7 @@ from pyfsense_client.v2 import (
     FirewallAliasUpdate,
 )
 
+
 @pytest.fixture
 def client_config():
     """Fixture for a basic ClientConfig."""
@@ -23,17 +24,20 @@ def client_config():
         username="admin",
         password="pfsense",
         api_key=None,
-        jwt_token=None
+        jwt_token=None,
     )
+
 
 @pytest.fixture
 def pf_client(client_config):
     """Fixture that returns a PfSenseV2Client with the above config."""
     return PfSenseV2Client(client_config)
 
+
 #
 # Tests for the PfSenseV2Client initialization
 #
+
 
 def test_pf_client_initialization(client_config):
     client = PfSenseV2Client(client_config)
@@ -44,19 +48,23 @@ def test_pf_client_initialization(client_config):
     assert "X-API-Key" not in client._session.headers
     assert "Authorization" not in client._session.headers
 
+
 def test_pf_client_initialization_with_key(client_config):
     client_config.api_key = "12345"
     client = PfSenseV2Client(client_config)
     assert client._session.headers["X-API-Key"] == "12345"
+
 
 def test_pf_client_initialization_with_jwt(client_config):
     client_config.jwt_token = "my-jwt-token"
     client = PfSenseV2Client(client_config)
     assert client._session.headers["Authorization"] == "Bearer my-jwt-token"
 
+
 #
 # Tests for _handle_response
 #
+
 
 @patch("requests.Response.raise_for_status")
 def test_handle_response_200(mock_raise_for_status, pf_client):
@@ -67,7 +75,7 @@ def test_handle_response_200(mock_raise_for_status, pf_client):
         "code": 200,
         "status": "success",
         "message": "OK",
-        "data": {"foo": "bar"}
+        "data": {"foo": "bar"},
     }
 
     result = pf_client._handle_response(mock_response)
@@ -75,36 +83,46 @@ def test_handle_response_200(mock_raise_for_status, pf_client):
     assert result.status == "success"
     assert result.data == {"foo": "bar"}
 
+
 def test_handle_response_401(pf_client):
     # Create a mock response whose raise_for_status() immediately throws 401
     mock_response = MagicMock(spec=requests.Response)
     mock_response.status_code = 401
-    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError("401 Error")
+    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError(
+        "401 Error"
+    )
 
     # We expect the client to raise our custom AuthenticationError
     with pytest.raises(AuthenticationError) as excinfo:
         pf_client._handle_response(mock_response)
     assert "Authentication failed (401)" in str(excinfo.value)
 
+
 def test_handle_response_400(pf_client):
     mock_response = MagicMock(spec=requests.Response)
     mock_response.status_code = 400
-    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError("400 Error")
+    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError(
+        "400 Error"
+    )
 
     with pytest.raises(ValidationError) as excinfo:
         pf_client._handle_response(mock_response)
     assert "Request validation failed (400)" in str(excinfo.value)
 
+
 def test_handle_response_500(pf_client):
     mock_response = MagicMock(spec=requests.Response)
     mock_response.status_code = 500
-    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError("500 Error")
+    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError(
+        "500 Error"
+    )
 
     # This should raise a generic APIError (status != 401 or 400).
     with pytest.raises(APIError) as excinfo:
         pf_client._handle_response(mock_response)
     # Confirm it's the "API request failed" path, not a JSON parse issue
     assert "API request failed" in str(excinfo.value)
+
 
 def test_handle_response_bad_json(pf_client):
     """Test JSON parsing errors raise APIError."""
@@ -117,9 +135,11 @@ def test_handle_response_bad_json(pf_client):
         pf_client._handle_response(mock_response)
     assert "Failed to parse JSON response" in str(excinfo.value)
 
+
 #
 # Tests for _request
 #
+
 
 @patch("requests.Session.request")
 def test_request_success(mock_request, pf_client):
@@ -130,7 +150,7 @@ def test_request_success(mock_request, pf_client):
         "code": 200,
         "status": "success",
         "message": "OK",
-        "data": {"foo": "bar"}
+        "data": {"foo": "bar"},
     }
     mock_request.return_value = mock_response
 
@@ -142,12 +162,14 @@ def test_request_success(mock_request, pf_client):
         url="https://example-pfsense/test-endpoint",
         params=None,
         json=None,
-        timeout=pf_client._default_timeout
+        timeout=pf_client._default_timeout,
     )
+
 
 #
 # Tests for authenticate_jwt
 #
+
 
 @patch.object(PfSenseV2Client, "_request")
 def test_authenticate_jwt_success(mock_request, pf_client):
@@ -157,12 +179,14 @@ def test_authenticate_jwt_success(mock_request, pf_client):
     assert pf_client.config.jwt_token == "fake-jwt-token"
     assert pf_client._session.headers["Authorization"] == "Bearer fake-jwt-token"
 
+
 def test_authenticate_jwt_no_credentials(pf_client):
     pf_client.config.username = None
     pf_client.config.password = None
     with pytest.raises(ValueError) as excinfo:
         pf_client.authenticate_jwt()
     assert "No username/password provided" in str(excinfo.value)
+
 
 @patch.object(PfSenseV2Client, "_request")
 def test_authenticate_jwt_missing_token(mock_request, pf_client):
@@ -171,34 +195,55 @@ def test_authenticate_jwt_missing_token(mock_request, pf_client):
         pf_client.authenticate_jwt()
     assert "No token returned in JWT auth response" in str(excinfo.value)
 
+
 #
 # Tests for firewall alias endpoints
 #
 
+
 @patch.object(PfSenseV2Client, "_request")
 def test_get_firewall_aliases(mock_request, pf_client):
     mock_request.return_value.data = [
-        {"id": 1, "name": "TestAlias", "type": "host", "descr": "", "address": [], "detail": []}
+        {
+            "id": 1,
+            "name": "TestAlias",
+            "type": "host",
+            "descr": "",
+            "address": [],
+            "detail": [],
+        }
     ]
     aliases = pf_client.get_firewall_aliases()
     assert len(aliases) == 1
     assert aliases[0].id == 1
     assert aliases[0].name == "TestAlias"
 
+
 @patch.object(PfSenseV2Client, "_request")
 def test_create_firewall_alias(mock_request, pf_client):
     mock_request.return_value.data = {
-        "id": 5, "name": "NewAlias", "type": "host", "descr": "", "address": [], "detail": []
+        "id": 5,
+        "name": "NewAlias",
+        "type": "host",
+        "descr": "",
+        "address": [],
+        "detail": [],
     }
     fa_create = FirewallAliasCreate(name="NewAlias", type="host")
     alias = pf_client.create_firewall_alias(fa_create)
     assert alias.id == 5
     assert alias.name == "NewAlias"
 
+
 @patch.object(PfSenseV2Client, "_request")
 def test_update_firewall_alias(mock_request, pf_client):
     mock_request.return_value.data = {
-        "id": 5, "name": "UpdatedAlias", "type": "host", "descr": "", "address": [], "detail": []
+        "id": 5,
+        "name": "UpdatedAlias",
+        "type": "host",
+        "descr": "",
+        "address": [],
+        "detail": [],
     }
     fa_update = FirewallAliasUpdate(id=5, name="UpdatedAlias", type="host")
     alias = pf_client.update_firewall_alias(fa_update)
@@ -257,6 +302,7 @@ def test_delete_firewall_alias(mock_request, pf_client):
 # Tests for DHCP Leases
 #
 
+
 @patch.object(PfSenseV2Client, "_request")
 def test_get_dhcp_leases(mock_request, pf_client):
     mock_request.return_value.data = [
@@ -264,7 +310,7 @@ def test_get_dhcp_leases(mock_request, pf_client):
             "ip": "192.168.1.10",
             "mac": "00:1A:2B:3C:4D:5E",
             "hostname": "Device1",
-            "status": "active"
+            "status": "active",
         }
     ]
     leases = pf_client.get_dhcp_leases(limit=10, offset=0)
@@ -274,15 +320,18 @@ def test_get_dhcp_leases(mock_request, pf_client):
     assert leases[0].hostname == "Device1"
     assert leases[0].status == "active"
 
+
 #
 # Tests for Apply Endpoints
 #
+
 
 @patch.object(PfSenseV2Client, "_request")
 def test_get_firewall_apply_status(mock_request, pf_client):
     mock_request.return_value.data = {"pending_changes": True}
     resp = pf_client.get_firewall_apply_status()
     assert resp.data["pending_changes"] is True
+
 
 @patch.object(PfSenseV2Client, "_request")
 def test_apply_firewall_changes(mock_request, pf_client):
@@ -292,6 +341,7 @@ def test_apply_firewall_changes(mock_request, pf_client):
 
 
 # Additional tests after the code review
+
 
 def test_pf_client_url_normalization(client_config):
     """Test different URL formats are normalized correctly."""
@@ -327,11 +377,7 @@ def test_get_dhcp_leases_empty_response(mock_request, pf_client):
 def test_get_dhcp_leases_with_params(mock_request, pf_client):
     """Test DHCP lease retrieval with all possible parameters."""
     mock_request.return_value.data = [
-        {
-            "ip": "192.168.1.10",
-            "mac": "00:1A:2B:3C:4D:5E",
-            "hostname": "Device1"
-        }
+        {"ip": "192.168.1.10", "mac": "00:1A:2B:3C:4D:5E", "hostname": "Device1"}
     ]
 
     # Test with all optional parameters
@@ -340,7 +386,7 @@ def test_get_dhcp_leases_with_params(mock_request, pf_client):
         offset=5,
         sort_by=["hostname", "ip"],
         sort_order="SORT_DESC",
-        query={"status": "active"}
+        query={"status": "active"},
     )
 
     mock_request.assert_called_once_with(
@@ -351,8 +397,8 @@ def test_get_dhcp_leases_with_params(mock_request, pf_client):
             "offset": 5,
             "sort_by": ["hostname", "ip"],
             "sort_order": "SORT_DESC",
-            "query": {"status": "active"}
-        }
+            "query": {"status": "active"},
+        },
     )
     assert len(leases) == 1
     assert leases[0].ip == "192.168.1.10"
@@ -368,7 +414,7 @@ def test_replace_all_firewall_aliases(mock_request, pf_client):
             "type": "host",
             "descr": "",
             "address": ["192.168.1.1"],
-            "detail": []
+            "detail": [],
         },
         {
             "id": 2,
@@ -376,13 +422,13 @@ def test_replace_all_firewall_aliases(mock_request, pf_client):
             "type": "network",
             "descr": "",
             "address": ["10.0.0.0/24"],
-            "detail": []
-        }
+            "detail": [],
+        },
     ]
 
     aliases_to_create = [
         FirewallAliasCreate(name="NewAlias1", type="host", address=["192.168.1.1"]),
-        FirewallAliasCreate(name="NewAlias2", type="network", address=["10.0.0.0/24"])
+        FirewallAliasCreate(name="NewAlias2", type="network", address=["10.0.0.0/24"]),
     ]
 
     result = pf_client.replace_all_firewall_aliases(aliases_to_create)
@@ -390,7 +436,7 @@ def test_replace_all_firewall_aliases(mock_request, pf_client):
     mock_request.assert_called_once_with(
         "PUT",
         "/api/v2/firewall/aliases",
-        json=[alias.model_dump() for alias in aliases_to_create]
+        json=[alias.model_dump() for alias in aliases_to_create],
     )
 
     assert len(result) == 2
@@ -406,13 +452,13 @@ def test_delete_all_firewall_aliases(mock_request, pf_client):
     mock_request.return_value.data = {"deleted": 2}
 
     # Test with all parameters
-    result = pf_client.delete_all_firewall_alias(limit=10, offset=5, query={"type": "host"})
-    mock_request.assert_called_once_with("DELETE", "/api/v2/firewall/aliases",
-        params={
-            "limit": 10,
-            "offset": 5,
-            "type": "host"
-        }
+    result = pf_client.delete_all_firewall_alias(
+        limit=10, offset=5, query={"type": "host"}
+    )
+    mock_request.assert_called_once_with(
+        "DELETE",
+        "/api/v2/firewall/aliases",
+        params={"limit": 10, "offset": 5, "type": "host"},
     )
     assert result.data == {"deleted": 2}
 
@@ -449,7 +495,7 @@ def test_get_firewall_alias_validation(mock_request, pf_client):
         "type": "invalid_type",  # Invalid enum value
         "descr": "test",
         "address": [],
-        "detail": []
+        "detail": [],
     }
 
     with pytest.raises(PydanticValidationError) as exc_info:
@@ -464,11 +510,13 @@ def test_get_firewall_alias_validation(mock_request, pf_client):
         "type": "host",
         "descr": "test",
         "address": "not_a_list",  # Should be list
-        "detail": []
+        "detail": [],
     }
 
     with pytest.raises(PydanticValidationError) as exc_info:
         pf_client.get_firewall_alias(1)
     errors = exc_info.value.errors()
     assert any(err["type"] == "int_parsing" and err["loc"] == ("id",) for err in errors)
-    assert any(err["type"] == "list_type" and err["loc"] == ("address",) for err in errors)
+    assert any(
+        err["type"] == "list_type" and err["loc"] == ("address",) for err in errors
+    )

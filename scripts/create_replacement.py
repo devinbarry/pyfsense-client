@@ -2,12 +2,14 @@ import subprocess
 import re
 import sys
 
+
 def escape_for_regex(text):
     """
     Escape special characters for use in a regex pattern.
     This is a more thorough escaping than re.escape() to handle multiline content.
     """
-    return re.sub(r'([\\.*+?^${}()|[\]])', r'\\\1', text)
+    return re.sub(r"([\\.*+?^${}()|[\]])", r"\\\1", text)
+
 
 def create_replacement_expression(old_commit, new_commit, target_file):
     """
@@ -19,23 +21,32 @@ def create_replacement_expression(old_commit, new_commit, target_file):
     :return: A tuple (old_content, new_content) for replacement
     """
     # Get the content of the file in the old commit
-    old_content = subprocess.check_output(f"git show {old_commit}:{target_file}", shell=True, text=True)
+    old_content = subprocess.check_output(
+        f"git show {old_commit}:{target_file}", shell=True, text=True
+    )
 
     # Get the content of the file in the new commit
-    new_content = subprocess.check_output(f"git show {new_commit}:{target_file}", shell=True, text=True)
+    new_content = subprocess.check_output(
+        f"git show {new_commit}:{target_file}", shell=True, text=True
+    )
 
     return old_content.strip(), new_content.strip()
 
+
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        print("Usage: python3 create_replacement.py <old_commit> <new_commit> <target_file>")
+        print(
+            "Usage: python3 create_replacement.py <old_commit> <new_commit> <target_file>"
+        )
         sys.exit(1)
 
     old_commit = sys.argv[1]
     new_commit = sys.argv[2]
     target_file = sys.argv[3]
 
-    old_content, new_content = create_replacement_expression(old_commit, new_commit, target_file)
+    old_content, new_content = create_replacement_expression(
+        old_commit, new_commit, target_file
+    )
 
     # Escape special regex characters in old_content
     escaped_old_content = escape_for_regex(old_content)

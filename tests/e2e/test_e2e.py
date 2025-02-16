@@ -13,7 +13,7 @@ load_dotenv()
 
 @pytest.mark.skipif(
     condition=not os.getenv("PFSENSE_HOST"),
-    reason="Requires a real pfSense server IP/URL in env var PFSENSE_HOST"
+    reason="Requires a real pfSense server IP/URL in env var PFSENSE_HOST",
 )
 def test_auth_and_get_aliases():
     """
@@ -45,7 +45,7 @@ def test_auth_and_get_aliases():
 
 @pytest.mark.skipif(
     condition=not os.getenv("PFSENSE_HOST"),
-    reason="Requires a real pfSense server IP/URL in env var PFSENSE_HOST"
+    reason="Requires a real pfSense server IP/URL in env var PFSENSE_HOST",
 )
 def test_fetch_dhcp_leases():
     """

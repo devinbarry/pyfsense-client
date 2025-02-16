@@ -5,7 +5,6 @@ from ..models import FirewallAliasCreate, FirewallAliasUpdate
 
 
 class FirewallAliasMixin(ClientABC):
-
     def get_firewall_alias(self, **kwargs) -> APIResponse:
         """Get a list of firewall aliases."""
         url = "/api/v1/firewall/alias"
@@ -38,14 +37,18 @@ class FirewallAliasMixin(ClientABC):
         return self.call(url=url, method="GET")
 
     @validate_call
-    def delete_firewall_alias_advanced(self, name: str, apply: bool = True) -> APIResponse:
+    def delete_firewall_alias_advanced(
+        self, name: str, apply: bool = True
+    ) -> APIResponse:
         url = "/api/v1/firewall/alias/advanced"
         method = "DELETE"
         payload = {"id": name, "apply": apply}
         return self.call(url=url, method=method, payload=payload)
 
     @validate_call
-    def create_firewall_alias_entry(self, name: str, address: str | list[str], apply: bool = True) -> APIResponse:
+    def create_firewall_alias_entry(
+        self, name: str, address: str | list[str], apply: bool = True
+    ) -> APIResponse:
         """Add new entries to an existing firewall alias."""
         method = "POST"
         url = "/api/v1/firewall/alias/entry"
@@ -53,7 +56,9 @@ class FirewallAliasMixin(ClientABC):
         return self.call(url=url, method=method, payload=payload)
 
     @validate_call
-    def delete_firewall_alias_entry(self, name: str, address: str | list[str], apply: bool = True) -> APIResponse:
+    def delete_firewall_alias_entry(
+        self, name: str, address: str | list[str], apply: bool = True
+    ) -> APIResponse:
         """Delete existing entries from an existing firewall alias."""
         method = "DELETE"
         url = "/api/v1/firewall/alias/entry"

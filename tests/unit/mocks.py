@@ -21,6 +21,6 @@ def get_response_json():
             "mbuf_usage": 0.04,
             "mem_usage": 0.06,
             "swap_usage": 0,
-            "disk_usage": 0.01
-        }
+            "disk_usage": 0.01,
+        },
     }

@@ -3,7 +3,6 @@ from ..client import ClientABC, APIResponse
 
 
 class InterfaceMixin(ClientABC):
-
     def create_interfaces(self, **args: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-interfaces"""
         url = "/api/v1/interface"
@@ -19,7 +18,7 @@ class InterfaceMixin(ClientABC):
     def get_interfaces(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-interfaces"""
         url = "/api/v1/interface"
-        return self.call(url=url, method='GET', payload=filterargs)
+        return self.call(url=url, method="GET", payload=filterargs)
 
     def update_interfaces(self, **args: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-interfaces"""
@@ -48,7 +47,7 @@ class InterfaceMixin(ClientABC):
     def get_interface_bridge(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-interface-bridges"""
         url = "/api/v1/interface/bridge"
-        return self.call(url=url, method='GET', payload=filterargs)
+        return self.call(url=url, method="GET", payload=filterargs)
 
     def update_interface_bridge(self, **args: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-interface-bridges"""
@@ -71,7 +70,7 @@ class InterfaceMixin(ClientABC):
     def get_interface_vlan(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-interface-vlans"""
         url = "/api/v1/interface/vlan"
-        return self.call(url=url, method='GET', payload=filterargs)
+        return self.call(url=url, method="GET", payload=filterargs)
 
     def update_interface_vlan(self, **args: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-interface-vlans"""

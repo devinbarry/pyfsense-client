@@ -5,9 +5,10 @@ from .types import APIResponse
 
 
 class ClientABC(ABC):
-
     @abstractmethod
-    def _request(self, url, method="GET", payload=None, params=None, **kwargs) -> Response:
+    def _request(
+        self, url, method="GET", payload=None, params=None, **kwargs
+    ) -> Response:
         pass
 
     @abstractmethod

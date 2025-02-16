@@ -6,16 +6,25 @@ from requests.exceptions import HTTPError
 
 from .abc import ClientABC
 from .types import ClientConfig, APIResponse
-from ..mixins import (DNSMixin, FirewallMixin, FirewallAliasMixin, InterfaceMixin, RoutingMixin, ServiceMixin,
-                      StatusMixin, SystemMixin, UserMixin)
+from ..mixins import (
+    DNSMixin,
+    FirewallMixin,
+    FirewallAliasMixin,
+    InterfaceMixin,
+    RoutingMixin,
+    ServiceMixin,
+    StatusMixin,
+    SystemMixin,
+    UserMixin,
+)
 
 
 class CustomHTTPError(HTTPError):
     def __init__(self, *args, **kwargs):
-        self.api_code = kwargs.pop('api_code', None)
-        self.return_code = kwargs.pop('return_code', None)
-        self.api_message = kwargs.pop('api_message', None)
-        self.api_data = kwargs.pop('api_data', None)
+        self.api_code = kwargs.pop("api_code", None)
+        self.return_code = kwargs.pop("return_code", None)
+        self.api_message = kwargs.pop("api_message", None)
+        self.api_data = kwargs.pop("api_data", None)
         super().__init__(*args, **kwargs)
 
     def __str__(self):
@@ -29,8 +38,12 @@ class ClientBase(ClientABC):
         self.session = Session()
         self.logger = logging.getLogger(__name__)
 
-        if self.config.mode == "local" and not (self.config.username and self.config.password):
-            raise ValueError("Authentication Mode is set to local but username or password are missing.")
+        if self.config.mode == "local" and not (
+            self.config.username and self.config.password
+        ):
+            raise ValueError(
+                "Authentication Mode is set to local but username or password are missing."
+            )
 
         if self.config.mode == "local":
             self.session.auth = (self.config.username, self.config.password)
@@ -47,7 +60,9 @@ class ClientBase(ClientABC):
         assert url.startswith("/")
         return f"{self.baseurl}{url}"
 
-    def _request(self, url, method="GET", payload=None, params=None, **kwargs) -> Response:
+    def _request(
+        self, url, method="GET", payload=None, params=None, **kwargs
+    ) -> Response:
         url = self.get_url(url)
         kwargs.setdefault("params", params)
         kwargs.setdefault("json", payload if method != "GET" else None)
@@ -57,10 +72,16 @@ class ClientBase(ClientABC):
         if self.config.mode == "jwt":
             headers["Authorization"] = f"Bearer {self.config.jwt}"
         elif self.config.mode == "api_token":
-            headers["Authorization"] = f"{self.config.client_id} {self.config.client_token}"
+            headers["Authorization"] = (
+                f"{self.config.client_id} {self.config.client_token}"
+            )
 
         response = self.session.request(
-            url=url, method=method, allow_redirects=False, verify=self.config.verify_ssl, **kwargs
+            url=url,
+            method=method,
+            allow_redirects=False,
+            verify=self.config.verify_ssl,
+            **kwargs,
         )
 
         # Attempt to parse the JSON response, regardless of status code
@@ -77,13 +98,13 @@ class ClientBase(ClientABC):
                 return response
 
         # Check for API-specific error information in the response
-        if 'code' in response_data and response_data['code'] != 200:
+        if "code" in response_data and response_data["code"] != 200:
             raise CustomHTTPError(
                 response=response,
-                api_code=response_data.get('code'),
-                return_code=response_data.get('return_code'),
-                api_message=response_data.get('message'),
-                api_data=response_data.get('data')
+                api_code=response_data.get("code"),
+                return_code=response_data.get("return_code"),
+                api_message=response_data.get("message"),
+                api_data=response_data.get("data"),
             )
 
         # If the HTTP status code is not 2xx, raise HTTPError
@@ -95,13 +116,23 @@ class ClientBase(ClientABC):
     def call(self, url, method="GET", payload=None) -> APIResponse:
         response = self._request(url=url, method=method, payload=payload)
         # If the response content is not JSON, return as is
-        if not response.headers.get('Content-Type', '').startswith('application/json'):
+        if not response.headers.get("Content-Type", "").startswith("application/json"):
             return response
         return APIResponse.model_validate(response.json())
 
 
-class PfSenseV1Client(ClientBase, DNSMixin, FirewallMixin, FirewallAliasMixin, InterfaceMixin, RoutingMixin,
-                       ServiceMixin, StatusMixin, SystemMixin, UserMixin):
+class PfSenseV1Client(
+    ClientBase,
+    DNSMixin,
+    FirewallMixin,
+    FirewallAliasMixin,
+    InterfaceMixin,
+    RoutingMixin,
+    ServiceMixin,
+    StatusMixin,
+    SystemMixin,
+    UserMixin,
+):
     """pfSense API Client"""
 
     def request_access_token(self) -> APIResponse:

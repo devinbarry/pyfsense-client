@@ -22,6 +22,7 @@ class FirewallAlias(BaseModel):
         "detail": ["Some detail"]
       }
     """
+
     id: int
     name: str
     type: AliasType
@@ -41,6 +42,7 @@ class FirewallAliasCreate(BaseModel):
       "detail": ["string"]
     }
     """
+
     name: str
     type: AliasType
     descr: str | None = None
@@ -60,6 +62,7 @@ class FirewallAliasUpdate(BaseModel):
       "detail": ["string"]
     }
     """
+
     id: int
     name: str
     type: AliasType

@@ -1,14 +1,22 @@
+from enum import StrEnum
 from dataclasses import dataclass
 from typing import Any
 
 import requests
 
-from .exceptions import (
-    APIError,
-    AuthenticationError,
-    ValidationError
+from .exceptions import APIError, AuthenticationError, ValidationError
+from .models import (
+    APIResponse,
+    FirewallAlias,
+    FirewallAliasCreate,
+    FirewallAliasUpdate,
+    DHCPLease,
 )
-from .models import APIResponse, FirewallAlias, FirewallAliasCreate, FirewallAliasUpdate, DHCPLease
+
+
+class SortOrder(StrEnum):
+    ASCENDING = "SORT_ASC"
+    DESCENDING = "SORT_DESC"
 
 
 @dataclass
@@ -25,6 +33,7 @@ class ClientConfig:
         api_key (str | None): If using API key-based authentication (the server expects "X-API-Key: <api_key>").
         jwt_token (str | None): If you already have a JWT token or want to store it after calling `authenticate_jwt()`.
     """
+
     host: str
     verify_ssl: bool = True
     timeout: int = 30
@@ -56,9 +65,11 @@ class PfSenseV2Client:
         self._session = requests.Session()
 
         # Normalize base URL
-        self.base_url = self.config.host.rstrip('/')
-        if not (self.base_url.startswith('http://') or self.base_url.startswith('https://')):
-            self.base_url = f'https://{self.base_url}'
+        self.base_url = self.config.host.rstrip("/")
+        if not (
+            self.base_url.startswith("http://") or self.base_url.startswith("https://")
+        ):
+            self.base_url = f"https://{self.base_url}"
 
         # Configure request session
         self._session.verify = self.config.verify_ssl
@@ -66,9 +77,11 @@ class PfSenseV2Client:
 
         # If we already have an API key or JWT token, attach it to the session headers
         if self.config.api_key:
-            self._session.headers.update({'X-API-Key': f'{self.config.api_key}'})
+            self._session.headers.update({"X-API-Key": f"{self.config.api_key}"})
         elif self.config.jwt_token:
-            self._session.headers.update({'Authorization': f'Bearer {self.config.jwt_token}'})
+            self._session.headers.update(
+                {"Authorization": f"Bearer {self.config.jwt_token}"}
+            )
 
     #
     # Internal request methods
@@ -105,7 +118,7 @@ class PfSenseV2Client:
         method: str,
         endpoint: str,
         params: dict[str, Any] | None = None,
-        json: dict[str, Any] | list[dict] | None = None
+        json: dict[str, Any] | list[dict] | None = None,
     ) -> APIResponse:
         """
         Core request method that returns an APIResponse (or raises an error).
@@ -126,7 +139,7 @@ class PfSenseV2Client:
             url=url,
             params=params,
             json=json,
-            timeout=self._default_timeout
+            timeout=self._default_timeout,
         )
         return self._handle_response(response)
 
@@ -134,7 +147,9 @@ class PfSenseV2Client:
     # Auth
     #
 
-    def authenticate_jwt(self, username: str | None = None, password: str | None = None) -> str:
+    def authenticate_jwt(
+        self, username: str | None = None, password: str | None = None
+    ) -> str:
         """
         Obtain a JWT token from the pfSense V2 API by calling POST /api/v2/auth/jwt.
 
@@ -158,7 +173,7 @@ class PfSenseV2Client:
             raise AuthenticationError("No token returned in JWT auth response.", None)
 
         token = raw_resp.data["token"]
-        self._session.headers.update({'Authorization': f'Bearer {token}'})
+        self._session.headers.update({"Authorization": f"Bearer {token}"})
         self.config.jwt_token = token
         return token
 
@@ -177,19 +192,27 @@ class PfSenseV2Client:
             return []
         return [FirewallAlias.model_validate(item) for item in resp.data]
 
-    def replace_all_firewall_aliases(self, aliases: list[FirewallAliasCreate]) -> list[FirewallAlias]:
+    def replace_all_firewall_aliases(
+        self, aliases: list[FirewallAliasCreate]
+    ) -> list[FirewallAlias]:
         """
         PUT /api/v2/firewall/aliases
         Returns a list of all firewall aliases.
         """
         endpoint = "/api/v2/firewall/aliases"
-        resp = self._request("PUT", endpoint, json=[alias.model_dump() for alias in aliases])
+        resp = self._request(
+            "PUT", endpoint, json=[alias.model_dump() for alias in aliases]
+        )
         if not resp.data or not isinstance(resp.data, list):
             return []
         return [FirewallAlias.model_validate(item) for item in resp.data]
 
-    def delete_all_firewall_alias(self, limit: int = 0, offset: int = 0,
-                                  query: dict[str, str | int | bool] | None = None) -> APIResponse:
+    def delete_all_firewall_alias(
+        self,
+        limit: int = 0,
+        offset: int = 0,
+        query: dict[str, str | int | bool] | None = None,
+    ) -> APIResponse:
         """
         DELETE /api/v2/firewall/aliases
         Deletes multiple existing Firewall Aliases using a query.
@@ -202,10 +225,7 @@ class PfSenseV2Client:
             query (dict[str, Any] | None): The arbitrary query parameters to include in the request. Default is None.
         """
         endpoint = "/api/v2/firewall/aliases"
-        params = {
-            "limit": limit,
-            "offset": offset
-        }
+        params = {"limit": limit, "offset": offset}
         if query:
             params.update(query)
         return self._request("DELETE", endpoint, params=params)
@@ -292,8 +312,8 @@ class PfSenseV2Client:
         limit: int = 0,
         offset: int = 0,
         sort_by: list[str] | None = None,
-        sort_order: str = "SORT_ASC",
-        query: dict[str, Any] | None = None
+        sort_order: SortOrder = SortOrder.ASCENDING,
+        query: dict[str, Any] | None = None,
     ) -> list[DHCPLease]:
         """
         GET /api/v2/status/dhcp_server/leases
@@ -314,7 +334,7 @@ class PfSenseV2Client:
         params: dict[str, Any] = {
             "limit": limit,
             "offset": offset,
-            "sort_order": sort_order
+            "sort_order": sort_order,
         }
         if sort_by:
             params["sort_by"] = sort_by

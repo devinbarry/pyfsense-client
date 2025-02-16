@@ -5,7 +5,7 @@ from ..client import ClientABC, APIResponse
 
 
 class FirewallMixin(ClientABC):
-    """ mixin class for firewall functions """
+    """mixin class for firewall functions"""
 
     def apply_firewall_changes(self) -> APIResponse:
         """Apply pending firewall changes. This will reload all filter items. This endpoint returns no data.

@@ -16,19 +16,19 @@ class FirewallAlias(BaseModel):
     detail: str | list[str]
     descr: str | None = None
 
-    @field_validator('address')
+    @field_validator("address")
     @classmethod
     def split_address_str(cls, value: str | list[str]) -> str | list[str]:
         if isinstance(value, list):
             return value
-        return value.split(' ') if ' ' in value else [value]
+        return value.split(" ") if " " in value else [value]
 
-    @field_validator('detail')
+    @field_validator("detail")
     @classmethod
     def split_detail_str(cls, value: str | list[str]) -> str | list[str]:
         if isinstance(value, list):
             return value
-        return value.split('||') if '||' in value else [value]
+        return value.split("||") if "||" in value else [value]
 
 
 class FirewallAliasCreate(FirewallAlias):
@@ -38,4 +38,3 @@ class FirewallAliasCreate(FirewallAlias):
 class FirewallAliasUpdate(FirewallAlias):
     id: str
     apply: bool = True
-

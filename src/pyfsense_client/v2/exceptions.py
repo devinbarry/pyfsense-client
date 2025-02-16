@@ -11,9 +11,11 @@ class APIError(Exception):
 
 class AuthenticationError(APIError):
     """Raised when authentication fails (HTTP 401)."""
+
     pass
 
 
 class ValidationError(APIError):
     """Raised when request validation fails (HTTP 400)."""
+
     pass

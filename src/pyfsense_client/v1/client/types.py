@@ -29,6 +29,7 @@ class ClientConfig(BaseModel):
     }
     ```
     """
+
     username: str | None = None
     password: str | None = None
     hostname: str
@@ -39,20 +40,26 @@ class ClientConfig(BaseModel):
     client_token: str | None = None
     verify_ssl: bool = True
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def validate_config(cls, values: ClientConfig) -> ClientConfig:
-        if values.mode not in ('local', 'jwt', 'api_token'):
-            raise ValueError("Authentication mode must be one of 'local', 'jwt', or 'api_token'.")
+        if values.mode not in ("local", "jwt", "api_token"):
+            raise ValueError(
+                "Authentication mode must be one of 'local', 'jwt', or 'api_token'."
+            )
 
-        if values.mode == 'local':
+        if values.mode == "local":
             if not (values.username and values.password):
-                raise ValueError("username and password must be provided if mode is 'local'.")
-        elif values.mode == 'jwt':
+                raise ValueError(
+                    "username and password must be provided if mode is 'local'."
+                )
+        elif values.mode == "jwt":
             if not values.jwt:
                 raise ValueError("jwt must be provided if mode is 'jwt'.")
-        elif values.mode == 'api_token':
+        elif values.mode == "api_token":
             if not (values.client_id and values.client_token):
-                raise ValueError("client_id and client_token must be provided if mode is 'api_token'.")
+                raise ValueError(
+                    "client_id and client_token must be provided if mode is 'api_token'."
+                )
         return values
 
 
@@ -82,10 +89,14 @@ class APIResponse(BaseModel):
     """
     Standard JSON API response from the pfSense API.
     """
+
     status: str
     code: int
     return_code: int = Field(
-        default=..., title="return", alias="return", description="The return field from the API"
+        default=...,
+        title="return",
+        alias="return",
+        description="The return field from the API",
     )
     message: str
     data: dict[str, Any] | list

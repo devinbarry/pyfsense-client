@@ -3,12 +3,15 @@ V2 Client Module Initialization
 """
 
 from .client import PfSenseV2Client, ClientConfig
-from .exceptions import (
-    APIError,
-    AuthenticationError,
-    ValidationError
+from .exceptions import APIError, AuthenticationError, ValidationError
+from .models import (
+    APIResponse,
+    JWTAuthResponse,
+    FirewallAlias,
+    FirewallAliasCreate,
+    FirewallAliasUpdate,
+    DHCPLease,
 )
-from .models import APIResponse, JWTAuthResponse, FirewallAlias, FirewallAliasCreate, FirewallAliasUpdate, DHCPLease
 
 __all__ = [
     "PfSenseV2Client",

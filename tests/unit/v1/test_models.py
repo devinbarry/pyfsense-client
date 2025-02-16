@@ -4,13 +4,8 @@ from pyfsense_client.v1.client import ClientConfig, APIResponse
 
 
 class TestClientConfig(unittest.TestCase):
-
     def test_pfsense_config_username_and_pass(self):
-        config = ClientConfig(
-            username="user",
-            password="pass",
-            hostname="example.com"
-        )
+        config = ClientConfig(username="user", password="pass", hostname="example.com")
         self.assertEqual(config.username, "user")
         self.assertEqual(config.password, "pass")
         self.assertEqual(config.hostname, "example.com")
@@ -37,14 +32,13 @@ class TestClientConfig(unittest.TestCase):
 
 
 class TestAPIResponse(unittest.TestCase):
-
     def test_apiresponse_valid_dict(self):
         response_data = {
             "status": "success",
             "code": 200,
             "return": 0,
             "message": "OK",
-            "data": {"key": "value"}
+            "data": {"key": "value"},
         }
         response = APIResponse(**response_data)
         self.assertEqual(response.data, {"key": "value"})
@@ -55,7 +49,7 @@ class TestAPIResponse(unittest.TestCase):
             "code": 200,
             "return": 0,
             "message": "OK",
-            "data": ["item1", "item2"]
+            "data": ["item1", "item2"],
         }
         response = APIResponse(**response_data)
         self.assertEqual(response.data, ["item1", "item2"])
@@ -67,7 +61,7 @@ class TestAPIResponse(unittest.TestCase):
                 "code": 999,  # Invalid code
                 "return": 0,
                 "message": "Error",
-                "data": {}
+                "data": {},
             }
             APIResponse(**response_data)
 
@@ -78,7 +72,7 @@ class TestAPIResponse(unittest.TestCase):
                 "code": 200,
                 "return": 0,
                 "message": "Invalid data",
-                "data": "This should be a dict or list"
+                "data": "This should be a dict or list",
             }
             APIResponse(**response_data)
 
@@ -88,7 +82,7 @@ class TestAPIResponse(unittest.TestCase):
             "code": 200,
             "return": 0,
             "message": "OK",
-            "data": {"key": "value"}
+            "data": {"key": "value"},
         }
         response = APIResponse(**response_data)
         self.assertEqual(response.data, {"key": "value"})
@@ -99,8 +93,7 @@ class TestAPIResponse(unittest.TestCase):
             "code": 200,
             "return": 0,
             "message": "OK",
-            "data": ["item1", "item2"]
+            "data": ["item1", "item2"],
         }
         response = APIResponse(**response_data)
         self.assertEqual(response.data, ["item1", "item2"])
-

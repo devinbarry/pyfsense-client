@@ -6,16 +6,13 @@ from pyfsense_client.v2.models import (
     FirewallAliasCreate,
     FirewallAliasUpdate,
     DHCPLease,
-    firewall_alias
+    firewall_alias,
 )
 
 
 def test_api_response():
     resp = APIResponse(
-        code=200,
-        status="success",
-        message="All good",
-        data={"foo": "bar"}
+        code=200, status="success", message="All good", data={"foo": "bar"}
     )
     assert resp.code == 200
     assert resp.status == "success"
@@ -28,10 +25,11 @@ def test_jwt_auth_response():
         code=200,
         status="success",
         message="JWT token obtained",
-        data={"token": "my-jwt-token"}
+        data={"token": "my-jwt-token"},
     )
     assert resp.code == 200
     assert resp.data["token"] == "my-jwt-token"
+
 
 def test_firewall_alias():
     alias = FirewallAlias(
@@ -40,7 +38,7 @@ def test_firewall_alias():
         type=firewall_alias.AliasType.HOST,
         descr="Test Description",
         address=["192.168.1.100"],
-        detail=[]
+        detail=[],
     )
     assert alias.id == 1
     assert alias.name == "TestAlias"
@@ -54,7 +52,7 @@ def test_firewall_alias_create():
         name="CreateAlias",
         type=firewall_alias.AliasType.URL,
         descr="A new alias",
-        address=["http://example.com"]
+        address=["http://example.com"],
     )
     assert fac.name == "CreateAlias"
     assert fac.type == "url"
@@ -69,7 +67,7 @@ def test_firewall_alias_update():
         type=firewall_alias.AliasType.NETWORK,
         descr="Updating alias",
         address=["10.0.0.0/24"],
-        detail=["some detail"]
+        detail=["some detail"],
     )
     assert fau.id == 2
     assert fau.name == "UpdateAlias"
@@ -86,7 +84,7 @@ def test_dhcp_lease():
         hostname="Device1",
         start=start_time,
         end=end_time,
-        status="active"
+        status="active",
     )
     assert lease.ip == "192.168.1.10"
     assert lease.mac == "00:1A:2B:3C:4D:5E"

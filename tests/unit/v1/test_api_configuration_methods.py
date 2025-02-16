@@ -2,8 +2,8 @@ import unittest
 from unittest.mock import patch
 from pyfsense_client.v1.client import ClientConfig, PfSenseV1Client
 
-class TestAPIConfigurationMethods(unittest.TestCase):
 
+class TestAPIConfigurationMethods(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.test_config = {
@@ -18,10 +18,10 @@ class TestAPIConfigurationMethods(unittest.TestCase):
         config = ClientConfig(**self.test_config)
         self.client = PfSenseV1Client(config=config)
 
-    @patch('pyfsense_client.v1.client.client.PfSenseV1Client.call')
+    @patch("pyfsense_client.v1.client.client.PfSenseV1Client.call")
     def test_get_system_api_version(self, mock_call):
         pass
 
-    @patch('pyfsense_client.v1.client.client.PfSenseV1Client.call')
+    @patch("pyfsense_client.v1.client.client.PfSenseV1Client.call")
     def test_update_system_api_configuration(self, mock_call):
         pass
