@@ -32,7 +32,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "python-dotenv"]
+dev = ["pytest", "python-dotenv", "ruff"]
 
 [project.urls]
 homepage = "https://github.com/devinbarry/pyfsense-client"
