@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 
 class APIResponse(BaseModel):
     """
-    Generic V2 API response shape. Adjust as needed.
+    Generic V2 API response model.
     """
     code: int
     status: str
