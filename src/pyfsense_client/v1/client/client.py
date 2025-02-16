@@ -38,12 +38,8 @@ class ClientBase(ClientABC):
         self.session = Session()
         self.logger = logging.getLogger(__name__)
 
-        if self.config.mode == "local" and not (
-            self.config.username and self.config.password
-        ):
-            raise ValueError(
-                "Authentication Mode is set to local but username or password are missing."
-            )
+        if self.config.mode == "local" and not (self.config.username and self.config.password):
+            raise ValueError("Authentication Mode is set to local but username or password are missing.")
 
         if self.config.mode == "local":
             self.session.auth = (self.config.username, self.config.password)
@@ -60,9 +56,7 @@ class ClientBase(ClientABC):
         assert url.startswith("/")
         return f"{self.baseurl}{url}"
 
-    def _request(
-        self, url, method="GET", payload=None, params=None, **kwargs
-    ) -> Response:
+    def _request(self, url, method="GET", payload=None, params=None, **kwargs) -> Response:
         url = self.get_url(url)
         kwargs.setdefault("params", params)
         kwargs.setdefault("json", payload if method != "GET" else None)
@@ -72,9 +66,7 @@ class ClientBase(ClientABC):
         if self.config.mode == "jwt":
             headers["Authorization"] = f"Bearer {self.config.jwt}"
         elif self.config.mode == "api_token":
-            headers["Authorization"] = (
-                f"{self.config.client_id} {self.config.client_token}"
-            )
+            headers["Authorization"] = f"{self.config.client_id} {self.config.client_token}"
 
         response = self.session.request(
             url=url,

@@ -28,9 +28,7 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_carp_status()
 
-        mock_call.assert_called_once_with(
-            url="/api/v1/status/carp", method="GET", payload={}
-        )
+        mock_call.assert_called_once_with(url="/api/v1/status/carp", method="GET", payload={})
         self.assertEqual(response, mock_response)
 
     @patch("pyfsense_client.v1.client.client.PfSenseV1Client.call")
@@ -54,9 +52,7 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_gateway_status()
 
-        mock_call.assert_called_once_with(
-            url="/api/v1/status/gateway", method="GET", payload={}
-        )
+        mock_call.assert_called_once_with(url="/api/v1/status/gateway", method="GET", payload={})
         self.assertEqual(response, mock_response)
 
     @patch("pyfsense_client.v1.client.client.PfSenseV1Client.call")
@@ -67,9 +63,7 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_system_status()
 
-        mock_call.assert_called_once_with(
-            url="/api/v1/status/system", method="GET", payload={}
-        )
+        mock_call.assert_called_once_with(url="/api/v1/status/system", method="GET", payload={})
         self.assertEqual(response, mock_response)
 
     @patch("pyfsense_client.v1.client.client.PfSenseV1Client.call")
@@ -79,9 +73,7 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_interface_status()
 
-        mock_call.assert_called_once_with(
-            url="/api/v1/status/interface", method="GET", payload={}
-        )
+        mock_call.assert_called_once_with(url="/api/v1/status/interface", method="GET", payload={})
         self.assertEqual(response, mock_response)
 
     @patch("pyfsense_client.v1.client.client.PfSenseV1Client.call")
@@ -91,9 +83,7 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_configuration_history_status_log()
 
-        mock_call.assert_called_once_with(
-            url="/api/v1/status/log/config_history", method="GET", payload={}
-        )
+        mock_call.assert_called_once_with(url="/api/v1/status/log/config_history", method="GET", payload={})
         self.assertEqual(response, mock_response)
 
     @patch("pyfsense_client.v1.client.client.PfSenseV1Client.call")
@@ -104,9 +94,7 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_dhcp_status_log()
 
-        mock_call.assert_called_once_with(
-            url="/api/v1/status/log/dhcp", method="GET", payload={}
-        )
+        mock_call.assert_called_once_with(url="/api/v1/status/log/dhcp", method="GET", payload={})
         self.assertEqual(response, mock_response)
 
     @patch("pyfsense_client.v1.client.client.PfSenseV1Client.call")
@@ -116,9 +104,7 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_firewall_status_log()
 
-        mock_call.assert_called_once_with(
-            url="/api/v1/status/log/firewall", method="GET", payload={}
-        )
+        mock_call.assert_called_once_with(url="/api/v1/status/log/firewall", method="GET", payload={})
         self.assertEqual(response, mock_response)
 
     @patch("pyfsense_client.v1.client.client.PfSenseV1Client.call")
@@ -128,9 +114,7 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_system_status_log()
 
-        mock_call.assert_called_once_with(
-            url="/api/v1/status/log/system", method="GET", payload={}
-        )
+        mock_call.assert_called_once_with(url="/api/v1/status/log/system", method="GET", payload={})
         self.assertEqual(response, mock_response)
 
     @patch("pyfsense_client.v1.client.client.PfSenseV1Client.call")
@@ -140,7 +124,5 @@ class TestStatusMixin(unittest.TestCase):
 
         response = self.client.get_openvpn_status()
 
-        mock_call.assert_called_once_with(
-            url="/api/v1/status/openvpn", method="GET", payload={}
-        )
+        mock_call.assert_called_once_with(url="/api/v1/status/openvpn", method="GET", payload={})
         self.assertEqual(response, mock_response)

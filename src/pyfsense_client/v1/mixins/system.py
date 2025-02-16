@@ -26,9 +26,7 @@ class SystemMixin(ClientABC):
         method = "GET"
         return self.call(url, method)
 
-    def update_system_api_configuration(
-        self, readonly: Optional[bool] = None, **kwargs: Dict[str, Any]
-    ) -> APIResponse:
+    def update_system_api_configuration(self, readonly: Optional[bool] = None, **kwargs: Dict[str, Any]) -> APIResponse:
         """Update the API configuration.
 
         https://github.com/jaredhendrickson13/pfsense-api#3-read-system-api-version
@@ -169,16 +167,12 @@ class SystemMixin(ClientABC):
         method = "PUT"
         return self.call(url=url, method=method, payload=args)
 
-    def get_system_email_notification_settings(
-        self, **filterargs: Dict[str, Any]
-    ) -> APIResponse:
+    def get_system_email_notification_settings(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-system-email-notification-settings"""
         url = "/api/v1/system/notifications/email"
         return self.call(url=url, method="GET", payload=filterargs)
 
-    def update_system_email_notification_settings(
-        self, **args: Dict[str, Any]
-    ) -> APIResponse:
+    def update_system_email_notification_settings(self, **args: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-update-system-email-notification-settings"""
         url = "/api/v1/system/notifications/email"
         method = "PUT"

@@ -11,9 +11,7 @@ from pyfsense_client.v2.models import (
 
 
 def test_api_response():
-    resp = APIResponse(
-        code=200, status="success", message="All good", data={"foo": "bar"}
-    )
+    resp = APIResponse(code=200, status="success", message="All good", data={"foo": "bar"})
     assert resp.code == 200
     assert resp.status == "success"
     assert resp.message == "All good"

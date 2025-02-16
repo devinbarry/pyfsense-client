@@ -9,11 +9,7 @@ from pyfsense_client.v1.client import ClientConfig, PfSenseV1Client
 
 
 def randomize_string(length=16):
-    return "".join(
-        random.choices(
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", k=length
-        )
-    )
+    return "".join(random.choices("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", k=length))
 
 
 class TestSystemStatus(unittest.TestCase):
@@ -44,9 +40,7 @@ class TestSystemStatus(unittest.TestCase):
                 "return": 0,
                 "message": "Success",
                 "data": {
-                    "system_platform": random.choice(
-                        ["Netgate pfSense Plus", "Linux Ubuntu", "Windows Server"]
-                    ),
+                    "system_platform": random.choice(["Netgate pfSense Plus", "Linux Ubuntu", "Windows Server"]),
                     "system_serial": randomize_string(16),
                     "system_netgate_id": uuid.uuid4().hex,
                     "bios_vendor": random.choice(
@@ -93,9 +87,7 @@ class TestSystemStatus(unittest.TestCase):
         self.assertEqual(response.model_dump(by_alias=True), expected_data)
 
         # Verify if the call method was called with the correct arguments
-        mock_request.assert_called_once_with(
-            url="/api/v1/status/system", method="GET", payload={}
-        )
+        mock_request.assert_called_once_with(url="/api/v1/status/system", method="GET", payload={})
 
     @patch("pyfsense_client.v1.client.client.PfSenseV1Client._request")
     def test_get_system_status_with_list_data(self, mock_request):
@@ -129,6 +121,4 @@ class TestSystemStatus(unittest.TestCase):
         self.assertEqual(response.model_dump(by_alias=True), expected_data)
 
         # Verify if the call method was called with the correct arguments
-        mock_request.assert_called_once_with(
-            url="/api/v1/status/system", method="GET", payload={}
-        )
+        mock_request.assert_called_once_with(url="/api/v1/status/system", method="GET", payload={})

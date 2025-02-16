@@ -15,9 +15,7 @@ class StatusMixin(ClientABC):
         return self.call(url=url, method="GET", payload=filterargs)
 
     @validate_call
-    def update_carp_status(
-        self, enable: Optional[bool], maintenance_mode: Optional[bool]
-    ) -> APIResponse:
+    def update_carp_status(self, enable: Optional[bool], maintenance_mode: Optional[bool]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-update-carp-status"""
         url = "/api/v1/status/carp"
         method = "PUT"

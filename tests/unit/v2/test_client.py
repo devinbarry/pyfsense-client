@@ -88,9 +88,7 @@ def test_handle_response_401(pf_client):
     # Create a mock response whose raise_for_status() immediately throws 401
     mock_response = MagicMock(spec=requests.Response)
     mock_response.status_code = 401
-    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError(
-        "401 Error"
-    )
+    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError("401 Error")
 
     # We expect the client to raise our custom AuthenticationError
     with pytest.raises(AuthenticationError) as excinfo:
@@ -101,9 +99,7 @@ def test_handle_response_401(pf_client):
 def test_handle_response_400(pf_client):
     mock_response = MagicMock(spec=requests.Response)
     mock_response.status_code = 400
-    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError(
-        "400 Error"
-    )
+    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError("400 Error")
 
     with pytest.raises(ValidationError) as excinfo:
         pf_client._handle_response(mock_response)
@@ -113,9 +109,7 @@ def test_handle_response_400(pf_client):
 def test_handle_response_500(pf_client):
     mock_response = MagicMock(spec=requests.Response)
     mock_response.status_code = 500
-    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError(
-        "500 Error"
-    )
+    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError("500 Error")
 
     # This should raise a generic APIError (status != 401 or 400).
     with pytest.raises(APIError) as excinfo:
@@ -376,9 +370,7 @@ def test_get_dhcp_leases_empty_response(mock_request, pf_client):
 @patch.object(PfSenseV2Client, "_request")
 def test_get_dhcp_leases_with_params(mock_request, pf_client):
     """Test DHCP lease retrieval with all possible parameters."""
-    mock_request.return_value.data = [
-        {"ip": "192.168.1.10", "mac": "00:1A:2B:3C:4D:5E", "hostname": "Device1"}
-    ]
+    mock_request.return_value.data = [{"ip": "192.168.1.10", "mac": "00:1A:2B:3C:4D:5E", "hostname": "Device1"}]
 
     # Test with all optional parameters
     leases = pf_client.get_dhcp_leases(
@@ -452,9 +444,7 @@ def test_delete_all_firewall_aliases(mock_request, pf_client):
     mock_request.return_value.data = {"deleted": 2}
 
     # Test with all parameters
-    result = pf_client.delete_all_firewall_alias(
-        limit=10, offset=5, query={"type": "host"}
-    )
+    result = pf_client.delete_all_firewall_alias(limit=10, offset=5, query={"type": "host"})
     mock_request.assert_called_once_with(
         "DELETE",
         "/api/v2/firewall/aliases",
@@ -517,6 +507,4 @@ def test_get_firewall_alias_validation(mock_request, pf_client):
         pf_client.get_firewall_alias(1)
     errors = exc_info.value.errors()
     assert any(err["type"] == "int_parsing" and err["loc"] == ("id",) for err in errors)
-    assert any(
-        err["type"] == "list_type" and err["loc"] == ("address",) for err in errors
-    )
+    assert any(err["type"] == "list_type" and err["loc"] == ("address",) for err in errors)

@@ -43,23 +43,17 @@ class ClientConfig(BaseModel):
     @model_validator(mode="after")
     def validate_config(cls, values: ClientConfig) -> ClientConfig:
         if values.mode not in ("local", "jwt", "api_token"):
-            raise ValueError(
-                "Authentication mode must be one of 'local', 'jwt', or 'api_token'."
-            )
+            raise ValueError("Authentication mode must be one of 'local', 'jwt', or 'api_token'.")
 
         if values.mode == "local":
             if not (values.username and values.password):
-                raise ValueError(
-                    "username and password must be provided if mode is 'local'."
-                )
+                raise ValueError("username and password must be provided if mode is 'local'.")
         elif values.mode == "jwt":
             if not values.jwt:
                 raise ValueError("jwt must be provided if mode is 'jwt'.")
         elif values.mode == "api_token":
             if not (values.client_id and values.client_token):
-                raise ValueError(
-                    "client_id and client_token must be provided if mode is 'api_token'."
-                )
+                raise ValueError("client_id and client_token must be provided if mode is 'api_token'.")
         return values
 
 

@@ -32,9 +32,7 @@ class ServiceMixin(ClientABC):
         method = "POST"
         return self.call(url=url, method=method, payload=args)
 
-    def get_dhcpd_service_configuration(
-        self, **filterargs: Dict[str, Any]
-    ) -> APIResponse:
+    def get_dhcpd_service_configuration(self, **filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-read-dhcpd-service-configuration"""
         url = "/api/v1/services/dhcpd"
         return self.call(url=url, method="GET", payload=filterargs)
@@ -168,32 +166,24 @@ class ServiceMixin(ClientABC):
         method = "DELETE"
         return self.call(url=url, method=method, payload=args)
 
-    def create_openvpn_client_specific_overrides(
-        self, **args: Dict[str, Any]
-    ) -> APIResponse:
+    def create_openvpn_client_specific_overrides(self, **args: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#1-create-openvpn-client-specific-overrides"""
         url = "/api/v1/services/openvpn/csc"
         method = "POST"
         return self.call(url=url, method=method, payload=args)
 
-    def delete_openvpn_client_specific_override(
-        self, **args: Dict[str, Any]
-    ) -> APIResponse:
+    def delete_openvpn_client_specific_override(self, **args: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#2-delete-openvpn-client-specific-override"""
         url = "/api/v1/services/openvpn/csc"
         method = "DELETE"
         return self.call(url=url, method=method, payload=args)
 
-    def get_openvpn_client_specific_overrides(
-        self, *filterargs: Dict[str, Any]
-    ) -> APIResponse:
+    def get_openvpn_client_specific_overrides(self, *filterargs: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#3-read-openvpn-client-specific-overrides"""
         url = "/api/v1/services/openvpn/csc"
         return self.call(url=url, method="GET", payload=filterargs)
 
-    def update_openvpn_client_specific_overrides(
-        self, **args: Dict[str, Any]
-    ) -> APIResponse:
+    def update_openvpn_client_specific_overrides(self, **args: Dict[str, Any]) -> APIResponse:
         """https://github.com/jaredhendrickson13/pfsense-api/blob/master/README.md#4-update-openvpn-client-specific-overrides"""
         url = "/api/v1/services/openvpn/csc"
         method = "PUT"
