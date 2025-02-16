@@ -72,6 +72,20 @@ build_and_publish:
     - hatch publish --repo "$PYPI_REPO_URL" --user "$PYPI_REPO_USER" --auth "$PYPI_REPO_AUTH"
 
 
+publish_to_test_pypi:
+  stage: build
+  image: python:3.12
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: on_success
+  script:
+    - export TWINE_USERNAME="__token__"
+    - export TWINE_PASSWORD="$PYPI_TEST_API_TOKEN"
+    - pip install hatch twine
+    - hatch build
+    - twine upload --non-interactive -r testpypi dist/*
+
+
 # Push a public copy of this repo up to GitHub
 sync_public_repo:
   stage: sync
