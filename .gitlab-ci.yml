@@ -9,8 +9,9 @@ test_pyfsense_client:
   image: python:3.12
   tags:
     - python
-  only:
-    - master
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_TAG'
+      when: on_success
   before_script:
     - python --version
     - pip --version
