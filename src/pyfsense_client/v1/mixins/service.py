@@ -2,7 +2,6 @@
 
 from typing import Any, Dict
 
-from requests import Response
 
 from ..client import ClientABC, APIResponse
 

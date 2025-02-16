@@ -4,3 +4,10 @@ from .firewall_alias import (
     FirewallAliasCreate,
     FirewallAliasUpdate,
 )
+
+__all__ = [
+    "AliasType",
+    "FirewallAlias",
+    "FirewallAliasCreate",
+    "FirewallAliasUpdate",
+]

@@ -6,3 +6,13 @@ from .firewall_alias import (
     FirewallAliasUpdate,
 )
 from .dhcp import DHCPLease
+
+__all__ = [
+    "APIResponse",
+    "JWTAuthResponse",
+    "AliasType",
+    "FirewallAlias",
+    "FirewallAliasCreate",
+    "FirewallAliasUpdate",
+    "DHCPLease",
+]

@@ -54,4 +54,4 @@ if __name__ == "__main__":
     with open("replacements.txt", "w") as f:
         f.write(f"regex:(?s){escaped_old_content}==>{new_content}\n")
 
-    print(f"Replacement expression written to replacements.txt")
+    print("Replacement expression written to replacements.txt")
