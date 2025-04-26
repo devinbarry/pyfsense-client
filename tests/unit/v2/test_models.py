@@ -76,17 +76,22 @@ def test_firewall_alias_update():
 def test_dhcp_lease():
     start_time = datetime(2025, 1, 1, 12, 0, 0)
     end_time = datetime(2025, 1, 2, 12, 0, 0)
-    lease = DHCPLease(
-        ip="192.168.1.10",
-        mac="00:1A:2B:3C:4D:5E",
-        hostname="Device1",
-        start=start_time,
-        end=end_time,
-        status="active",
-    )
+    lease_data = {
+        "ip": "192.168.1.10",
+        "mac": "00:1A:2B:3C:4D:5E",
+        "hostname": "Device1",
+        "if": "LAN",
+        "start": start_time,
+        "end": end_time,
+        "active_status": "active",
+        "online_status": "active/online",
+    }
+    lease = DHCPLease(**lease_data)
     assert lease.ip == "192.168.1.10"
     assert lease.mac == "00:1A:2B:3C:4D:5E"
     assert lease.hostname == "Device1"
+    assert lease.interface == "LAN"
     assert lease.start == start_time
     assert lease.end == end_time
-    assert lease.status == "active"
+    assert lease.active_status == "active"
+    assert lease.online_status == "active/online"

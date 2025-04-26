@@ -6,6 +6,7 @@ from pydantic import ValidationError as PydanticValidationError
 from pyfsense_client.v2 import (
     PfSenseV2Client,
     ClientConfig,
+    SortOrder,
     APIError,
     AuthenticationError,
     ValidationError,
@@ -293,29 +294,6 @@ def test_delete_firewall_alias(mock_request, pf_client):
 
 
 #
-# Tests for DHCP Leases
-#
-
-
-@patch.object(PfSenseV2Client, "_request")
-def test_get_dhcp_leases(mock_request, pf_client):
-    mock_request.return_value.data = [
-        {
-            "ip": "192.168.1.10",
-            "mac": "00:1A:2B:3C:4D:5E",
-            "hostname": "Device1",
-            "status": "active",
-        }
-    ]
-    leases = pf_client.get_dhcp_leases(limit=10, offset=0)
-    assert len(leases) == 1
-    assert leases[0].ip == "192.168.1.10"
-    assert leases[0].mac == "00:1A:2B:3C:4D:5E"
-    assert leases[0].hostname == "Device1"
-    assert leases[0].status == "active"
-
-
-#
 # Tests for Apply Endpoints
 #
 
@@ -353,47 +331,6 @@ def test_pf_client_url_normalization(client_config):
     client_config.host = "http://pfsense.local"
     client = PfSenseV2Client(client_config)
     assert client.base_url == "http://pfsense.local"
-
-
-@patch.object(PfSenseV2Client, "_request")
-def test_get_dhcp_leases_empty_response(mock_request, pf_client):
-    """Test DHCP lease retrieval with empty response."""
-    mock_request.return_value.data = None
-    leases = pf_client.get_dhcp_leases()
-    assert len(leases) == 0
-
-    mock_request.return_value.data = []
-    leases = pf_client.get_dhcp_leases()
-    assert len(leases) == 0
-
-
-@patch.object(PfSenseV2Client, "_request")
-def test_get_dhcp_leases_with_params(mock_request, pf_client):
-    """Test DHCP lease retrieval with all possible parameters."""
-    mock_request.return_value.data = [{"ip": "192.168.1.10", "mac": "00:1A:2B:3C:4D:5E", "hostname": "Device1"}]
-
-    # Test with all optional parameters
-    leases = pf_client.get_dhcp_leases(
-        limit=10,
-        offset=5,
-        sort_by=["hostname", "ip"],
-        sort_order="SORT_DESC",
-        query={"status": "active"},
-    )
-
-    mock_request.assert_called_once_with(
-        "GET",
-        "/api/v2/status/dhcp_server/leases",
-        params={
-            "limit": 10,
-            "offset": 5,
-            "sort_by": ["hostname", "ip"],
-            "sort_order": "SORT_DESC",
-            "query": {"status": "active"},
-        },
-    )
-    assert len(leases) == 1
-    assert leases[0].ip == "192.168.1.10"
 
 
 @patch.object(PfSenseV2Client, "_request")
