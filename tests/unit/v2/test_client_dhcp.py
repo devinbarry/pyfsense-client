@@ -5,6 +5,7 @@ from pyfsense_client.v2 import (
     PfSenseV2Client,
     ClientConfig,
     SortOrder,
+    SortFlags,
 )
 
 
@@ -53,9 +54,7 @@ def test_get_dhcp_leases(mock_request, pf_client):
     assert leases[0].ip == "192.168.1.10"
     assert leases[0].mac == "00:1A:2B:3C:4D:5E"
     assert leases[0].hostname == "Device1"
-    assert leases[0].status == "active"
-
-
+    assert leases[0].active_status == "static"
 
 
 @patch.object(PfSenseV2Client, "_request")
@@ -84,7 +83,8 @@ def test_get_dhcp_leases_with_params(mock_request, pf_client):
             "active_status": "static",
             "online_status": "'active/online'",
             "descr": "Friendly name for Device1",
-        }]
+        }
+    ]
 
     # Test with all optional parameters
     leases = pf_client.get_dhcp_leases(
@@ -92,6 +92,7 @@ def test_get_dhcp_leases_with_params(mock_request, pf_client):
         offset=5,
         sort_by=["hostname", "ip"],
         sort_order=SortOrder.DESCENDING,
+        # Intentionally not specifying sort_flags to test default
     )
 
     mock_request.assert_called_once_with(
@@ -101,11 +102,10 @@ def test_get_dhcp_leases_with_params(mock_request, pf_client):
             "limit": 10,
             "offset": 5,
             "sort_by": ["hostname", "ip"],
-            "sort_order": "SORT_DESC",
-            "query": {"status": "active"},
+            "sort_order": SortOrder.DESCENDING,
+            # Added expected default sort_flags
+            "sort_flags": SortFlags.SORT_REGULAR,
         },
     )
     assert len(leases) == 1
     assert leases[0].ip == "192.168.1.10"
-
-

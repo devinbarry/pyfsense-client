@@ -6,7 +6,6 @@ from pydantic import ValidationError as PydanticValidationError
 from pyfsense_client.v2 import (
     PfSenseV2Client,
     ClientConfig,
-    SortOrder,
     APIError,
     AuthenticationError,
     ValidationError,
