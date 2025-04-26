@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "pyfsense-client"
 requires-python = ">=3.11"
 dynamic = ["version"]
-description = "A client for the unofficial pfSense API at https://github.com/jaredhendrickson13/pfsense-api"
+description = "A client for the unofficial pfSense API."
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [
@@ -38,6 +38,7 @@ dev = ["pytest", "python-dotenv", "ruff"]
 homepage = "https://github.com/devinbarry/pyfsense-client"
 repository = "https://github.com/devinbarry/pyfsense-client"
 documentation = "https://yaleman.github.io/pfsense-api-client/"
+
 
 [tool.ruff]
 line-length = 120
