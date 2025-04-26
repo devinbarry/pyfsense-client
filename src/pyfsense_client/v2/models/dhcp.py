@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 
 
@@ -9,9 +9,10 @@ class DHCPLease(BaseModel):
       "ip": "192.168.1.10",
       "mac": "00:1A:2B:3C:4D:5E",
       "hostname": "Device1",
+      "if": "LAN",
       "start": "2025-01-01T12:00:00Z",
       "end": "2025-01-02T12:00:00Z",
-      "status": "active",
+      "active_status": "active",
       "online_status": "string",
       "descr": "string"
     }
@@ -19,9 +20,10 @@ class DHCPLease(BaseModel):
 
     ip: str
     mac: str
-    hostname: str | None = None
+    hostname: str | None
+    interface: str | None = Field(alias="if")  # Use 'interface' in Python, but 'if' in JSON
     start: datetime | None = None
     end: datetime | None = None
-    status: str | None = None
-    online_status: str | None = None
+    active_status: str
+    online_status: str
     descr: str | None = None

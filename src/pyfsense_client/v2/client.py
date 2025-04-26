@@ -19,6 +19,15 @@ class SortOrder(StrEnum):
     DESCENDING = "SORT_DESC"
 
 
+class SortFlags(StrEnum):
+    SORT_REGULAR = "SORT_REGULAR"
+    SORT_NUMERIC = "SORT_NUMERIC"
+    SORT_STRING = "SORT_STRING"
+    SORT_LOCALE_STRING = "SORT_LOCALE_STRING"
+    SORT_NATURAL = "SORT_NATURAL"
+    SORT_FLAG_CASE = "SORT_FLAG_CASE"
+
+
 @dataclass
 class ClientConfig:
     """
@@ -303,22 +312,21 @@ class PfSenseV2Client:
         offset: int = 0,
         sort_by: list[str] | None = None,
         sort_order: SortOrder = SortOrder.ASCENDING,
-        query: dict[str, Any] | None = None,
+        sort_flags: SortFlags = SortFlags.SORT_REGULAR,
     ) -> list[DHCPLease]:
         """
         GET /api/v2/status/dhcp_server/leases
+        Fetches active and static DHCP leases from the system.
 
-        Fetches DHCP leases from the system.
-
-        Args:
-            limit (int): Number of objects to get at once (0 = no limit).
-            offset (int): Starting point in the dataset.
-            sort_by (list[str]): Fields to sort response data by.
-            sort_order (str): 'SORT_ASC' or 'SORT_DESC'.
-            query (dict[str, Any]): Additional query parameters.
+        Arguments:
+            limit (int): The maximum number of lease records to return. (0 = no limit).
+            offset (int): The starting point for the records to return in a paginated response.
+            sort_by (list[str]): Optional. A list of fields by which the results should be sorted.
+            sort_order (SortOrder): The direction of sorting, ascending or descending.
+            sort_flags (SortFlags): The manner in which sorting is applied.
 
         Returns:
-            list[DHCPLease]: The list of DHCP leases
+            list[DHCPLease]: A list of parsed DHCP lease objects.
         """
         endpoint = "/api/v2/status/dhcp_server/leases"
         params: dict[str, Any] = {
@@ -328,10 +336,8 @@ class PfSenseV2Client:
         }
         if sort_by:
             params["sort_by"] = sort_by
-        if query:
-            # The doc mentions "query" is an object;
-            # depending on server behavior, you may need to flatten it or send differently.
-            params["query"] = query
+        if sort_flags:
+            params["sort_flags"] = sort_flags
 
         resp = self._request("GET", endpoint, params=params)
         if not resp.data or not isinstance(resp.data, list):
